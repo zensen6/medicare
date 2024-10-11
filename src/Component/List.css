@@ -1,0 +1,31 @@
+.List{
+    width: 100px;
+    height: 200px;
+    background-color: rgba(239, 240, 237, 0.872);
+    border-radius: 10px;
+    width: 160px;
+}
+
+.Sec0{
+    position: absolute;
+    top: 30px;
+    left: 40px;
+}
+
+.Sec1{
+    position: absolute;
+    top: 30px;
+    right: 40px;
+}
+
+.Sec2{
+    position: absolute;
+    top: 250px;
+    left: 40px;
+}
+
+.Sec3{
+    position: absolute;
+    top: 250px;
+    right: 40px;
+}

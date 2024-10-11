@@ -1,0 +1,61 @@
+.Header{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    height: 100px;
+}
+
+.HeaderElement{
+    padding: 10px;
+    height: 45px;
+    display: flex;    
+}
+
+.Button1{
+    border-radius: 10px;
+    width: 75px;
+    height: 30px;
+    margin: 5px;
+    font-size: 10px;
+    background-color: orange;
+    color: white;
+    border: none;
+}
+
+
+.Button2{
+    border-radius: 10px;
+    width: 75px;
+    height: 30px;
+    margin: 5px;
+    font-size: 10px;
+    background-color: orange;
+    color: white;
+    border: none;
+}
+
+
+.Button3{
+    border-radius: 10px;
+    width: 75px;
+    height: 30px;
+    margin: 5px;
+    font-size: 10px;
+    background-color: skyblue;
+    color: white;
+    border: none;
+}
+
+.Button4{
+    border-radius: 10px;
+    width: 75px;
+    height: 30px;
+    margin: 5px;
+    font-size: 10px;
+    background-color: darkgray; 
+    color: white;
+    border: none;
+}
+
