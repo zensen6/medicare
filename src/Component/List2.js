@@ -1,9 +1,23 @@
 import "./List.css";
 import React from 'react'
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import './RangeSlider.css';
 
 function List2({ className }) {
+
+    const inputRef = useRef(null);
+
+    const handleFocus = () => {
+      if (inputRef.current) {
+          inputRef.current.focus();  // input 요소에 포커스
+      }
+    };
+
+    const handleClear = () => {
+        if (inputRef.current) {
+            inputRef.current.value = '';  // input 값 초기화
+        }
+    };
 
     const [year, setYear] = useState("");
     const [month, setMonth] = useState("");
@@ -30,6 +44,7 @@ function List2({ className }) {
 
     const handleSliderChange = (event) => {
         setValue(parseInt(event.target.value, 10));  // 슬라이더 값이 변할 때 상태 업데이트
+        inputRef.current.value = parseInt(event.target.value,10);
     };
 
 
@@ -55,8 +70,9 @@ function List2({ className }) {
         </div>
 
         <div className="elementBtn">
-          <span className="smallTitle">요절박 점수</span>
-          
+          <span className="smallTitle" value={0}>요절박 점수</span>
+          <input type="number" className="inputY inputY2" ref={inputRef}/>
+          <span className="smallTitle">점</span>
         </div>
         <div className="elementBtn">
           <input
