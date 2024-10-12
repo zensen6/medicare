@@ -1,5 +1,7 @@
 .BodyList{
+    
     height: 85vh;
     position: relative;
     background-color: white;
+    padding: 10px;
 }

@@ -1,5 +1,4 @@
 .List{
-    width: 100px;
     height: 270px;
     background-color: rgba(239, 240, 237, 0.872);
     border-radius: 10px;
@@ -12,6 +11,11 @@
    flex-direction: column;
    justify-content: center;
    height: 90px;
+}
+
+.list4{
+
+    height: 310px;  
 }
 
 .title{
@@ -36,8 +40,19 @@
 .element{
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+}
+
+
+.elementCapture{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
@@ -59,24 +74,24 @@
 
 .Sec0{
     position: absolute;
-    top: 30px;
-    left: 40px;
+    top: 15px;
+    left: calc(50vw - 173px);
 }
 
 .Sec1{
     position: absolute;
-    top: 30px;
-    right: 40px;
+    top: 15px;
+    left: calc(50vw - 1px);
 }
 
 .Sec2{
     position: absolute;
-    top: 320px;
-    left: 40px;
+    top: 340px;
+    left: calc(50vw - 173px);
 }
 
 .Sec3{
     position: absolute;
-    top: 320px;
-    right: 40px;
+    top: 340px;
+    left: calc(50vw - 1px);
 }

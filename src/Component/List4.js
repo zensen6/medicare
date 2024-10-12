@@ -19,6 +19,20 @@ function List4({ className }) {
     const [isSmell, setIsSmell] = useState(false);
     const handleSmell = () => setIsSmell(!isSmell);
 
+    const [isSore, setIsSore] = useState(false);
+    const handleSore = () => setIsSore(!isSore);
+
+    const [isBelly, setIsBelly] = useState(false);
+    const handleBelly = () => setIsBelly(!isBelly);
+
+    const [isObite, setIsObite] = useState(false);
+    const handleObite = () => setIsObite(!isObite);
+
+    const [isFever, setIsFever] = useState(false);
+    const handleFever = () => setIsFever(!isFever);
+
+
+
     useEffect(() => {
         const currentDate = new Date();
         setYear(currentDate.getFullYear());
@@ -47,7 +61,7 @@ function List4({ className }) {
     };
 
     return (
-        <div className={`List ${className}`}>
+        <div className={`List list4 ${className}`}>
             <h5 className="title">이상증세 기록</h5>
             <div className="element">
                 <span className="smallTitle">날짜</span>
@@ -109,7 +123,7 @@ function List4({ className }) {
                 />
             </div>
 
-            <div className="element">
+            <div className="elementCapture">
                 <div>
                     <input
                         accept="image/*"
@@ -123,7 +137,52 @@ function List4({ className }) {
                 </div>
                 {source && <img src={source} alt={"snap"} width='50' height='50'></img>}
             </div>
+
+
+            <div className="element">
+                <h6 className="smallTitle yangsang">기타 증상</h6>
+            </div>
+
+            <div className="element">
+                <span className="smallTitle">배뇨 시 통증이 있나요?</span>
+                <input
+                    type="checkbox"
+                    checked={isSore}
+                    onChange={handleSore}
+                />
+            </div>
+
+            <div className="element">
+                <span className="smallTitle">측복부에 통증이 있나요?</span>
+                <input
+                    type="checkbox"
+                    checked={isBelly}
+                    onChange={handleBelly}
+                />
+            </div>
+
+            <div className="element">
+                <span className="smallTitle">오심 혹은 구토 증상이 있나요?</span>
+                <input
+                    type="checkbox"
+                    checked={isObite}
+                    onChange={handleObite}
+                />
+            </div>
+
+            <div className="element">
+                <span className="smallTitle">발열이 있나요?</span>
+                <input
+                    type="checkbox"
+                    checked={isFever}
+                    onChange={handleFever}
+                />
+            </div>
+                 
+            
+
         </div>
+
     );
 }
 
