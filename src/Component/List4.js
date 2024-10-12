@@ -1,19 +1,130 @@
 import "./List.css";
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
 function List4({ className }) {
+    const [year, setYear] = useState("");
+    const [month, setMonth] = useState("");
+    const [day, setDay] = useState("");
+    const [photo, setPhoto] = useState(null);
 
-    console.log(className);
+
+
+    // 체크박스 상태 관리
+    const [isHontak, setIsHontak] = useState(false);
+    const handleHontak = () => setIsHontak(!isHontak);
+
+    const [isCola, setIsCola] = useState(false);
+    const handleCola = () => setIsCola(!isCola);
+
+    const [isSmell, setIsSmell] = useState(false);
+    const handleSmell = () => setIsSmell(!isSmell);
+
+    useEffect(() => {
+        const currentDate = new Date();
+        setYear(currentDate.getFullYear());
+        setMonth(String(currentDate.getMonth() + 1).padStart(2, '0'));
+        setDay(String(currentDate.getDate()).padStart(2, '0'));
+    }, []);
+
+    
+
+    const [source, setSource] = useState("");
+    const handleCapture = (target) => {
+        if (target.files) {
+            if (target.files.length !== 0) {
+                const file = target.files[0];
+                const newUrl = URL.createObjectURL(file);
+                setSource(newUrl);
+                setPhoto(true);
+                
+                localStorage.setItem('imageSource', newUrl);
+            }
+        }
+    };
+
+    const triggerFileInput = () => {
+        document.getElementById("cameraInput").click();
+    };
+
     return (
+        <div className={`List ${className}`}>
+            <h5 className="title">이상증세 기록</h5>
+            <div className="element">
+                <span className="smallTitle">날짜</span>
+                <input
+                    type="number"
+                    className="inputY"
+                    min="1900"
+                    max="2100"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)} // onChange 핸들러 추가
+                />
+                <span className="smallTitle">년</span>
+                <input
+                    type="number"
+                    className="inputY"
+                    min="1"
+                    max="12"
+                    value={month}
+                    onChange={(e) => setMonth(e.target.value)} // onChange 핸들러 추가
+                />
+                <span className="smallTitle">월</span>
+                <input
+                    type="number"
+                    className="inputY"
+                    min="1"
+                    max="31"
+                    value={day}
+                    onChange={(e) => setDay(e.target.value)} // onChange 핸들러 추가
+                />
+                <span className="smallTitle">일</span>
+            </div>
+            <div className="element">
+                <h6 className="smallTitle yangsang">소변의 양상</h6>
+            </div>
+            <div className="element">
+                <span className="smallTitle">혼탁한 색인가요?</span>
+                <input
+                    type="checkbox"
+                    checked={isHontak}
+                    onChange={handleHontak}
+                />
+            </div>
 
-        className? <div className={`List ${className}`}>
-            List4
+            <div className="element">
+                <span className="smallTitle">붉은 색 혹은 콜라색 인가요?</span>
+                <input
+                    type="checkbox"
+                    checked={isCola}
+                    onChange={handleCola}
+                />
+            </div>
+
+            <div className="element">
+                <span className="smallTitle">불쾌한 소변냄새가 있나요?</span>
+                <input
+                    type="checkbox"
+                    checked={isSmell}
+                    onChange={handleSmell}
+                />
+            </div>
+
+            <div className="element">
+                <div>
+                    <input
+                        accept="image/*"
+                        id="cameraInput"
+                        type="file"
+                        capture="environment"
+                        style={{ display: 'none' }}
+                        onChange={(e) => handleCapture(e.target)}
+                    />
+                    <button className="capture" onClick={triggerFileInput} style={{ margin: '10px' }}>{photo ? "다시 찍기" : "소변 사진 찍기"}</button>
+                </div>
+                {source && <img src={source} alt={"snap"} width='50' height='50'></img>}
+            </div>
         </div>
-        :
-        null
-    
     );
-    
-  }
+}
 
-export default List4
+export default List4;

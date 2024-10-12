@@ -1,10 +1,61 @@
 .List{
     width: 100px;
-    height: 200px;
+    height: 270px;
     background-color: rgba(239, 240, 237, 0.872);
     border-radius: 10px;
     width: 160px;
 }
+
+
+.silgeum{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   height: 90px;
+}
+
+.title{
+   margin: 10px;
+}
+
+
+.smallTitle{
+    font-size: 10px;
+}
+
+.smallTime{
+    margin-right: 20px;
+}
+
+.yangsang{
+
+    position: absolute;
+    left: 6px;
+}
+
+.element{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.capture{
+
+    border-radius: 15px;
+    background-color: black;
+    border: none;
+    color: white;
+}
+
+.inputY{
+    border: none;
+}
+
+
 
 .Sec0{
     position: absolute;
@@ -20,12 +71,12 @@
 
 .Sec2{
     position: absolute;
-    top: 250px;
+    top: 320px;
     left: 40px;
 }
 
 .Sec3{
     position: absolute;
-    top: 250px;
+    top: 320px;
     right: 40px;
 }

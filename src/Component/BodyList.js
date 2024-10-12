@@ -36,7 +36,11 @@ function BodyList(props) {
     <div className="BodyList">
       {modalQueue.map((element, index) => {
         const Component = componentMap[element]; // element에 맞는 컴포넌트 선택
-        return Component ? Component(`Sec${index}`) : null;  // className을 전달
+        return Component ? (
+          <div key={`sec-${index}`}>  
+            {Component(`Sec${index}`)}
+          </div>
+        ) : null;
       })}
     </div>
   );
