@@ -48,14 +48,18 @@ const Result = () => {
         let l=[];
         let l1=[];
 
+        console.log(data.length);
+
         for(let i = 0; i < data.length; i++){
-            var value = Object.values(data[i]);
-            if(!values || values.length === 0 || values[0] !== (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'))) continue;
+            var values = Object.values(data[i]);
+            console.log((String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')));
+            if(values[0] !== (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'))) continue;
             for(let j = 1; j < values.length; j++){
                 l.push(values[j]);
             }
             l.push(" ");
         }
+        console.log(l);
 
         const data2 = JSON.parse(localStorage.getItem("data"));
         if(data2 != null){
@@ -82,9 +86,12 @@ const Result = () => {
                 }else{
                     l1.push("-");
                 }
-                l1.pussh(" ");
+                l1.push(" ");
             }
         }
+
+        console.log(l1);
+        console.log(ll1);
         setL(l);
         setL1(ll1);
     },[clickCount]);
