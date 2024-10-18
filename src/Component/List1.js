@@ -3,7 +3,6 @@ import React from 'react'
 import {useState, useEffect, useRef} from "react";
 import './RangeSlider.css';
 import {useSelector, useDispatch} from 'react-redux';
-import { setPees, setQueue, setTimeRedux, setUrl, setWater, setWeird } from "./store";
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
 
 function List1({ className }) {
@@ -48,7 +47,7 @@ function List1({ className }) {
     return state.url;
   });
 
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const globlaQueue = useSelector((state) => {
     return state.queue;
   });
@@ -92,10 +91,10 @@ function List1({ className }) {
   useEffect(() =>{
     const currentDate = new Date();
     setYear(currentDate.getFullYear());
-    setMonth(String(currentDate.getMonth()+1).padState(2,'0'));
-    setDay(String(currentDate.getDate()).padState(2,'0'));
-    setHours(String(currentDate.getHours()).padState(2,'0'));
-    setMinutes(String(currentDate.getMinutes()).padState(2,'0'));
+    setMonth(String(currentDate.getMonth()+1).padStart(2,'0'));
+    setDay(String(currentDate.getDate()).padStart(2,'0'));
+    setHours(String(currentDate.getHours()).padStart(2,'0'));
+    setMinutes(String(currentDate.getMinutes()).padStart(2,'0'));
 
 
     const currentTime = `${hours}:${minutes}`;

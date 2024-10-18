@@ -6,7 +6,7 @@ import List3 from "./List3";
 import List4 from "./List4";
 import './List.css';
 import data from "../Data/data.json";
-import {useSelector, useDispath} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from "react-router-dom";
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
 
@@ -71,7 +71,7 @@ function BodyList(props) {
     if(localStorage.getItem('data')){
       localStorage.setItem('data', JSON.stringify([...JSON.parse(localStorage.getItem('data')), dataJson]));
     }else{
-      localStorage.setItem('dataa', JSSON.stringify([dataJson]));
+      localStorage.setItem('dataa', JSON.stringify([dataJson]));
     }
     navigate('/result');
   }
@@ -158,6 +158,9 @@ function BodyList(props) {
           </div>
         ) : null;
       })}
+      <button className="SaveInfoBtn" onClick={Save}>
+        기록 저장하기
+      </button>
     </div>
   );
 }

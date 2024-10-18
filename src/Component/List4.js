@@ -16,10 +16,10 @@ function List4({ className }) {
     useEffect(() =>{
         const currentDate = new Date();
         setYear(currentDate.getFullYear());
-        setMonth(String(currentDate.getMonth()+1).padState(2,'0'));
-        setDay(String(currentDate.getDate()).padState(2,'0'));
-        setHours(String(currentDate.getHours()).padState(2,'0'));
-        setMinutes(String(currentDate.getMinutes()).padState(2,'0'));
+        setMonth(String(currentDate.getMonth()+1).padStart(2,'0'));
+        setDay(String(currentDate.getDate()).padStart(2,'0'));
+        setHours(String(currentDate.getHours()).padStart(2,'0'));
+        setMinutes(String(currentDate.getMinutes()).padStart(2,'0'));
     
     
         const currentTime = `${hours}:${minutes}`;

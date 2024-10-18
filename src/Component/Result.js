@@ -2,7 +2,7 @@ import "./Result.css";
 import data from "../Data/data.json";
 import {useState, useEffect, useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCareRight, faCareLeft } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 const Result = () => {
@@ -93,13 +93,13 @@ const Result = () => {
     return(
         <div className="Result">
             <div className="ResultHeader">
-                <FontAwesomeIcon icon={faCareLeft} style={{color: 'black', width: "20px"}} onClick={handleYesterday}/>
+                <FontAwesomeIcon icon={faCaretLeft} style={{color: 'black', width: "20px"}} onClick={handleYesterday}/>
                 <div className="Date">
                     {
                         String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0') + (String(currentDate.getMonth()+1).padStart(2,'0') ===  String(curDate.getMonth() + 1).padStart(2,'0') && String(currentDate.getDate()).padStart(2,'0') === String(curDate.getDate()).padStart(2,'0') ? "(오늘)" : "" )
                     }
                 </div>
-                <FontAwesomeIcon icon={faCareRight} style={{color: 'black', width: "20px"}} onClick={handleTommorow}/>
+                <FontAwesomeIcon icon={faCaretRight} style={{color: 'black', width: "20px"}} onClick={handleTommorow}/>
             </div>
             <div className="ResultSummary">
                 <div className="GrayBlock">
@@ -145,3 +145,5 @@ const Result = () => {
 
 
 }
+
+export default Result;

@@ -149,7 +149,7 @@ export const {setQueue, enqueue, dequeue} = queue.actions;
 export default configureStore({
 
     reducer:{
-        isYes : tes.reducer,
+        isYes : yes.reducer,
         date : date.reducer,
         time : time.reducer,
         water : water.reducer,

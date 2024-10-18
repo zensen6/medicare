@@ -4,7 +4,6 @@ import {useState, useEffect, useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useSelector, useDispatch} from 'react-redux';
 import { faWhiskeyGlass, faGlassWater, faBottleWater } from "@fortawesome/free-solid-svg-icons";
-import { setPees, setQueue, setTimeRedux, setUrl, setWater, setWeird } from "./store";
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
 
 
@@ -34,10 +33,10 @@ function List3({ className }) {
     useEffect(() =>{
       const currentDate = new Date();
       setYear(currentDate.getFullYear());
-      setMonth(String(currentDate.getMonth()+1).padState(2,'0'));
-      setDay(String(currentDate.getDate()).padState(2,'0'));
-      setHours(String(currentDate.getHours()).padState(2,'0'));
-      setMinutes(String(currentDate.getMinutes()).padState(2,'0'));
+      setMonth(String(currentDate.getMonth()+1).padStart(2,'0'));
+      setDay(String(currentDate.getDate()).padStart(2,'0'));
+      setHours(String(currentDate.getHours()).padStart(2,'0'));
+      setMinutes(String(currentDate.getMinutes()).padStart(2,'0'));
   
   
       const currentTime = `${hours}:${minutes}`;

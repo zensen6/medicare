@@ -3,6 +3,7 @@ import ButtonHeader from './Component/ButtonHeader';
 import BodyList from './Component/BodyList';
 import { useEffect } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import Result from './Component/Result';
 
 function App() {
 
