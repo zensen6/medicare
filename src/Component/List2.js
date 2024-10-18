@@ -6,6 +6,7 @@ import './RangeSlider.css';
 function List2({ className }) {
 
     const inputRef = useRef(null);
+    const inputRef2 = useRef(null);
 
     const handleFocus = () => {
       if (inputRef.current) {
@@ -25,6 +26,7 @@ function List2({ className }) {
     const [hours, setHours] = useState("");
     const [minutes, setMinutes] = useState("");
     const [time, setTime] = useState("");
+    const [timeY, setTimeY] = useState("");
 
     useEffect(() => {
       const currentDate = new Date();
@@ -35,7 +37,9 @@ function List2({ className }) {
       setMinutes(String(currentDate.getMinutes()).padStart(2, '0'));
 
       const currentTime = `${hours}:${minutes}`;
+      const currentTimeY = `${year}:${month}:${day}`;
       setTime(currentTime);
+      setTime(currentTimeY);
 
     }, []);
 
@@ -55,12 +59,8 @@ function List2({ className }) {
         </h5>
         <div className="elementBtn">
           <span className="smallTitle">날짜</span>
-          <input type="number" className="inputY" min="1900" max="2100" value={year} />
-          <span className="smallTitle">년</span>
-          <input type="number" className="inputY" min="1" max="12" value={month}/>
-          <span className="smallTitle">월</span>
-          <input type="number" className="inputY" min="1" max="31" value={day}/>
-          <span className="smallTitle">일</span>
+          <input type="date" defaultValue={timeY} onChange={(e) => setTimeY(e.target.value)} />
+          
         </div>
         <div className="elementBtn">
           <span className="smallTitle smallTime">시간</span>
@@ -101,6 +101,16 @@ function List2({ className }) {
                 <span className={`label labelRight active2 ${value === 3 ? 'active' : ''}`}>매우 심함</span>
           </div>
         </div>
+
+
+        <div className="elementBtn">
+          <span className=""smallTitle>상황 기록(선택)</span>
+        </div>
+        <div className="elementBtn">
+          <input type="number" className="inputY inputY2" ref={inputRef2}/>
+        </div>
+
+
       </div>
     );
   }
