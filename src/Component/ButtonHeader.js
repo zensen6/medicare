@@ -3,6 +3,8 @@ import "./ButtonHeader.css";
 import React from 'react'
 import {useState} from 'react'
 import BodyList from "./BodyList";
+import { useSelector, useDispatch } from "react-redux";
+import {enqueue, dequeue, setQueue} from './store';
 
 function ButtonHeader() {
 
@@ -15,6 +17,13 @@ function ButtonHeader() {
 
   //console.log(count);
 
+
+
+    const dispatch = useDispatch();
+    const globalQueue = useSelector((state) => {
+        return state.queue;
+    });
+
   const handleButtonClick = (id) => {
     // 클릭한 버튼의 id를 기록하고 모달을 띄움
     let t = modalQueue;
@@ -23,6 +32,7 @@ function ButtonHeader() {
     }else{
         setModalQueue(modalQueue.filter(e => e !== id));
     }
+    dispatch(setQueue(modalQueue));
   };
 
     console.log(modalQueue);

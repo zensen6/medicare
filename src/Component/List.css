@@ -10,12 +10,20 @@
    display: flex;
    flex-direction: column;
    justify-content: center;
-   height: 270px;
+   height: 250px;
 }
+
+.list3{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 175px;
+ }
+
 
 .list4{
 
-    height: 310px;  
+    height: 315px;  
 }
 
 .title{
@@ -52,7 +60,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 20px;
+    height: 45px;
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
@@ -75,6 +83,9 @@
     background-color: black;
     border: none;
     color: white;
+    box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -webkit-box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -moz-box-shadow: 0px 3px 4px -3px rgbaa(112,112,112,0.75);
 }
 
 .inputY{
@@ -85,7 +96,9 @@
     width: 50px;
 }
 
-
+.inputText{
+    width: 95%;
+}
 
 .Sec0{
     position: absolute;
@@ -109,4 +122,107 @@
     position: absolute;
     top: 340px;
     left: calc(50vw - 1px);
+}
+
+.Secu01{
+    position: absolute;
+    top : 345px;
+    left : calc(50vw - 173px);
+}
+
+.Secu02{
+    position: absolute;
+    top : 280px;
+    left : calc(50vw - 173px);
+}
+
+.Secu03{
+    position: absolute;
+    top : 205px;
+    left : calc(50vw - 173px);
+}
+
+.Secu04{
+    position: absolute;
+    top : 340px;
+    left : calc(50vw - 173px);
+}
+
+
+.Secu12{
+    position: absolute;
+    top : 280px;
+    left : calc(50vw - 1px);
+}
+
+.Secu11{
+    position: absolute;
+    top : 340px;
+    left : calc(50vw - 1px);
+}
+
+.Secu13{
+    position: absolute;
+    top : 205px;
+    left : calc(50vw - 1px);
+}
+
+.Secu14{
+    position: absolute;
+    top : 340px;
+    left : calc(50vw - 1px);
+}
+
+.Circle{
+    background-color: rgb(68,180,224);
+    border-radius: 100%;
+    width: 33px;
+    height :33px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -webkit-box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -moz-box-shadow: 0px 3px 4px -3px rgbaa(112,112,112,0.75);
+}
+
+.Clicked{
+    background-color: rgb(25,25,187);
+}
+
+.yesButton{
+    background-color: white;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 3px;
+    width: 35px;
+    height : 20px;
+    font-size: 7px;
+    box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -webkit-box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -moz-box-shadow: 0px 3px 4px -3px rgbaa(112,112,112,0.75);
+}
+
+.ClickedYes{
+    background-color: rgb(25,25,187);
+    color: white;
+}
+
+.SaveInfoBtn{
+    position: absolute;
+    bottom : 30px;
+    left : calc(50vw - 80px);
+    width : 140px;
+    height : 40px;
+    border-radius: 10px;
+    background-color: rgb(25,25,187);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    font-size: 13px;
+
 }

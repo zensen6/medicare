@@ -2,6 +2,7 @@ import './App.css';
 import ButtonHeader from './Component/ButtonHeader';
 import BodyList from './Component/BodyList';
 import { useEffect } from 'react';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 function App() {
 
@@ -15,9 +16,12 @@ function App() {
 
 
   return (
-    <div className="App">
-      <ButtonHeader></ButtonHeader>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<ButtonHeader/>} />
+        <Route path="/result" element={<Result/>} />
+      </Routes>
+    </Router>
   );
 }
 
