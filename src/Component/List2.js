@@ -59,13 +59,13 @@ function List2({ className }) {
         </h5>
         <div className="elementBtn">
           <span className="smallTitle">날짜</span>
-          <input type="date" defaultValue={timeY} onChange={(e) => setTimeY(e.target.value)} />
+          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={(e) => setTimeY(e.target.value)} />
           
         </div>
         <div className="elementBtn">
           <span className="smallTitle smallTime">시간</span>
 
-          <input type="time" defaultValue={time} onChange={(e) => setTime(e.target.value)}/>
+          <input type="time" className="styledDateInput" defaultValue={time} onChange={(e) => setTime(e.target.value)}/>
 
         </div>
 
@@ -74,7 +74,7 @@ function List2({ className }) {
           <input type="number" className="inputY inputY2" ref={inputRef}/>
           <span className="smallTitle">점</span>
         </div>
-        <div className="elementBtn">
+        <div className="elementBtn3">
           <input
                 type="range"
                 min="0"
@@ -86,12 +86,12 @@ function List2({ className }) {
                 style={{width : '95%'}}
           />
         </div>
-        <div className="elementBtn">
+        <div className="elementBtn3">
           <div className="labels">
-                <span className={`label ${value === 0 ? 'active' : ''}`}>0</span>
-                <span className={`label ${value === 1 ? 'active' : ''}`}>1</span>
-                <span className={`label ${value === 2 ? 'active' : ''}`}>2</span>
-                <span className={`label ${value === 3 ? 'active' : ''}`}>3</span>
+                <span className={`label ${value === 0 ? 'active' : ''}`} style={{fontSize:"10px"}}>0</span>
+                <span className={`label ${value === 1 ? 'active' : ''}`} style={{fontSize:"10px"}}>1</span>
+                <span className={`label ${value === 2 ? 'active' : ''}`} style={{fontSize:"10px"}}>2</span>
+                <span className={`label ${value === 3 ? 'active' : ''}`} style={{fontSize:"10px"}}>3</span>
           </div>
         </div>
         <div className="elementBtn">
@@ -103,11 +103,11 @@ function List2({ className }) {
         </div>
 
 
-        <div className="elementBtn">
+        <div className="elementBtn3">
           <span className=""smallTitle>상황 기록(선택)</span>
         </div>
         <div className="elementBtn">
-          <input type="number" className="inputY inputY2" ref={inputRef2}/>
+          <input className="inputY inputY3" ref={inputRef2}/>
         </div>
 
 

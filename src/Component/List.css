@@ -10,7 +10,7 @@
    display: flex;
    flex-direction: column;
    justify-content: center;
-   height: 250px;
+   height: 280px;
 }
 
 .list3{
@@ -23,7 +23,7 @@
 
 .list4{
 
-    height: 315px;  
+    height: 350px;  
 }
 
 .title{
@@ -35,8 +35,28 @@
     font-size: 10px;
 }
 
+
+.styledDateInput {
+    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 100px; /* 원하는 크기로 설정 */
+    background-color: #f9f9f9;
+    transition: border-color 0.2s ease-in-out;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.styledDateInput:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+
 .smallTime{
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 .yangsang{
@@ -55,12 +75,42 @@
     margin-bottom: 2px;
 }
 
+.element2{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+}
+
 
 .elementBtn{
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 45px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.elementBtn2{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 35px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.elementBtn3{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 10px;
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
@@ -94,6 +144,10 @@
 
 .inputY2{
     width: 50px;
+}
+
+.inputY3{
+    width : 95%;
 }
 
 .inputText{

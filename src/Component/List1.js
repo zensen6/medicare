@@ -164,27 +164,27 @@ function List1({ className }) {
       <h5 className="title">
         도뇨 기록
       </h5>
-      <div className="elementBtn">
-          <span className="smallTitle">날짜</span>
-          <input type="date" defaultValue={timeY} onChange={handleDate} ref={inputRef2}/>
+      <div className="elementBtn2">
+          <span className="smallTitle smallTime">날짜</span>
+          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={handleDate} ref={inputRef2}/>
 
       </div>
 
-      <div className="elementBtn">
+      <div className="elementBtn2">
           <span className="smallTitle smallTime">시간</span>
-          <input type="time" defaultValue={time} onChange={handleTime}/>
+          <input type="time" className="styledDateInput" defaultValue={time} onChange={handleTime}/>
 
       </div>
 
 
 
 
-      <div className="elementBtn">
+      <div className="elementBtn2">
           <span className="smallTitle" value={0}>배뇨량</span>
           <input type="number" className="inputY inputY2" ref={inputRef2} onChange={handlePees}/>
           <span className="smallTitle">mL</span>
       </div>
-      <div className="elementBtn">
+      <div className="elementBtn3">
         <input
           type="range"
           min="0"
@@ -196,7 +196,7 @@ function List1({ className }) {
           style={{width: '95%'}}
         />
       </div>
-      <div className="elementBtn" style={{display: "flex", justifyContent:"center"}}>
+      <div className="elementBtn3" style={{display: "flex", justifyContent:"center"}}>
           <div className="labels" style={{width:"72%"}}>
             <span className={`label ${value2 === 100? 'active':''}`} style={{fontSize:"9px"}}>100</span>
             <span className={`label ${value2 === 200? 'active':''}`} style={{fontSize:"9px"}}>200</span>
@@ -207,12 +207,7 @@ function List1({ className }) {
           </div>
       </div>
 
-      <div className="elementBtn">
-          
-      </div>
-
-
-      <div className="elementBtn">
+      <div className="elementBtn2">
           <span className="smallTitle">실금 발생 여부</span>
           <button onClick={()=> handleYes()} className={`yesButton ${yes ? "ClickedYes" : ""}`}>예</button>
           <button onClick={()=> handleNo()} className={`yesButton ${yes ? "" : "ClickedYes"}`}>아니오</button>
@@ -220,12 +215,12 @@ function List1({ className }) {
 
 
 
-      <div className="elementBtn">
+      <div className="elementBtn2">
           <span className="smallTitle" value={0}>요절박 점수</span>
           <input type="number" className="inputY inputY2" ref={inputRef}/>
           <span className="smallTitle">점</span>
       </div>
-      <div className="elementBtn">
+      <div className="elementBtn3">
         <input
           type="range"
           min="0"
@@ -237,12 +232,12 @@ function List1({ className }) {
           style={{width: '95%'}}
         />
       </div>
-      <div className="elementBtn">
+      <div className="elementBtn3">
           <div className="labels">
-            <span className={`label ${value2 === 0? 'active':''}`} style={{fontSize:"10px"}}>0</span>
-            <span className={`label ${value2 === 1? 'active':''}`} style={{fontSize:"10px"}}>1</span>
-            <span className={`label ${value2 === 2? 'active':''}`} style={{fontSize:"10px"}}>2</span>
-            <span className={`label ${value2 === 3? 'active':''}`} style={{fontSize:"10px"}}>3</span>
+            <span className={`label ${value === 0? 'active':''}`} style={{fontSize:"10px"}}>0</span>
+            <span className={`label ${value === 1? 'active':''}`} style={{fontSize:"10px"}}>1</span>
+            <span className={`label ${value === 2? 'active':''}`} style={{fontSize:"10px"}}>2</span>
+            <span className={`label ${value === 3? 'active':''}`} style={{fontSize:"10px"}}>3</span>
             
           </div>
       </div>
