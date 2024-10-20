@@ -123,13 +123,20 @@ const Result = () => {
             </div>
             <div className="ResultSummary">
                 <div className="GrayBlock">
-
+                    <div className="SummaryTitle">
+                        도뇨 주기 분석
+                    </div>
                 </div>
                 <div className="GrayBlock">
-
+                    <div className="SummaryTitle">
+                        요약
+                    </div>
                 </div>
             </div>
             <div className="Advice">
+                <div className="SummaryTitle">
+                    조언
+                </div>
 
             </div>
             <table class="rwd-table">

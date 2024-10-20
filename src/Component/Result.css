@@ -36,14 +36,16 @@
     display: flex;
     justify-content: center;
     align-items: center; 
+
     width: 95%;
     height: 17%;
 }
 
 .Advice{
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center; 
+    flex-direction: column;
     width: 90%;
     height: 90px;
     border-radius: 30px;
@@ -74,7 +76,23 @@
     background-color: #e0f4ff; /* Light blue for summary blocks */
     border-radius: 30px;
     margin: 4px;
+    
 }
+
+.SummaryTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(75, 93, 108); /* Darker gray */
+    font-size: 15px; /* Slightly larger font */
+    font-weight: 600; /* Semi-bold for elegance */
+    letter-spacing: 1px; /* Spaced-out letters for readability */
+    margin-top: 12px; /* Adjusted margin for better spacing */
+    font-family: 'Poppins', sans-serif; /* Modern, clean font */
+    text-transform: uppercase; /* Makes text all uppercase for emphasis */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
 
 .item{
     display: flex;
