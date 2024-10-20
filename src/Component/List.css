@@ -250,7 +250,7 @@
 }
 
 .Clicked{
-    background-color: rgb(25,25,187);
+    background-color: #4a90e2;
 }
 
 .yesButton{
@@ -267,7 +267,7 @@
 }
 
 .ClickedYes{
-    background-color: rgb(25,25,187);
+    background-color: #4a90e2;
     color: white;
 }
 
@@ -278,7 +278,7 @@
     width : 140px;
     height : 40px;
     border-radius: 10px;
-    background-color: rgb(25,25,187);
+    background-color: #4a90e2;
     color: white;
     display: flex;
     justify-content: center;

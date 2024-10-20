@@ -73,7 +73,7 @@ function BodyList(props) {
     }else{
       localStorage.setItem('data', JSON.stringify([dataJson]));
     }
-    navigate('/result');
+    navigate('/loading');
   }
 
   if(globlaQueue.type){

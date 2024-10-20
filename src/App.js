@@ -1,9 +1,12 @@
 import './App.css';
 import ButtonHeader from './Component/ButtonHeader';
 import BodyList from './Component/BodyList';
-import { useEffect } from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import Loading from './Component/Loading';
+import { useEffect, useState } from 'react';
+import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import Result from './Component/Result';
+
+
 
 function App() {
 
@@ -15,11 +18,22 @@ function App() {
     setScreenSize();
   });
 
+  const [canAccessLoading, setCanAccessLoading] = useState(false);
+
+  // Function to allow access to loading page (you can call this based on an event)
+  const allowAccessToLoading = () => {
+    setCanAccessLoading(true);
+  };
+
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<ButtonHeader/>} />
+        <Route 
+          path="/loading" 
+          element={<Loading />} 
+        />
         <Route path="/result" element={<Result/>} />
       </Routes>
     </Router>

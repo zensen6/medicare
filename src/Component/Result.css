@@ -48,7 +48,7 @@
     flex-direction: column;
     width: 90%;
     height: 90px;
-    border-radius: 30px;
+    border-radius: 20px;
     background-color: #4a90e2; /* Same blue as header */
     color: white;
     margin-top: 5px;
@@ -93,6 +93,20 @@
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
+.SummaryTitle2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(255, 255, 255); /* Darker gray */
+    font-size: 15px; /* Slightly larger font */
+    font-weight: 600; /* Semi-bold for elegance */
+    letter-spacing: 1px; /* Spaced-out letters for readability */
+    margin-top: 12px; /* Adjusted margin for better spacing */
+    font-family: 'Poppins', sans-serif; /* Modern, clean font */
+    text-transform: uppercase; /* Makes text all uppercase for emphasis */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.1); /* Subtle shadow for depth */
+}
+
 
 .item{
     display: flex;
@@ -135,10 +149,13 @@ th, td {
 th {
     background: #62b4ff; /* Medium blue for header */
     color: white;
-    text-align: left;
-    font-size: 9px;
+    height: 20px;
+    text-align: center;
+    font-size: 8px;
     font-weight: bold;
 }
+
+
 
 tr:first-child th:first-child {
     border-top-left-radius: 6px;
@@ -151,6 +168,7 @@ tr:first-child th:last-child {
 td {
     border-right: 1px solid #bcd2e8; /* Light blue border */
     border-bottom: 1px solid #bcd2e8;
+    text-align: center;
 }
 
 td:first-child {

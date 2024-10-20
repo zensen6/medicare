@@ -1,0 +1,49 @@
+/* Loading.css */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    background-color: #f0f8ff; /* Light blue background */
+}
+
+
+.loading-message {
+    font-size: 2em;
+    color: #4a90e2; /* Deeper blue for the text */
+    animation: fadeInOut 5s ease-in-out; /* Animation for fading in and out */
+}
+
+
+.Advice{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    text-align: center;
+    width: 90%;
+    height: 90px;
+    border-radius: 10px;
+    margin-top: 30px;
+    background-color: #4a90e2; /* Same blue as header */
+    color: white;
+    margin-bottom: 5px;
+    padding: 10px;
+
+    font-size: 1.1em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
+}
+
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

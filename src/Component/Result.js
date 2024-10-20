@@ -137,7 +137,7 @@ const Result = () => {
                 </div>
             </div>
             <div className="Advice">
-                <div className="SummaryTitle">
+                <div className="SummaryTitle2">
                     조언
                 </div>
 
