@@ -43,29 +43,6 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
     }
   }, [date1, timeR, dispatch]);
 
-  
-
-  useEffect(() => {
-    // If date1 is available, set it as the initial value
-    if (date1) {
-        console.log("list2 effect : ", date1);
-        setDateValue(date1);
-      
-        console.log("after effect : ", inputRef2.defaultValue);
-    } else {
-        // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
-        const today = new Date();
-        const formattedDate = today.toISOString().split('T')[0];
-        setDateValue(formattedDate);
-        dispatch(setDate(formattedDate)); // 초기값으로 오늘 날짜 설정
-    }
-
-    // If timeR is available, set it as the initial value
-    if (timeR) {
-        setTimeValue(timeR);
-        //inputRef.
-    }
-  }, [date1, timeR, dispatch]);
 
 
   const yes1 = useSelector((state) => {
@@ -207,6 +184,19 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
   }
 
 
+  const handleDateChange = (e) => {
+    const newDate = e.target.value;
+    setDateValue(newDate);
+    dispatch(setDate(newDate));
+  };
+
+// Handle time change
+  const handleTimeChange = (e) => {
+      const newTime = e.target.value;
+      setTimeValue(newTime);
+      dispatch(setTimeRedux(newTime));
+  };
+
 
 
 
@@ -222,7 +212,17 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
           {/*
           <input type="date" className="styledDateInput" defaultValue={timeY} onChange={handleDate} ref={inputRef2}/>
           */}
-          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={handleDate} ref={inputRef2} />
+          <input 
+            type="date" 
+            className="styledDateInput" 
+
+
+            value={date1.value} 
+
+
+            onChange={handleDateChange} 
+            ref={inputRef2} 
+          />
       </div>
 
       <div className="elementBtn2">
@@ -230,7 +230,14 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
           {/*
           <input type="time" className="styledDateInput" defaultValue={time} onChange={handleTime}/>
             */}
-          <input type="time" className="styledDateInput" defaultValue={time} onChange={handleTime} ref={inputRef}/>
+          <input 
+            type="time" 
+            className="styledDateInput" 
+
+            value={timeR.value} 
+            onChange={handleTimeChange} 
+            ref={inputRef} 
+          />
 
       </div>
 
@@ -238,8 +245,8 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
 
 
       <div className="elementBtn2">
-          <span className="smallTitle" value={0}>배뇨량</span>
-          <input type="number" className="inputY inputY2" ref={inputRef2} onChange={handlePees}/>
+          <span className="smallTitle">배뇨량</span>
+          <input type="number" className="inputY inputY2" ref={inputRef2} defaultValue={0} onChange={handlePees}/>
           <span className="smallTitle">mL</span>
       </div>
       <div className="elementBtn3">
@@ -275,7 +282,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
 
       <div className="elementBtn2">
           <span className="smallTitle" value={0}>요절박 점수</span>
-          <input type="number" className="inputY inputY2" ref={inputRef}/>
+          <input type="number" className="inputY inputY2" ref={inputRef} defaultValue= {0}/>
           <span className="smallTitle">점</span>
       </div>
       <div className="elementBtn3">
