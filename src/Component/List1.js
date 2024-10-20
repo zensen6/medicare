@@ -95,10 +95,14 @@ function List1({ className }) {
     setDay(String(currentDate.getDate()).padStart(2,'0'));
     setHours(String(currentDate.getHours()).padStart(2,'0'));
     setMinutes(String(currentDate.getMinutes()).padStart(2,'0'));
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+    const currentDay = String(currentDate.getDate()).padStart(2, '0');
+ 
 
 
     const currentTime = `${hours}:${minutes}`;
-    const currentTimeY = `${year}:${month}:${day}`;
+    const currentTimeY = `${currentYear}-${currentMonth}-${currentDay}`;
 
 
     setTime(currentTime);

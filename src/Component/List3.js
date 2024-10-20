@@ -145,12 +145,12 @@ function List3({ className }) {
         </h5>
         <div className="elementBtn">
           <span className="smallTitle">날짜</span>
-          <input type="date" defaultValue={timeY} onChange={(e) => setTimeY(e.target.value)} />
+          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={(e) => setTimeY(e.target.value)} />
         </div>
         <div className="elementBtn" style={{marginTop : '8px'}}>
           <span className="smallTitle smallTime">시간</span>
 
-          <input type="time" defaultValue={time} onChange={(e) => setTime(e.target.value)}/>
+          <input type="time" className="styledDateInput" defaultValue={time} onChange={(e) => setTime(e.target.value)}/>
 
         </div>
 

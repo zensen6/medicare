@@ -104,7 +104,7 @@ function List2({ className }) {
 
 
         <div className="elementBtn3">
-          <span className=""smallTitle>상황 기록(선택)</span>
+          <span className="smallTitle">상황 기록(선택)</span>
         </div>
         <div className="elementBtn">
           <input className="inputY inputY3" ref={inputRef2}/>

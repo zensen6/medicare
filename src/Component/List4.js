@@ -85,11 +85,11 @@ function List4({ className }) {
     };
 
     return (
-        <div className={`List list4 ${className}`}>
+        <div className={`List list41 ${className}`}>
             <h5 className="title">이상증세 기록</h5>
             <div className="element">
                 <span className="smallTitle">날짜</span>
-                <input type="date" defaultValue={timeY} onChange={e => setTimeY(e.target.value)}/>
+                <input type="date" className="styledDateInput" defaultValue={timeY} onChange={e => setTimeY(e.target.value)}/>
 
             </div>
 

@@ -17,14 +17,21 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 175px;
+    height: 190px;
  }
 
 
 .list4{
 
-    height: 350px;  
+    height: 345px;  
 }
+
+.list41{
+
+    height: 315px;  
+}
+
+
 
 .title{
    margin: 10px;
@@ -38,11 +45,11 @@
 
 .styledDateInput {
     font-size: 12px;
-    padding: 4px 6px;
+    padding: 2px 4px;
     border-radius: 6px;
     border: 1px solid #ccc;
     outline: none;
-    width: 100px; /* 원하는 크기로 설정 */
+    width: 110px; /* 원하는 크기로 설정 */
     background-color: #f9f9f9;
     transition: border-color 0.2s ease-in-out;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -180,38 +187,38 @@
 
 .Secu01{
     position: absolute;
-    top : 345px;
+    top : 370px;
     left : calc(50vw - 173px);
 }
 
 .Secu02{
     position: absolute;
-    top : 280px;
+    top : 305px;
     left : calc(50vw - 173px);
 }
 
 .Secu03{
     position: absolute;
-    top : 205px;
+    top : 215px;
     left : calc(50vw - 173px);
 }
 
 .Secu04{
     position: absolute;
-    top : 340px;
+    top : 350px;
     left : calc(50vw - 173px);
 }
 
 
 .Secu12{
     position: absolute;
-    top : 280px;
+    top : 305px;
     left : calc(50vw - 1px);
 }
 
 .Secu11{
     position: absolute;
-    top : 340px;
+    top : 360px;
     left : calc(50vw - 1px);
 }
 
