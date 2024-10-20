@@ -100,6 +100,15 @@ const Result = () => {
         setL1(l1);
     },[clickCount]);
 
+    const convertTo12HourFormat = (timeString) => {
+        // Assuming the timeString is in "HH:mm" format
+        const [hours, minutes] = timeString.split(':').map(Number);
+        const suffix = hours >= 12 ? 'PM' : 'AM';
+        const adjustedHours = hours % 12 || 12; // Convert to 12-hour format (0 becomes 12)
+        return `${adjustedHours}:${minutes.toString().padStart(2, '0')} ${suffix}`;
+    };
+    
+
 
     return(
         <div className="Result">
@@ -123,6 +132,79 @@ const Result = () => {
             <div className="Advice">
 
             </div>
+            <table class="rwd-table">
+                <tbody>
+                    <tr>
+                        <th>시간</th>
+                        <th>수분섭취량(ml)</th>
+                        <th>배뇨량(ml)</th>
+                        <th>요절박</th>
+                        <th>실금</th>
+                        <th>이상증세</th>
+                        <th>소변사진</th>
+                        <th>삭제</th>
+                    </tr>
+                    
+                    {
+                                l1.length > 0 ? (
+                                    // Loop over the array in chunks of 8
+                                    l1.map((e, index) => {
+                                        // Every 8 elements, start a new <tr> row
+                                        if (index % 8 === 0) {
+                                            const rowItems = l1.slice(index, index + 8); // Get the next 8 elements
+                                            return (
+                                                <tr key={index}>
+                                                    {rowItems.map((item, subIndex) => {
+                                                        if(subIndex === 0){
+                                                            return <td key={subIndex}>{convertTo12HourFormat(item)}</td> // Render each item as a <td>
+                                                        }else{
+                                                            return <td key={subIndex}>{item}</td> // Render each item as a <td>
+                                                        }
+                                                    })}
+                                                </tr>
+                                            );
+                                        } else {
+                                            return null; // Do nothing for non-starting rows
+                                        }
+                                    })
+                                ) : null
+
+                            }
+
+                    
+                    
+                        
+                            {
+                                ll1.length > 0 ? (
+                                    // Loop over the array in chunks of 8
+                                    ll1.map((e, index) => {
+                                        // Every 8 elements, start a new <tr> row
+                                        if (index % 8 === 0) {
+                                            const rowItems = ll1.slice(index, index + 8); // Get the next 8 elements
+                                            return (
+                                                <tr key={index}>
+                                                    {rowItems.map((item, subIndex) => {
+                                                        if(subIndex === 0){
+                                                            return <td key={subIndex}>{convertTo12HourFormat(item)}</td> // Render each item as a <td>
+                                                        }else{
+                                                            return <td key={subIndex}>{item}</td> // Render each item as a <td>
+                                                        }
+                                                    })}
+                                                </tr>
+                                            );
+                                        } else {
+                                            return null; // Do nothing for non-starting rows
+                                        }
+                                    })
+                                ) : null
+
+                            }
+                        
+                    
+                
+                </tbody>
+            </table>
+            {/*
             <div className="Chart">
                 <div className="item">시간</div>
                 <div className="item">수분섭취량(ml)</div>
@@ -147,6 +229,7 @@ const Result = () => {
 
 
             </div>
+            */}
         </div>
 
 
