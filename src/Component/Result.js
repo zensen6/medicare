@@ -62,10 +62,15 @@ const Result = () => {
         console.log(l);
 
         const data2 = JSON.parse(localStorage.getItem("data"));
+        console.log(data2);
+
         if(data2 != null){
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                console.log("SELE : "+ selectedDate);
+                console.log((String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')));
+
 
                 if((String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) !== selectedDate) continue;
 
@@ -91,9 +96,8 @@ const Result = () => {
         }
 
         console.log(l1);
-        console.log(ll1);
         setL(l);
-        setL1(ll1);
+        setL1(l1);
     },[clickCount]);
 
 

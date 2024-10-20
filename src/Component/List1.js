@@ -102,7 +102,7 @@ function List1({ className }) {
 
 
     const currentTime = `${hours}:${minutes}`;
-    const currentTimeY = `${currentYear}-${currentMonth}-${currentDay}`;
+    const currentTimeY = `${currentYear}:${currentMonth}:${currentDay}`;
 
 
     setTime(currentTime);

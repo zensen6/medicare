@@ -71,7 +71,7 @@ function BodyList(props) {
     if(localStorage.getItem('data')){
       localStorage.setItem('data', JSON.stringify([...JSON.parse(localStorage.getItem('data')), dataJson]));
     }else{
-      localStorage.setItem('dataa', JSON.stringify([dataJson]));
+      localStorage.setItem('data', JSON.stringify([dataJson]));
     }
     navigate('/result');
   }

@@ -184,7 +184,7 @@ function List3({ className }) {
                 </span>
             </div> 
 
-            <div className={`Circle ${btn2l? "Clicked" : ""}`} ref={w2l} onClick={()=>handleClick500()}>
+            <div className={`Circle ${btn2l? "Clicked" : ""}`} ref={w2l} onClick={()=>handleClick2l()}>
                 <FontAwesomeIcon icon={faBottleWater} style={{color : 'white'}}/> 
                 <span style={{color : 'white', fontSize: '6px'}}>
                   2L
