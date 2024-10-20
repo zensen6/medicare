@@ -116,8 +116,7 @@ const Result = () => {
     };
 
     const goBack = (e) => {
-        navigate("/");
-
+        navigate("/main");
     }
     
 

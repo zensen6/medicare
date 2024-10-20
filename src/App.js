@@ -5,6 +5,7 @@ import Loading from './Component/Loading';
 import { useEffect, useState } from 'react';
 import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import Result from './Component/Result';
+import Intro from './Component/Intro';
 
 
 
@@ -29,7 +30,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<ButtonHeader/>} />
+        <Route path="/" element={<Intro/>}></Route>
+        <Route path="/main" element={<ButtonHeader/>} />
         <Route 
           path="/loading" 
           element={<Loading />} 
