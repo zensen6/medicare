@@ -22,7 +22,7 @@ function List2({ className }) {
       if (date1) {
           console.log("list2 effect : ", date1);
           setDateValue(date1);
-          inputRef2.defaultValue = date1.value;
+        
           console.log("after effect : ", inputRef2.defaultValue);
       } else {
           // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
@@ -35,6 +35,7 @@ function List2({ className }) {
       // If timeR is available, set it as the initial value
       if (timeR) {
           setTimeValue(timeR);
+          //inputRef.
       }
     }, [date1, timeR, dispatch]);
 
@@ -65,7 +66,7 @@ function List2({ className }) {
             type="date" 
             className="styledDateInput" 
 
-            
+
             value={date1.value} 
 
 
@@ -78,7 +79,8 @@ function List2({ className }) {
           <input 
             type="time" 
             className="styledDateInput" 
-            value={timeValue} 
+
+            value={timeR.value} 
             onChange={handleTimeChange} 
             ref={inputRef} 
           />

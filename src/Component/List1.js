@@ -7,23 +7,69 @@ import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, deque
 
 function List1({ className, date, timeP, onDateChange, onTimeChange }) {
 
+  const dispatch = useDispatch();
 
+  const date1 = useSelector((state) => state.date);
+  const timeR = useSelector((state) => state.time);
+  
+
+  const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
+  const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
 
 
 
   const inputRef = useRef(null);
   const inputRef2 = useRef(null);
 
+  useEffect(() => {
+    // If date1 is available, set it as the initial value
+    if (date1) {
+        console.log("list2 effect : ", date1);
+        setDateValue(date1);
+      
+        console.log("after effect : ", inputRef2.defaultValue);
+    } else {
+        // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        setDateValue(formattedDate);
+        dispatch(setDate(formattedDate)); // 초기값으로 오늘 날짜 설정
+    }
+
+    // If timeR is available, set it as the initial value
+    if (timeR) {
+        setTimeValue(timeR);
+        //inputRef.
+    }
+  }, [date1, timeR, dispatch]);
+
+  
+
+  useEffect(() => {
+    // If date1 is available, set it as the initial value
+    if (date1) {
+        console.log("list2 effect : ", date1);
+        setDateValue(date1);
+      
+        console.log("after effect : ", inputRef2.defaultValue);
+    } else {
+        // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        setDateValue(formattedDate);
+        dispatch(setDate(formattedDate)); // 초기값으로 오늘 날짜 설정
+    }
+
+    // If timeR is available, set it as the initial value
+    if (timeR) {
+        setTimeValue(timeR);
+        //inputRef.
+    }
+  }, [date1, timeR, dispatch]);
+
+
   const yes1 = useSelector((state) => {
     return state.isYes;
-  });
-
-  const date1 = useSelector((state) => {
-    return state.date;
-  });
-
-  const timeR = useSelector((state) => {
-    return state.time;
   });
 
   const water = useSelector((state) => {
@@ -50,7 +96,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
     return state.url;
   });
 
-  const dispatch = useDispatch();
+  
   const globlaQueue = useSelector((state) => {
     return state.queue;
   });

@@ -10,6 +10,8 @@ import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, deque
 function List3({ className, date, timeP, onDateChange, onTimeChange }) {
 
     const inputRef = useRef(null);
+    const inputRef2 = useRef(null);
+  
 
     const w200 = useRef(null);
     const w350 = useRef(null);
@@ -29,6 +31,13 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
     const [btn2l, setBtn2l] = useState(false);
     const [total, setTotal] = useState(0);
     const [direct, setDirect] = useState(false);
+
+    const date1 = useSelector((state) => state.date);
+    const timeR = useSelector((state) => state.time);
+  
+    const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
+    const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
+    const [value, setValue] = useState(0);  // Initial value for the score slider
 
     useEffect(() =>{
       const currentDate = new Date();
@@ -135,6 +144,44 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
 
 
 
+    useEffect(() => {
+      // If date1 is available, set it as the initial value
+      if (date1) {
+          console.log("list2 effect : ", date1);
+          setDateValue(date1);
+        
+          console.log("after effect : ", inputRef2.defaultValue);
+      } else {
+          // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
+          const today = new Date();
+          const formattedDate = today.toISOString().split('T')[0];
+          setDateValue(formattedDate);
+          dispatch(setDate(formattedDate)); // 초기값으로 오늘 날짜 설정
+      }
+
+      // If timeR is available, set it as the initial value
+      if (timeR) {
+          setTimeValue(timeR);
+          //inputRef.
+      }
+    }, [date1, timeR, dispatch]);
+
+    // Handle date change
+    const handleDateChange = (e) => {
+        const newDate = e.target.value;
+        setDateValue(newDate);
+        dispatch(setDate(newDate));
+    };
+
+    // Handle time change
+    const handleTimeChange = (e) => {
+        const newTime = e.target.value;
+        setTimeValue(newTime);
+        dispatch(setTimeRedux(newTime));
+    };
+
+
+
 
 
 
@@ -145,12 +192,29 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
         </h5>
         <div className="elementBtn">
           <span className="smallTitle">날짜</span>
-          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={(e) => setTimeY(e.target.value)} />
+          <input 
+            type="date" 
+            className="styledDateInput" 
+
+
+            value={date1.value} 
+
+
+            onChange={handleDateChange} 
+            ref={inputRef2} 
+          />
         </div>
         <div className="elementBtn" style={{marginTop : '8px'}}>
           <span className="smallTitle">시간</span>
 
-          <input type="time" className="styledDateInput" defaultValue={time} onChange={(e) => setTime(e.target.value)}/>
+          <input 
+            type="time" 
+            className="styledDateInput" 
+
+            value={timeR.value} 
+            onChange={handleTimeChange} 
+            ref={inputRef} 
+          />
 
         </div>
 

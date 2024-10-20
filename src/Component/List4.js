@@ -1,7 +1,13 @@
 import "./List.css";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
 
 function List4({ className, date, timeP, onDateChange, onTimeChange }) {
+
+    const inputRef = useRef(null);
+    const inputRef2 = useRef(null);
+    const dispatch = useDispatch();
 
     const [day, setDay] = useState("");
     const [photo, setPhoto] = useState("");
@@ -11,6 +17,13 @@ function List4({ className, date, timeP, onDateChange, onTimeChange }) {
     const [minutes, setMinutes] = useState("");
     const [time, setTime] = useState("");
     const [timeY, setTimeY] = useState("");
+    const date1 = useSelector((state) => state.date);
+    const timeR = useSelector((state) => state.time);
+  
+    const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
+    const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
+    const [value, setValue] = useState(0);  // Initial value for the score slider
+
 
 
     useEffect(() =>{
@@ -64,6 +77,43 @@ function List4({ className, date, timeP, onDateChange, onTimeChange }) {
         setDay(String(currentDate.getDate()).padStart(2, '0'));
     }, []);
 
+
+    useEffect(() => {
+        // If date1 is available, set it as the initial value
+        if (date1) {
+            console.log("list2 effect : ", date1);
+            setDateValue(date1);
+          
+            console.log("after effect : ", inputRef2.defaultValue);
+        } else {
+            // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            setDateValue(formattedDate);
+            dispatch(setDate(formattedDate)); // 초기값으로 오늘 날짜 설정
+        }
+  
+        // If timeR is available, set it as the initial value
+        if (timeR) {
+            setTimeValue(timeR);
+            //inputRef.
+        }
+      }, [date1, timeR, dispatch]);
+  
+      // Handle date change
+      const handleDateChange = (e) => {
+          const newDate = e.target.value;
+          setDateValue(newDate);
+          dispatch(setDate(newDate));
+      };
+  
+      // Handle time change
+      const handleTimeChange = (e) => {
+          const newTime = e.target.value;
+          setTimeValue(newTime);
+          dispatch(setTimeRedux(newTime));
+      };
+
     
 
     const [source, setSource] = useState("");
@@ -89,7 +139,17 @@ function List4({ className, date, timeP, onDateChange, onTimeChange }) {
             <h5 className="title">이상증세 기록</h5>
             <div className="element">
                 <span className="smallTitle">날짜</span>
-                <input type="date" className="styledDateInput" defaultValue={timeY} onChange={e => setTimeY(e.target.value)}/>
+                <input 
+                    type="date" 
+                    className="styledDateInput" 
+
+
+                    value={date1.value} 
+
+
+                    onChange={handleDateChange} 
+                    ref={inputRef2} 
+                />
 
             </div>
 
