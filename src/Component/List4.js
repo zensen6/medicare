@@ -1,7 +1,7 @@
 import "./List.css";
 import React, { useState, useEffect } from 'react';
 
-function List4({ className }) {
+function List4({ className, date, timeP, onDateChange, onTimeChange }) {
 
     const [day, setDay] = useState("");
     const [photo, setPhoto] = useState("");

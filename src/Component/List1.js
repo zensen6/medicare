@@ -5,7 +5,10 @@ import './RangeSlider.css';
 import {useSelector, useDispatch} from 'react-redux';
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
 
-function List1({ className }) {
+function List1({ className, date, timeP, onDateChange, onTimeChange }) {
+
+
+
 
 
   const inputRef = useRef(null);
@@ -169,14 +172,19 @@ function List1({ className }) {
         도뇨 기록
       </h5>
       <div className="elementBtn2">
-          <span className="smallTitle smallTime">날짜</span>
+          <span className="smallTitle">날짜</span>
+          {/*
           <input type="date" className="styledDateInput" defaultValue={timeY} onChange={handleDate} ref={inputRef2}/>
-
+          */}
+          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={handleDate} ref={inputRef2} />
       </div>
 
       <div className="elementBtn2">
-          <span className="smallTitle smallTime">시간</span>
+          <span className="smallTitle">시간</span>
+          {/*
           <input type="time" className="styledDateInput" defaultValue={time} onChange={handleTime}/>
+            */}
+          <input type="time" className="styledDateInput" defaultValue={time} onChange={handleTime} ref={inputRef}/>
 
       </div>
 

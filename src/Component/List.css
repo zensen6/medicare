@@ -272,7 +272,7 @@
 }
 
 .SaveInfoBtn{
-    position: absolute;
+    position: fixed;
     bottom : 30px;
     left : calc(50vw - 80px);
     width : 140px;
@@ -285,5 +285,5 @@
     align-items: center;
     border: none;
     font-size: 13px;
-
+    z-index: 1000;
 }

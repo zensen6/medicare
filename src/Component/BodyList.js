@@ -13,8 +13,16 @@ import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPe
 function BodyList(props) {
 
 
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleDateChange = (newDate) => {
+    dispatch(setDate(newDate));
+  };
+
+  const handleTimeChange = (newTime) => {
+    dispatch(setTimeRedux(newTime));
+  };
 
   const yes = useSelector((state) => {
     return state.isYes;
@@ -53,7 +61,7 @@ function BodyList(props) {
   });
 
   const globlaQueue = useSelector((state) => {
-    return state.queue;
+    return state.queue.queue;
   });
 
 
@@ -76,9 +84,8 @@ function BodyList(props) {
     navigate('/loading');
   }
 
-  if(globlaQueue.type){
-    console.log("listqueue : " + globlaQueue.queue);
-  }
+    console.log("listqueue : " + globlaQueue);
+    console.log("bodylist date:" , date1);
 
   const { modalQueue } = props;
 
@@ -153,8 +160,14 @@ function BodyList(props) {
       {modalQueue.map((element, index) => {
         const Component = componentMap[element]; // element에 맞는 컴포넌트 선택
         return Component ? (
-          <div key={`sec-${index}`}>  
-            {Component(index)}
+          <div key={`sec-${index}`}>
+            {/* Pass date, time, and handlers as props */}
+            {React.cloneElement(Component(index), {
+              date: date1,
+              time: timeR,
+              onDateChange: handleDateChange,
+              onTimeChange: handleTimeChange,
+            })}
           </div>
         ) : null;
       })}

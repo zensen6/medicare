@@ -7,7 +7,7 @@ import { faWhiskeyGlass, faGlassWater, faBottleWater } from "@fortawesome/free-s
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
 
 
-function List3({ className }) {
+function List3({ className, date, timeP, onDateChange, onTimeChange }) {
 
     const inputRef = useRef(null);
 
@@ -77,7 +77,7 @@ function List3({ className }) {
         t = parseInt(total) + 350;
         setTotal(parseInt(total) + 350);
       }else{
-        setBtn200(false);
+        setBtn350(false);
         t = parseInt(total) - 350;
         setTotal(parseInt(total) - 350);
       }
@@ -148,7 +148,7 @@ function List3({ className }) {
           <input type="date" className="styledDateInput" defaultValue={timeY} onChange={(e) => setTimeY(e.target.value)} />
         </div>
         <div className="elementBtn" style={{marginTop : '8px'}}>
-          <span className="smallTitle smallTime">시간</span>
+          <span className="smallTitle">시간</span>
 
           <input type="time" className="styledDateInput" defaultValue={time} onChange={(e) => setTime(e.target.value)}/>
 

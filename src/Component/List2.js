@@ -1,12 +1,57 @@
 import "./List.css";
 import React from 'react'
 import {useState, useEffect, useRef} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import './RangeSlider.css';
+import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
 
-function List2({ className }) {
+function List2({ className, date, timeP, onDateChange, onTimeChange }) {
+
+    const dispatch = useDispatch(
+
+    );
 
     const inputRef = useRef(null);
     const inputRef2 = useRef(null);
+    const dateRef = useRef(null);
+    const timeRef = useRef(null);
+
+    const yes1 = useSelector((state) => {
+      return state.isYes;
+    });
+  
+    const date1 = useSelector((state) => {
+      return state.date;
+    });
+  
+    const timeR = useSelector((state) => {
+      return state.time;
+    });
+  
+    const water = useSelector((state) => {
+      return state.water;
+    });
+  
+    const pees = useSelector((state) => {
+      return state.pees;
+    });
+  
+    const silgeum = useSelector((state) => {
+      return state.silgeum;
+    });
+  
+    const yo = useSelector((state) => {
+      return state.yo;
+    });
+  
+    const weird = useSelector((state) => {
+      return state.weird;
+    });
+  
+    const url = useSelector((state) => {
+      return state.url;
+    });
+  
 
     const handleFocus = () => {
       if (inputRef.current) {
@@ -28,6 +73,8 @@ function List2({ className }) {
     const [time, setTime] = useState("");
     const [timeY, setTimeY] = useState("");
 
+    
+
     useEffect(() => {
       const currentDate = new Date();
       setYear(currentDate.getFullYear());
@@ -40,6 +87,7 @@ function List2({ className }) {
       const currentTimeY = `${year}:${month}:${day}`;
       setTime(currentTime);
       setTime(currentTimeY);
+      console.log("list2 date : " + date1.type);
 
     }, []);
 
@@ -51,6 +99,26 @@ function List2({ className }) {
         inputRef.current.value = parseInt(event.target.value,10);
     };
 
+    const handleDate = (e) => {
+      const newDate = e.target.value;
+      setTimeY(newDate);
+      //
+      dispatch(setDate(newDate));
+      //
+      //dispatch(setDate(newDate, time)); // Dispatch both date and time
+    };
+  
+    const handleTime = (e) => {
+        const newTime = e.target.value;
+        setTime(newTime);
+        //
+        dispatch(setTimeRedux(newTime));
+        //
+        //dispatch(setTime(date1, newTime)); // Dispatch both date and time
+    };
+
+    
+
 
     return (
       <div className={`List silgeum ${className}`}>
@@ -59,14 +127,20 @@ function List2({ className }) {
         </h5>
         <div className="elementBtn">
           <span className="smallTitle">날짜</span>
-          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={(e) => setTimeY(e.target.value)} />
+          {/*
+          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={handleDate} ref={dateRef}/>
+          */}
+          <input type="date" className="styledDateInput" defaultValue={timeY} onChange={handleDate} ref={inputRef2} />
+
           
+
         </div>
         <div className="elementBtn">
           <span className="smallTitle smallTime">시간</span>
-
-          <input type="time" className="styledDateInput" defaultValue={time} onChange={(e) => setTime(e.target.value)}/>
-
+          {/*
+          <input type="time" className="styledDateInput" defaultValue={time} onChange={handleTime} ref={timeRef}/>
+          */}
+          <input type="time" className="styledDateInput" defaultValue={time} onChange={handleTime} ref={inputRef}/>
         </div>
 
         <div className="elementBtn">
