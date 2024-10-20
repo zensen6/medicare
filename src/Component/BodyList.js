@@ -64,6 +64,7 @@ function BodyList(props) {
     return state.queue.queue;
   });
 
+  
 
   const Save = (e) => {
     const dataJson = {
@@ -83,9 +84,6 @@ function BodyList(props) {
     }
     navigate('/loading');
   }
-
-    console.log("listqueue : " + globlaQueue);
-    console.log("bodylist date:" , date1);
 
   const { modalQueue } = props;
 

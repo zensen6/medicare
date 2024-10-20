@@ -1,10 +1,10 @@
 import "./ButtonHeader.css";
 
 import React from 'react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import BodyList from "./BodyList";
 import { useSelector, useDispatch } from "react-redux";
-import {enqueue, dequeue, setQueue} from './store';
+import {enqueue, dequeue, setQueue, setSilgeum} from './store';
 
 function ButtonHeader() {
 
@@ -15,6 +15,29 @@ function ButtonHeader() {
   const [btn3, setBtn3] = useState(false);
   const [btn4, setBtn4] = useState(false);
 
+  const silgeum = useSelector((state) => {
+    return state.silgeum;
+  });
+  useEffect(() => {
+    // Logs whenever silgeum changes
+    console.log("Updated silgeum: ", silgeum);
+    let updatedQueue = modalQueue;
+
+    if (!updatedQueue.includes(2) && silgeum.value === 'Y') {
+        console.log("here!!");
+        updatedQueue = [...updatedQueue, 2];
+    }
+
+    if(updatedQueue.includes(2) && silgeum.value === 'N'){
+        updatedQueue = modalQueue.filter(e=> e!==2);
+    }
+    setModalQueue(updatedQueue);
+    dispatch(setQueue(updatedQueue));
+    console.log(updatedQueue);
+
+  }, [silgeum]);
+  //console.log("header:" ,silgeum);
+
   //console.log(count);
 
 
@@ -24,18 +47,41 @@ function ButtonHeader() {
         return state.queue;
     });
 
-  const handleButtonClick = (id) => {
-    // 클릭한 버튼의 id를 기록하고 모달을 띄움
-    let t = modalQueue;
-    if(modalQueue.filter(e => e !== id).length === t.length){
-        setModalQueue(prevQueue => [...prevQueue, id]);
-    }else{
-        setModalQueue(modalQueue.filter(e => e !== id));
-    }
-    dispatch(setQueue(modalQueue));
-  };
+    const handleButtonClick = (id) => {
+        let updatedQueue = modalQueue;
+      
+        // Toggle modalQueue based on button click
+        if (modalQueue.includes(id)) {
+          // Remove from queue
+          updatedQueue = modalQueue.filter(e => e !== id);
+          
+          // If id is 2, reset silgeum to 'N'
+          if (id === 2) {
+            dispatch(setSilgeum('N'));
+          }
+        } else {
+          // Add to queue
+          updatedQueue = [...modalQueue, id];
+          
+          // If id is 2, set silgeum to 'Y'
+          if (id === 2) {
+            dispatch(setSilgeum('Y'));
+          }
+        }
+        console.log(silgeum);
+      
+        // Automatically ensure 2 is added if silgeum is 'Y'
+        
+      
+        // Update local and global queue
+        setModalQueue(updatedQueue);
+        dispatch(setQueue(updatedQueue));
+      
+        //console.log(updatedQueue);
+    };
 
-    console.log(modalQueue);
+
+    
   return (
     <>
         <div className="Header">
@@ -57,6 +103,7 @@ function ButtonHeader() {
                 </button>
             </div>
         </div>
+        
         <BodyList modalQueue={modalQueue}>
 
 

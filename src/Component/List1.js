@@ -11,7 +11,6 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
 
   const date1 = useSelector((state) => state.date);
   const timeR = useSelector((state) => state.time);
-  
 
   const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
   const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
@@ -24,10 +23,10 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
   useEffect(() => {
     // If date1 is available, set it as the initial value
     if (date1) {
-        console.log("list2 effect : ", date1);
+        //console.log("list2 effect : ", date1);
         setDateValue(date1);
       
-        console.log("after effect : ", inputRef2.defaultValue);
+        //console.log("after effect : ", inputRef2.defaultValue);
     } else {
         // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
         const today = new Date();
@@ -42,7 +41,6 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
         //inputRef.
     }
   }, [date1, timeR, dispatch]);
-
 
 
   const yes1 = useSelector((state) => {
@@ -103,7 +101,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
     }
   }
 
-
+  
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
@@ -112,6 +110,16 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
   const [time, setTime] = useState("");
   const [timeY, setTimeY] = useState("");
   const [yes, setYes] = useState(false);
+
+
+  useEffect(()=>{
+    if(silgeum.value === 'Y'){
+      setYes(true);
+    }else{
+      setYes(false);
+    }
+  },[silgeum.value])
+
 
 
   useEffect(() =>{
@@ -282,7 +290,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
 
       <div className="elementBtn2">
           <span className="smallTitle" value={0}>요절박 점수</span>
-          <input type="number" className="inputY inputY2" ref={inputRef} defaultValue= {0}/>
+          <input type="number" className="inputY inputY2" ref={inputRef} defaultValue= {0} value={yo.value}/>
           <span className="smallTitle">점</span>
       </div>
       <div className="elementBtn3">
@@ -291,7 +299,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
           min="0"
           max="3"
           step="1"
-          value={value}
+          value={yo.value}
           onChange={handleSliderChange}
           className="slider"
           style={{width: '95%'}}

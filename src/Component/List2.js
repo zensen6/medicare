@@ -16,6 +16,9 @@ function List2({ className }) {
     const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
     const [value, setValue] = useState(0);  // Initial value for the score slider
 
+    const yo = useSelector((state) => {
+      return state.yo;
+    });
     // Update local state on mount
     useEffect(() => {
       // If date1 is available, set it as the initial value
@@ -87,7 +90,7 @@ function List2({ className }) {
         </div>
         <div className="elementBtn">
           <span className="smallTitle">요절박 점수</span>
-          <input type="number" className="inputY inputY2" value={value} readOnly />
+          <input type="number" className="inputY inputY2" defaultValue={0} value={yo.value} />
           <span className="smallTitle">점</span>
         </div>
         <div className="elementBtn3">
@@ -96,7 +99,7 @@ function List2({ className }) {
             min="0"
             max="3"
             step="1"
-            value={value}
+            value={yo.value}
             onChange={handleSliderChange}
             className="slider"
             style={{width: '95%'}}
