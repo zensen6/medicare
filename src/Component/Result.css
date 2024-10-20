@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: center; 
-    height: 100vh;
+    height: 120vh;
     width: 100%;
     background-color: #f0f8ff; /* Light blue background */
 }
@@ -185,4 +185,22 @@ tr:last-child td:first-child {
 
 tr:last-child td:last-child {
     border-bottom-right-radius: 6px;
+}
+
+
+.SaveInfoBtn{
+    position: fixed;
+    bottom : 30px;
+    left : calc(50vw - 80px);
+    width : 140px;
+    height : 40px;
+    border-radius: 10px;
+    background-color: #4a90e2;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    font-size: 13px;
+    z-index: 1000;
 }

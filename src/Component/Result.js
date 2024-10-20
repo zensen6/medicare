@@ -1,6 +1,7 @@
 import "./Result.css";
 import data from "../Data/data.json";
 import {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -19,6 +20,8 @@ const Result = () => {
 
     const [month, setMonth] = useState(curMonth);
     const [day, setDay] = useState(curDay);
+
+    const navigate = useNavigate();
 
     const handleYesterday = (e) => {
         const pivot = curDate;
@@ -111,6 +114,11 @@ const Result = () => {
 
         //localStorage.setItem("data",updatedLL1);
     };
+
+    const goBack = (e) => {
+        navigate("/");
+
+    }
     
 
     return(
@@ -213,6 +221,10 @@ const Result = () => {
                 
                 </tbody>
             </table>
+
+            <button className="SaveInfoBtn" onClick={goBack}>
+                기록 추가하기
+            </button>
         </div>
     )
 }

@@ -78,7 +78,7 @@ function List2({ className }) {
           />
         </div>
         <div className="elementBtn">
-          <span className="smallTitle smallTime">시간</span>
+          <span className="smallTitle">시간</span>
           <input 
             type="time" 
             className="styledDateInput" 
