@@ -3,7 +3,7 @@ import data from "../Data/data.json";
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight, faCaretLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 const Result = () => {
@@ -130,6 +130,7 @@ const Result = () => {
                     }
                 </div>
                 <FontAwesomeIcon icon={faCaretRight} style={{color: 'black', width: "20px"}} onClick={handleTommorow}/>
+                <FontAwesomeIcon icon={faHouse} style={{position:"fixed", right : "20px", top : "20px"}} onClick={(e)=>{navigate("/")}}/>
             </div>
             <div className="ResultSummary">
                 <div className="GrayBlock">

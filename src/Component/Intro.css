@@ -128,3 +128,22 @@
     color: #555;
     text-align: center;
   }
+
+
+
+  .SaveInfoBtn{
+    position: fixed;
+    bottom : 30px;
+    left : calc(50% - 70px);
+    width : 140px;
+    height : 40px;
+    border-radius: 10px;
+    background-color: #4a90e2;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    font-size: 13px;
+    z-index: 1000;
+  }

@@ -5,7 +5,7 @@
         "water" : "300",
         "drunk" : "300",
         "yo" : "1",
-        "silgeum" : "N",
+        "silgeum" : "3",
         "weird" : "-",
         "url" : "-"
     },
@@ -15,7 +15,60 @@
         "water" : "200",
         "drunk" : "350",
         "yo" : "2",
-        "silgeum" : "N",
+        "silgeum" : "4",
+        "weird" : "-",
+        "url" : "-"
+    },
+    {
+        "date" : "10/20",
+        "time" : "8:11",
+        "water" : "200",
+        "drunk" : "350",
+        "yo" : "2",
+        "silgeum" : "3",
+        "weird" : "-",
+        "url" : "-"
+    },
+    {
+        "date" : "10/21",
+        "time" : "8:11",
+        "water" : "200",
+        "drunk" : "350",
+        "yo" : "2",
+        "silgeum" : "1",
+        "weird" : "-",
+        "url" : "-"
+    },
+
+    {
+        "date" : "10/21",
+        "time" : "8:13",
+        "water" : "300",
+        "drunk" : "350",
+        "yo" : "2",
+        "silgeum" : "1",
+        "weird" : "-",
+        "url" : "-"
+    },
+
+    {
+        "date" : "10/22",
+        "time" : "8:10",
+        "water" : "350",
+        "drunk" : "350",
+        "yo" : "2",
+        "silgeum" : "1",
+        "weird" : "-",
+        "url" : "-"
+    },
+
+    {
+        "date" : "10/22",
+        "time" : "8:13",
+        "water" : "300",
+        "drunk" : "350",
+        "yo" : "2",
+        "silgeum" : "2",
         "weird" : "-",
         "url" : "-"
     }
