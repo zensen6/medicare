@@ -5,7 +5,9 @@ import {useRef, useEffect} from 'react'
 function Intro() {
 
     let infoRefs = useRef([]);
-    const percentage = (1500 / 1500) * 100;
+   
+    const max = 1500;
+    const value = 700;
     
     /*
     const infoRef = useRef(null);
@@ -108,33 +110,54 @@ function Intro() {
 
             <div className="InfoVerticalBack">
                 <div className="InfoVertical" ref={addToRefs}>
-                    <div className="circular-progress">
-                        <div className="circular-progress-bar">
-                            <svg viewBox="0 0 36 36" className="progress-circle">
-                            <path
-                                className="circle-bg"
-                                d="M18 2.0845
-                                a 15.9155 15.9155 0 0 1 0 31.831
-                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                            />
-                            <path
-                                className="circle"
-                                strokeDasharray={`${percentage}, 100`}
-                                d="M18 2.0845
-                                a 15.9155 15.9155 0 0 1 0 31.831
-                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                            />
-                            </svg>
-                            <div className="progress-value">
-                                {700}mL
-                            <div className="progress-subtext">하루 권장 섭취량</div>
-                            <div className="progress-subtext-small">1500mL 기준</div>
-                            </div>
-                        </div>
+                    <div className="InfoTitle">
+                        총 수분 섭취량
                     </div>
+                    <svg className="progress-ring" width="120" height="120" style={{ position: 'absolute', top: 45, left: 18.43 }}>
+
+                        <circle
+                            
+                            stroke="#ccc"
+                            strokeWidth="10"
+                            fill="transparent"
+                            r="52"
+                            cx="60"
+                            cy="60"
+                            position="absolute"
+                            
+                            transform="rotate(150 60 60)"
+
+                            strokeDasharray={`${2* Math.PI * 52}`}  // 180도 만큼
+    // 8시 방향에서 시작하므로 strokeDashoffset은 전체 길이의 1/4에 해당하는 값으로 설정
+                            strokeDashoffset={`${(1/3) * 2 * Math.PI * 52}`}  
+                        
+                        />
+                    </svg>
+                    <svg className="progress-ring" width="120" height="120" style={{ position: 'absolute', top: 45, left: 18.43 }}>
+
+                        <circle
+                            
+                            stroke="#007BFF"
+                            strokeWidth="10"
+                            fill="transparent"
+                            r="52"
+                            cx="60"
+                            cy="60"
+
+                            transform="rotate(150 60 60)"
+
+                            strokeDasharray={`${2* Math.PI * 52}`}  // 180도 만큼
+    // 8시 방향에서 시작하므로 strokeDashoffset은 전체 길이의 1/4에 해당하는 값으로 설정
+                            strokeDashoffset={`${(2 * Math.PI * 52) - (4/3)*Math.PI*52*(value/max)}`}  
+                            
+                        />
+                    </svg>
+                    
+                    
+                
                 </div>
                 <div className="InfoVertical" ref={addToRefs}>
-
+                    
                 </div>
             </div>
         </div>
