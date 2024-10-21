@@ -232,7 +232,7 @@ function Intro() {
                     <div className="InfoTitle">
                         총 수분 섭취량
                     </div>
-                    <svg className="progress-ring" width="120" height="120" style={{ position: 'absolute', top: 45, left: 25 }}>
+                    <svg className="progress-ring" width="120" height="120" style={{ position: 'absolute', top: 45, left: 'calc(50% - 60px)' }}>
 
                         <circle
                             
@@ -252,7 +252,7 @@ function Intro() {
                         
                         />
                     </svg>
-                    <svg className="progress-ring" width="120" height="120" style={{ position: 'absolute', top: 45, left: 25 }}>
+                    <svg className="progress-ring" width="120" height="120" style={{ position: 'absolute', top: 45, left: 25, left: 'calc(50% - 60px)' }}>
 
                         <circle
                             
