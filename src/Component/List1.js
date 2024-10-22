@@ -15,7 +15,10 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
   const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
   const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
 
-
+  
+  const today1 = new Date();
+  const format = today1.toISOString().split('T')[0];
+        
 
   const inputRef = useRef(null);
   const inputRef2 = useRef(null);
@@ -223,8 +226,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
           <input 
             type="date" 
             className="styledDateInput" 
-
-
+            defaultValue={new Date().toISOString().slice(0, 7)}
             value={date1.value} 
 
 

@@ -4,7 +4,7 @@ import {useState, useEffect, useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useSelector, useDispatch} from 'react-redux';
 import { faWhiskeyGlass, faGlassWater, faBottleWater } from "@fortawesome/free-solid-svg-icons";
-import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
+import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo, setPopUp} from "./store";
 
 
 function List3({ className, date, timeP, onDateChange, onTimeChange }) {
@@ -38,6 +38,8 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
     const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
     const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
     const [value, setValue] = useState(0);  // Initial value for the score slider
+    const [popupVisible, setPopupVisible] = useState(false); // 상태 추가: 팝업 가시성
+
 
     useEffect(() =>{
       const currentDate = new Date();
@@ -62,6 +64,10 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
     const water = useSelector((state) => {
       return state.water;
     });
+
+    const popup = useSelector((state) => {
+      return state.popup;
+    })
 
     const handleClick200 = (e) => {
       let t;
@@ -179,7 +185,10 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
         setTimeValue(newTime);
         dispatch(setTimeRedux(newTime));
     };
-
+    
+    const handlePopupToggle = () => {
+      setPopupVisible((prev) => !prev); // 팝업 가시성 토글
+    };
 
 
 
@@ -256,6 +265,13 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
             </div> 
 
         </div>
+
+        <div className="elementDown" style={{marginTop : '8px'}}>
+          <button className="CustomBtn" onClick={(e)=>{dispatch(setPopUp(true))}}>
+            용량 버튼 직접 설정하기
+          </button>
+        </div>
+        
       </div>
     );
   }

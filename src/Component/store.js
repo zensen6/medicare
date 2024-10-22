@@ -134,6 +134,18 @@ const queue = createSlice({
     }
 });
 
+const popup = createSlice({
+    name : 'popup',
+    initialState: {
+        value : false
+    },
+    reducers:{
+        setPopUp : (state, action) => {
+            state.value = action.payload;
+        }
+    }
+});
+
 
 export const {changeState} = yes.actions;
 export const {setDate} = date.actions;
@@ -145,6 +157,8 @@ export const {setWeird} = weird.actions;
 export const {setUrl} = url.actions;
 export const {setPees} = pees.actions;
 export const {setQueue, enqueue, dequeue} = queue.actions;
+export const {setPopUp} = popup.actions;
+
 
 export default configureStore({
 
@@ -158,7 +172,8 @@ export default configureStore({
         weird : weird.reducer,
         url : url.reducer,
         pees : pees.reducer,
-        queue : queue.reducer
+        queue : queue.reducer,
+        popup : popup.reducer,
 
     }
 

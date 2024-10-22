@@ -8,7 +8,7 @@ import './List.css';
 import data from "../Data/data.json";
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from "react-router-dom";
-import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
+import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp} from "./store";
 
 function BodyList(props) {
 
@@ -64,6 +64,11 @@ function BodyList(props) {
     return state.queue.queue;
   });
 
+  const popup = useSelector((state) => {
+    return state.popup;
+  }); 
+
+  console.log("popup", popup);
   
 
   const Save = (e) => {
@@ -169,6 +174,29 @@ function BodyList(props) {
           </div>
         ) : null;
       })}
+
+      {popup.value && (
+                <div className="popup">
+                    <h6>직접 설정할 용량 입력하기</h6>
+                    <input 
+                        type="number" 
+                        placeholder="ml 입력"
+                    />
+                    <button onClick={() => {
+                        dispatch(setPopUp(false)); // 팝업 닫기
+                    }}>
+                        설정하기
+                    </button>
+                    <button onClick={() => dispatch(setPopUp(false))}>
+                        취소
+                    </button>
+                </div>
+            )}
+
+
+
+
+
       <button className="SaveInfoBtn" onClick={Save}>
         기록 저장하기
       </button>
