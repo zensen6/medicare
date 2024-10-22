@@ -17,8 +17,11 @@ function Intro() {
     const navigate = useNavigate();
     const [curDate, setCurDate] = useState(new Date());
     const [total, setTotal] = useState(0);
+    const [baenow, setBaenow] = useState(0);
     const [Y, setY] = useState([0, 0, 0, 0, 0]); // Y 값을 상태로 관리
     const [calen, setCalen] = useState([0,0,0,0,0]);
+    const [avg, setAvg] = useState(0);
+    const [len, setLen] = useState(0);
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
     useEffect(()=>{
@@ -34,11 +37,14 @@ function Intro() {
         setCalen(datesToCheck);
         let newTotal = 0; // 새로운 총합을 저장할 변수
         let newY = [0, 0, 0, 0, 0]; // 새로운 Y 값을 저장할 배열
+        let bn = 0;
 
 
         for(let i = 0; i < json.length; i++){
             var values = Object.values(json[i]);
             const nowString = values[0];
+            bn += parseInt(values[3]);
+
             if(!datesToCheck.includes(nowString)) continue;
             if(nowString === (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'))){
                 newTotal += parseInt(values[2]);
@@ -51,13 +57,17 @@ function Intro() {
             
         }
 
+        
+
 
         const data2 = JSON.parse(localStorage.getItem("data"));
+        setLen(json.length + data2.length);
 
         if(data2 != null){
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                bn += parseInt(values["drunk"]["value"]);
 
                 if(!datesToCheck.includes(selectedDate)) continue;
                 if(NowString === selectedDate) newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
@@ -70,7 +80,10 @@ function Intro() {
             
         }
 
+        setBaenow(bn);
+
         setTotal(newTotal); // 총합 업데이트
+        setAvg(total / json.length);
         setY(newY); // Y 값 업데이트
 
     },[]);
@@ -219,6 +232,10 @@ function Intro() {
             <div className="InfoHorizontal" ref={addToRefs}>
                 <div className="InfoTitle">
                     평균 1회 배뇨량
+                </div>
+
+                <div className="InfoContent">
+                    {Math.ceil(baenow / len)} mL
                 </div>
             </div>
             <div className="InfoHorizontal2" ref={addToRefs}>
