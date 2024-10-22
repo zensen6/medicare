@@ -22,6 +22,9 @@ function Intro() {
     const [calen, setCalen] = useState([0,0,0,0,0]);
     const [avg, setAvg] = useState(0);
     const [len, setLen] = useState(0);
+    const [firstS, setFirstS] = useState("-");
+    const [lastS, setLastS] = useState("-");
+    const [freq, setFreq] = useState("-");
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
     useEffect(()=>{
@@ -77,6 +80,34 @@ function Intro() {
                     }
                 }
             }
+            
+        }
+
+
+
+        if(data2 != null){
+            var lastDay = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+            var firstIdx = data2.length-1;
+            for(let i =data2.length-2; i>=0;i--){
+                var values = data2[i];
+                var dateHere = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                if(lastDay !== dateHere) break;
+                firstIdx = i;
+            }
+            var first = data2[firstIdx]["time"]["value"];
+            var last = data2[data2.length-1]["time"]["value"];
+            if(first.split(":")[0] < "12"){
+                setFirstS("오전 " + `${parseInt(first.split(":")[0])}` + '시 ' + first.split(":")[1] + '분');
+            }else{
+                setFirstS("오후 " + `${parseInt(first.split(":")[0]) - 12}` + '시 ' + first.split(":")[1] + '분');
+            }
+
+            if(last.split(":")[0] < "12"){
+                setLastS("오전 " + `${parseInt(last.split(":")[0])}` + '시 ' + last.split(":")[1] + '분');
+            }else{
+                setLastS("오전 " + `${parseInt(last.split(":")[0]) - 12}` + '시 ' + last.split(":")[1] + '분');
+            }
+
             
         }
 
@@ -241,6 +272,32 @@ function Intro() {
             <div className="InfoHorizontal2" ref={addToRefs}>
                 <div className="InfoTitle">
                     최근 도뇨 주기 분석
+                </div>
+                <div className="grid">
+                    <div className="GridItem">
+                        첫 도뇨 시간
+                    </div>
+                    <div className="GridItem" style={{textAlign: "right"}}>
+                        {firstS}
+                    </div>
+                    <div className="GridItem">
+                        마지막 도뇨 시간
+                    </div>
+                    <div className="GridItem">
+                        {lastS}
+                    </div>
+                    <div className="GridItem">
+                        평균 도뇨 주기
+                    </div>
+                    <div className="GridItem">
+
+                    </div>
+                    <div className="GridItem">
+                        평균 도뇨 횟수
+                    </div>
+                    <div className="GridItem">
+                        {`${len} 회`}
+                    </div>
                 </div>
             </div>
 
