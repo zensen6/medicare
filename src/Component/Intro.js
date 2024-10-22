@@ -22,11 +22,30 @@ function Intro() {
     const [calen, setCalen] = useState([0,0,0,0,0]);
     const [avg, setAvg] = useState(0);
     const [len, setLen] = useState(0);
+    const [diff, setDiff] = useState(0);
     const [firstS, setFirstS] = useState("-");
     const [lastS, setLastS] = useState("-");
+    const [fIdx, setFIdx] = useState(0);
+    const [lIdx, setLIdx] = useState(0);
     const [freq, setFreq] = useState("-");
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
+
+
+    function getMinuteDifference(time1, time2) {
+        // 시간과 분을 분리 (예: "08:11" => ["08", "11"])
+        const [hours1, minutes1] = time1.split(":").map(Number);
+        const [hours2, minutes2] = time2.split(":").map(Number);
+        
+        // 총 분 계산
+        const totalMinutes1 = hours1 * 60 + minutes1;
+        const totalMinutes2 = hours2 * 60 + minutes2;
+        
+        // 분 차이 계산
+        return Math.abs(totalMinutes1 - totalMinutes2);
+    }
+
+
     useEffect(()=>{
 
         const datesToCheck = [];
@@ -88,14 +107,32 @@ function Intro() {
         if(data2 != null){
             var lastDay = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
             var firstIdx = data2.length-1;
-            for(let i =data2.length-2; i>=0;i--){
+            var lastIdx = data2.length-1;
+            for(let i =data2.length-1; i>=0;i--){
+                if(data2[lastIdx]["time"]["value"].split(0) < "05"){
+                    continue;
+                }
+                lastDay = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                lastIdx = i;
+                break;
+            }
+
+            firstIdx = lastIdx;
+            
+            for(let i = lastIdx; i>=0;i--){
                 var values = data2[i];
                 var dateHere = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                 if(lastDay !== dateHere) break;
+                if(data2[i]["time"]["value"].split(0) < "05"){
+                    break;
+                }
                 firstIdx = i;
             }
             var first = data2[firstIdx]["time"]["value"];
-            var last = data2[data2.length-1]["time"]["value"];
+            var last = data2[lastIdx]["time"]["value"];
+            
+            setDiff(getMinuteDifference(first, last));
+
             if(first.split(":")[0] < "12"){
                 setFirstS("오전 " + `${parseInt(first.split(":")[0])}` + '시 ' + first.split(":")[1] + '분');
             }else{
@@ -105,9 +142,11 @@ function Intro() {
             if(last.split(":")[0] < "12"){
                 setLastS("오전 " + `${parseInt(last.split(":")[0])}` + '시 ' + last.split(":")[1] + '분');
             }else{
-                setLastS("오전 " + `${parseInt(last.split(":")[0]) - 12}` + '시 ' + last.split(":")[1] + '분');
+                setLastS("오후 " + `${parseInt(last.split(":")[0]) - 12}` + '시 ' + last.split(":")[1] + '분');
             }
 
+            setFIdx(firstIdx);
+            setLIdx(lastIdx);
             
         }
 
@@ -290,13 +329,13 @@ function Intro() {
                         평균 도뇨 주기
                     </div>
                     <div className="GridItem">
-
+                        {(lIdx === fIdx && fIdx === 0) ? '-' : Math.ceil((diff / (lIdx - fIdx + 1))*10)/10 + '분'}
                     </div>
                     <div className="GridItem">
                         평균 도뇨 횟수
                     </div>
                     <div className="GridItem">
-                        {`${len} 회`}
+                        {(lIdx === fIdx && fIdx === 0) ? '-' : `${lIdx - fIdx + 1} 회`}
                     </div>
                 </div>
             </div>
