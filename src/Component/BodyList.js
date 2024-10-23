@@ -189,6 +189,12 @@ function BodyList(props) {
   
 
   const Select = ((e, item) => {
+
+    if(frequentList != null){
+      if(frequentList.length === 4){
+        return;
+      }
+    }
     let List = customList.filter(c => c.name !== item.name);
     if(Array.isArray(List)){
       dispatch(setCustomList(List));
@@ -197,6 +203,9 @@ function BodyList(props) {
   });
 
   const save = (e => {
+    if(!ml.current.value){
+      return;
+    }
 
     console.log("aaaa:", nameCup.current.value);
     dispatch(setCustomList([...customList,{name:nameCup.current.value, volume:ml.current.value}]));
@@ -237,7 +246,7 @@ function BodyList(props) {
                     </div>
                     <div className="CustomContainer">
                       <div className="CustomTitle">
-                        자주 사용하는 용량
+                        자주 사용하는 용량 (최대 4개까지 가능)
                       </div>
                       {
                         frequentList.map(e =>

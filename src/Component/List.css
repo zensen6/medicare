@@ -17,7 +17,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 210px;
+    height: 220px;
     overflow: hidden;
  }
 
@@ -210,7 +210,7 @@
 
 .Secu03{
     position: absolute;
-    top : 235px;
+    top : 245px;
     left : calc(50vw - 173px);
 }
 
@@ -278,7 +278,7 @@
 }
 
 .ClickedYes{
-    background-color: #4a90e2;
+    background-color: rgb(11, 101, 198);
     color: white;
 }
 
@@ -302,6 +302,18 @@
 
 
 
+.CustomBtn{
+    width: 65%;
+    border: none;
+    height:20px;
+    border-radius: 10px;
+    background-color: #4a90e2;
+    font-size: 11px;
+    color: white;
+    box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -webkit-box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -moz-box-shadow: 0px 3px 4px -3px rgbaa(112,112,112,0.75);
+}
 
 
 

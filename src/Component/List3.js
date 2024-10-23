@@ -345,7 +345,7 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
 
         <div className="elementDown" style={{marginTop : '8px'}}>
           <button className="CustomBtn" onClick={(e)=>{dispatch(setPopUp(true))}}>
-            용량 버튼 직접 설정하기
+            용량 버튼 설정
           </button>
         </div>
         
