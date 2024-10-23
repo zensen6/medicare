@@ -95,7 +95,7 @@ function Intro() {
                 if(NowString === selectedDate) newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
                 for(let j=0;j<5;j++){
                     if(datesToCheck[j] === selectedDate){
-                        newY[j] = values["silgeum"]["value"];
+                        newY[j] += (values["silgeum"]["value"] == 'Y' ? 1 : 0);
                     }
                 }
             }
