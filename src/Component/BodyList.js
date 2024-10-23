@@ -204,6 +204,11 @@ function BodyList(props) {
     dispatch(setSelectedList(frequentList));
   }) 
 
+  const Close = (e => {
+    dispatch(setSelectedList(frequentList));
+    dispatch(setPopUp(false));
+  })
+
   return (
     <div className="BodyList">
       {modalQueue.map((element, index) => {
@@ -227,7 +232,7 @@ function BodyList(props) {
                     <div className="TopTitle">
                       <span>직접 설정할 용량 입력하기</span>
                       <div>
-                        <FontAwesomeIcon icon={faX} onClick={e=>dispatch(setPopUp(false))}/>
+                        <FontAwesomeIcon icon={faX} onClick={Close}/>
                       </div>
                     </div>
                     <div className="CustomContainer">

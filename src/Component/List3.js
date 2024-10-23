@@ -4,13 +4,14 @@ import {useState, useEffect, useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useSelector, useDispatch} from 'react-redux';
 import { faWhiskeyGlass, faGlassWater, faBottleWater } from "@fortawesome/free-solid-svg-icons";
-import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo, setPopUp} from "./store";
+import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setSelectedList} from "./store";
 
 
 function List3({ className, date, timeP, onDateChange, onTimeChange }) {
 
     const inputRef = useRef(null);
     const inputRef2 = useRef(null);
+    const divRefs = useRef([]);
   
 
     const w200 = useRef(null);
@@ -34,7 +35,8 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
 
     const date1 = useSelector((state) => state.date);
     const timeR = useSelector((state) => state.time);
-  
+    const selectedList = useSelector((state) => state.selectedList);
+
     const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
     const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
     const [value, setValue] = useState(0);  // Initial value for the score slider
@@ -134,6 +136,24 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
     }
 
 
+    const handleClickN = (e, ml) => {
+      let t;
+      if(e.target.style.backgroundColor === "rgb(68,180,224)"){ // 안눌렸는데 누른다면
+        e.target.style.backgroundColor = "#4a90e2";
+        t = parseInt(total) + ml;
+      }else{
+        e.target.style.backgroundColor = "rgb(68,180,224)";
+        t = parseInt(total) - ml;
+      }
+      inputRef.value = total;
+      dispatch(setWater(t));
+    }
+
+    const setDivRef = (el, index) => {
+      divRefs.current[index] = el; // 배열의 특정 인덱스에 ref 설정
+    };
+
+
     const directInput = (e) => {
       setTotal(e.target.value);
       setDirect(true);
@@ -192,7 +212,7 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
 
 
 
-
+    //console.log("selected: ", selectedList);
 
     return (
       <div className={`List list3 ${className}`}>
@@ -235,6 +255,9 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
           <span className="smallTitle">ml</span>
         </div>
 
+        
+
+        {/*
         <div className="elementBtn" style={{marginTop : '8px'}}>
             <div className={`Circle ${btn200? "Clicked" : ""}`} ref={w200} onClick={()=>handleClick200()}>
                 <FontAwesomeIcon icon={faWhiskeyGlass} style={{color : 'white'}}/> 
@@ -265,6 +288,51 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
             </div> 
 
         </div>
+        */}
+
+        {
+          selectedList.map((c,index) => {
+             if(index % 4 === 0){
+              return(
+              <div className="elementBtn" style={{marginTop : '8px'}}>
+                <div className={`Circle`} ref={(el) => setDivRef(el, index)} onClick={(el)=>handleClickN(el, c.volume)}>
+                  <FontAwesomeIcon icon={faGlassWater} style={{color : 'white'}}/> 
+                  <span style={{color : 'white', fontSize: '6px'}}>
+                    {selectedList[index].volume}
+                  </span>
+                </div>
+
+                <div className={`Circle`} ref={(el) => setDivRef(el, index+1)} onClick={(el)=>handleClickN(el, selectedList[index+1].volume)}>
+                  <FontAwesomeIcon icon={faGlassWater} style={{color : 'white'}}/> 
+                  <span style={{color : 'white', fontSize: '6px'}}>
+                    {selectedList[index+1].volume}
+                  </span>
+                </div>
+
+                <div className={`Circle`} ref={(el) => setDivRef(el, index+2)} onClick={(el)=>handleClickN(el, selectedList[index+2].volume)}>
+                  <FontAwesomeIcon icon={faGlassWater} style={{color : 'white'}}/> 
+                  <span style={{color : 'white', fontSize: '6px'}}>
+                    {selectedList[index+2].volume}
+                  </span>
+                </div>
+
+                <div className={`Circle`} ref={(el) => setDivRef(el, index+3)} onClick={(el)=>handleClickN(el, selectedList[index+3].volume)}>
+                  <FontAwesomeIcon icon={faGlassWater} style={{color : 'white'}}/> 
+                  <span style={{color : 'white', fontSize: '6px'}}>
+                    {selectedList[index+3].volume}
+                  </span>
+                </div>
+
+              </div>
+              );
+             } 
+             
+          })
+
+        }
+
+
+
 
         <div className="elementDown" style={{marginTop : '8px'}}>
           <button className="CustomBtn" onClick={(e)=>{dispatch(setPopUp(true))}}>

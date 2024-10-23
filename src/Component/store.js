@@ -155,7 +155,7 @@ const frequentList = createSlice({
         { name: "종이컵 한 컵", volume: "200" },
         { name: "머그컵 한 컵", volume: "350"  },
         { name: "작은 페트병", volume: "500"  },
-        { name: "큰 페트병", volume: "2"  }
+        { name: "큰 페트병", volume: "2000"  }
     ],
     reducers:{
         setFrequentList : (state,action) => {
@@ -171,7 +171,7 @@ const customList = createSlice({
         { name: "종이컵 1/2 컵", volume: "90"},
         { name: "머그컵 1/2 컵", volume: "175"},
         { name: "작은 페트병 1/2 병", volume: "250" },
-        { name: "큰 페트병 1/2 병", volume: "1" },
+        { name: "큰 페트병 1/2 병", volume: "1000" },
         { name: "1회용 봉투컵", volume: "45" },
         { name: "커피 라지 한잔", volume: "470" },
         { name: "대용량 커피 한잔", volume: "590" },
@@ -193,10 +193,10 @@ const customList = createSlice({
 const selectedList = createSlice({
     name : 'selectedList',
     initialState: [
-        { id: 1, name: "종이컵 한 컵", volume: "200mL", checked: true },
-        { id: 2, name: "머그컵 한 컵", volume: "350mL", checked: true },
-        { id: 3, name: "작은 페트병", volume: "500mL", checked: true },
-        { id: 4, name: "큰 페트병", volume: "2L", checked: true }
+        { name: "종이컵 한 컵", volume: "200"},
+        { name: "머그컵 한 컵", volume: "350"},
+        { name: "작은 페트병", volume: "500"},
+        { name: "큰 페트병", volume: "2000"}
     ],
     reducers:{
         setSelectedList : (state,action) => {
