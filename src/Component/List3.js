@@ -136,16 +136,25 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
     }
 
 
-    const handleClickN = (e, ml) => {
+    const handleClickN = (e, index, ml) => {
       let t;
-      if(e.target.style.backgroundColor === "rgb(68,180,224)"){ // 안눌렸는데 누른다면
-        e.target.style.backgroundColor = "#4a90e2";
-        t = parseInt(total) + ml;
+      //const targetDiv = divRefs.current[index];
+      const targetDiv = e.currentTarget;
+      console.log(targetDiv);
+
+      console.log(targetDiv.style.backgroundColor);
+      const computedStyle = window.getComputedStyle(targetDiv); // 요소의 스타일을 가져옴
+      const backgroundColor = computedStyle.backgroundColor; // 배경색
+
+      if(backgroundColor === "rgb(68, 180, 224)"){ // 안눌렸는데 누른다면
+        targetDiv.style.backgroundColor = "rgb(11, 101, 198)";
+        t = parseInt(total) + parseInt(ml);
       }else{
-        e.target.style.backgroundColor = "rgb(68,180,224)";
-        t = parseInt(total) - ml;
+        targetDiv.style.backgroundColor = "rgb(68, 180, 224)";
+        t = parseInt(total) - parseInt(ml);
       }
-      inputRef.value = total;
+      inputRef.current.value = parseInt(total);
+      setTotal(t);
       dispatch(setWater(t));
     }
 
@@ -294,29 +303,29 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
           selectedList.map((c,index) => {
              if(index % 4 === 0){
               return(
-              <div className="elementBtn" style={{marginTop : '8px'}}>
-                <div className={`Circle`} ref={(el) => setDivRef(el, index)} onClick={(el)=>handleClickN(el, c.volume)}>
+              <div key={index} className="elementBtn" style={{marginTop : '8px'}}>
+                <div className={`Circle`} ref={(el) => setDivRef(el, index)} onClick={(el)=>handleClickN(el, index, c.volume)}>
                   <FontAwesomeIcon icon={faGlassWater} style={{color : 'white'}}/> 
                   <span style={{color : 'white', fontSize: '6px'}}>
                     {selectedList[index].volume}
                   </span>
                 </div>
 
-                <div className={`Circle`} ref={(el) => setDivRef(el, index+1)} onClick={(el)=>handleClickN(el, selectedList[index+1].volume)}>
+                <div key={index+1} className={`Circle`} ref={(el) => setDivRef(el, index+1)} onClick={(el)=>handleClickN(el, index+1, selectedList[index+1].volume)}>
                   <FontAwesomeIcon icon={faGlassWater} style={{color : 'white'}}/> 
                   <span style={{color : 'white', fontSize: '6px'}}>
                     {selectedList[index+1].volume}
                   </span>
                 </div>
 
-                <div className={`Circle`} ref={(el) => setDivRef(el, index+2)} onClick={(el)=>handleClickN(el, selectedList[index+2].volume)}>
+                <div key={index+2} className={`Circle`} ref={(el) => setDivRef(el, index+2)} onClick={(el)=>handleClickN(el, index+2, selectedList[index+2].volume)}>
                   <FontAwesomeIcon icon={faGlassWater} style={{color : 'white'}}/> 
                   <span style={{color : 'white', fontSize: '6px'}}>
                     {selectedList[index+2].volume}
                   </span>
                 </div>
 
-                <div className={`Circle`} ref={(el) => setDivRef(el, index+3)} onClick={(el)=>handleClickN(el, selectedList[index+3].volume)}>
+                <div key={index+3} className={`Circle`} ref={(el) => setDivRef(el, index+3)} onClick={(el)=>handleClickN(el, index+3, selectedList[index+3].volume)}>
                   <FontAwesomeIcon icon={faGlassWater} style={{color : 'white'}}/> 
                   <span style={{color : 'white', fontSize: '6px'}}>
                     {selectedList[index+3].volume}
