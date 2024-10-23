@@ -1,3 +1,49 @@
+.CustomBtn{
+    width: 80%;
+    border: none;
+    border-radius: 10px;
+    background-color: #4a90e2;
+    font-size: 11px;
+    color: white;
+    box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -webkit-box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -moz-box-shadow: 0px 3px 4px -3px rgbaa(112,112,112,0.75);
+}
+
+
+.popup {
+    position: absolute;
+    top: -100px; /* Adjust position as needed */
+    width: 90%;
+    left: 50%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1000; /* Ensure it appears above other elements */
+    animation: slideDown 1s forwards; 
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+}
+
+@keyframes slideDown{
+    0%{
+        height: 0px;
+        opacity: 0; /* 시작 투명도 */
+
+    }
+    100% {
+        height: 700px;
+        opacity: 1; /* 최종 투명도 */
+    }
+
+
+}
+
 .BodyList{
 
     height: 120vh;
@@ -10,8 +56,8 @@
 .TopTitle {
     display: flex;
     align-items: center;
-    width: 80%;
-    justify-content: start;
+    width: 100%;
+    justify-content: space-between;
     color: rgb(75, 93, 108); /* Darker gray */
     font-size: 15px; /* Slightly larger font */
     font-weight: 600; /* Semi-bold for elegance */
@@ -20,4 +66,94 @@
     font-family: 'Poppins', sans-serif; /* Modern, clean font */
     text-transform: uppercase; /* Makes text all uppercase for emphasis */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-bottom: 10px;
+}
+
+.CustomContainer{
+    display: flex;
+    align-items: center;
+    width:100%;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.CustomTitle{
+    display: flex;
+    align-items: center;
+    width: 90%;
+    justify-content: start;
+    color: rgb(75, 93, 108); /* Darker gray */
+    font-size: 11px; /* Slightly larger font */
+    font-weight: 600; /* Semi-bold for elegance */
+    letter-spacing: 1px; /* Spaced-out letters for readability */
+    margin-top: 12px; /* Adjusted margin for better spacing */
+    font-family: 'Poppins', sans-serif; /* Modern, clean font */
+    text-transform: uppercase; /* Makes text all uppercase for emphasis */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.Element{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1.5fr 1fr;
+    width: 90%;
+    height: 50px;
+    margin-top:5px;
+    border-bottom: 1px solid black;
+}
+
+.Element2{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    width: 90%;
+    height: 40px;
+    margin-top:5px;
+}
+
+
+.ItemInElement{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.CircleCustom{
+    background-color: rgb(68,180,224);
+    border-radius: 100%;
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -webkit-box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
+    -moz-box-shadow: 0px 3px 4px -3px rgbaa(112,112,112,0.75);
+}
+
+
+.MySelf{
+    margin-top: 10px;
+    width: 85%;
+    background-color: #d3e6f6;
+    border-radius: 20px;
+    height: 130px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.CustomInput{
+    border: none;
+}
+
+.CustomBtn{
+    width: 60%;
+    border-radius: 10px;
+    height: 30px;
+    background-color: #4a90e2;
+    color : white;
 }

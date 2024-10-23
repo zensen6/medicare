@@ -152,37 +152,58 @@ const popup = createSlice({
 const frequentList = createSlice({
     name : 'frequentList',
     initialState: [
+        { name: "종이컵 한 컵", volume: "200" },
+        { name: "머그컵 한 컵", volume: "350"  },
+        { name: "작은 페트병", volume: "500"  },
+        { name: "큰 페트병", volume: "2"  }
+    ],
+    reducers:{
+        setFrequentList : (state,action) => {
+            return action.payload;
+        }
+    }
+});
+
+
+const customList = createSlice({
+    name : 'customList',
+    initialState: [
+        { name: "종이컵 1/2 컵", volume: "90"},
+        { name: "머그컵 1/2 컵", volume: "175"},
+        { name: "작은 페트병 1/2 병", volume: "250" },
+        { name: "큰 페트병 1/2 병", volume: "1" },
+        { name: "1회용 봉투컵", volume: "45" },
+        { name: "커피 라지 한잔", volume: "470" },
+        { name: "대용량 커피 한잔", volume: "590" },
+        { name: "커피 라지 두잔", volume: "470"},
+        { name: "대용량 커피 두잔", volume: "590" },
+        { name: "커피 라지 세잔", volume: "470" },
+        { name: "대용량 커피 세잔", volume: "590" },
+    
+    
+    ],
+    reducers:{
+        setCustomList : (state,action) => {
+            return action.payload; // 배열 수정시에는 return이 좋음
+        }
+    }
+});
+
+
+const selectedList = createSlice({
+    name : 'selectedList',
+    initialState: [
         { id: 1, name: "종이컵 한 컵", volume: "200mL", checked: true },
         { id: 2, name: "머그컵 한 컵", volume: "350mL", checked: true },
         { id: 3, name: "작은 페트병", volume: "500mL", checked: true },
         { id: 4, name: "큰 페트병", volume: "2L", checked: true }
     ],
     reducers:{
-        setFrequentList : (state,action) => {
-            state.value = action.payload;
+        setSelectedList : (state,action) => {
+            return action.payload;
         }
     }
 });
-
-
-const customtList = createSlice({
-    name : 'customList',
-    initialState: [
-        { id: 5, name: "종이컵 1/2 컵", volume: "90mL", checked: false },
-        { id: 6, name: "머그컵 1/2 컵", volume: "175mL", checked: false },
-        { id: 7, name: "작은 페트병 1/2 병", volume: "250mL", checked: false },
-        { id: 8, name: "큰 페트병 1/2 병", volume: "1L", checked: false },
-        { id: 9, name: "1회용 봉투컵", volume: "45mL", checked: false },
-        { id: 10, name: "커피 라지 한잔", volume: "470mL", checked: false },
-        { id: 11, name: "대용량 커피 한잔", volume: "590mL", checked: false },
-    ],
-    reducers:{
-        setFrequentList : (state,action) => {
-            state.value = action.payload;
-        }
-    }
-});
-
 
 
 
@@ -199,6 +220,8 @@ export const {setPees} = pees.actions;
 export const {setQueue, enqueue, dequeue} = queue.actions;
 export const {setPopUp} = popup.actions;
 export const {setFrequentList} = frequentList.actions;
+export const {setCustomList} = customList.actions;
+export const {setSelectedList} = selectedList.actions;
 
 export default configureStore({
 
@@ -215,6 +238,8 @@ export default configureStore({
         queue : queue.reducer,
         popup : popup.reducer,
         frequentList: frequentList.reducer,
+        customList: customList.reducer,
+        selectedList: selectedList.reducer,
     }
 
 

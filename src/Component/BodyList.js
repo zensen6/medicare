@@ -8,13 +8,19 @@ import './List.css';
 import data from "../Data/data.json";
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from "react-router-dom";
-import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp} from "./store";
+import {useRef} from 'react'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faWhiskeyGlass, faGlassWater, faBottleWater, faX } from "@fortawesome/free-solid-svg-icons";
+import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setFrequentList, setCustomList, setSelectedList} from "./store";
+
 
 function BodyList(props) {
 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const nameCup = useRef();
+  const ml = useRef();
 
   const handleDateChange = (newDate) => {
     dispatch(setDate(newDate));
@@ -68,11 +74,20 @@ function BodyList(props) {
     return state.popup;
   }); 
 
+  const frequentList = useSelector((state) => {
+    return state.frequentList;
+  });
+
+  const customList = useSelector((state) => {
+    return state.customList;
+  });
+
+  const selectedList = useSelector((state) => {
+    return state.selectedList;
+  });
+
   console.log("popup", popup);
 
-
-
-  
 
   const Save = (e) => {
     const dataJson = {
@@ -161,6 +176,34 @@ function BodyList(props) {
     4: l4
   };
 
+
+  const unSelect = (e, item) => {
+    const usList = frequentList.filter(c => c.name !== item.name);
+    if (Array.isArray(usList)) { // Check if it's an array
+      dispatch(setFrequentList(usList));
+    } else {
+      console.error("Expected usList to be an array but got:", usList);
+    }
+    dispatch(setCustomList([...customList, item]));
+  };
+  
+
+  const Select = ((e, item) => {
+    let List = customList.filter(c => c.name !== item.name);
+    if(Array.isArray(List)){
+      dispatch(setCustomList(List));
+    }
+    dispatch(setFrequentList([...frequentList,item]));
+  });
+
+  const save = (e => {
+
+    console.log("aaaa:", nameCup.current.value);
+    dispatch(setCustomList([...customList,{name:nameCup.current.value, volume:ml.current.value}]));
+
+    dispatch(setSelectedList(frequentList));
+  }) 
+
   return (
     <div className="BodyList">
       {modalQueue.map((element, index) => {
@@ -178,25 +221,105 @@ function BodyList(props) {
         ) : null;
       })}
 
-      {/*}
+      
       {popup.value && (
                 <div className="popup">
-                    <div className="TopTitle">직접 설정할 용량 입력하기</div>
-                    <input 
-                        type="number" 
-                        placeholder="ml 입력"
-                    />
-                    <button onClick={() => {
-                        dispatch(setPopUp(false)); // 팝업 닫기
-                    }}>
-                        설정하기
-                    </button>
-                    <button onClick={() => dispatch(setPopUp(false))}>
-                        취소
-                    </button>
+                    <div className="TopTitle">
+                      <span>직접 설정할 용량 입력하기</span>
+                      <div>
+                        <FontAwesomeIcon icon={faX} onClick={e=>dispatch(setPopUp(false))}/>
+                      </div>
+                    </div>
+                    <div className="CustomContainer">
+                      <div className="CustomTitle">
+                        자주 사용하는 용량
+                      </div>
+                      {
+                        frequentList.map(e =>
+                          <div className="Element">
+                            <div className="ItemInElement">
+                              <div className="CircleCustom">
+                                <FontAwesomeIcon icon={faGlassWater} style={{color:"white", zIndex:"2000"}}/> 
+                              </div>
+                            </div>
+                            <div className="ItemInElement" style={{fontSize: "13px"}}>
+                              {e.name}
+                            </div>
+                            <div className="ItemInElement" style={{fontSize: "13px"}}>
+                              {`${e.volume}mL`}
+                            </div>
+                            <div className="ItemInElement">
+                              <input type="checkbox" checked={true} onClick={(i)=>unSelect(i,e)}/>
+                            </div>    
+
+                          </div>
+                        )
+                      }
+                    </div>
+
+                    <div className="CustomContainer">
+                      <div className="CustomTitle">
+                        커스텀 하기
+                      </div>
+                      {
+                        customList.map(e =>
+                          <div className="Element">
+                            <div className="ItemInElement">
+                              <div className="CircleCustom">
+                                <FontAwesomeIcon icon={faGlassWater} style={{color:"white", zIndex:"2000"}}/> 
+                              </div>
+                            </div>
+                            <div className="ItemInElement" style={{fontSize: "13px"}}>
+                              {e.name}
+                            </div>
+                            <div className="ItemInElement" style={{fontSize: "13px"}}>
+                              {`${e.volume}mL`}
+                            </div>
+                            <div className="ItemInElement">
+                              <input type="checkbox" checked={false} onClick={(i)=>Select(i,e)}/>
+                            </div>
+                          </div>
+                        )
+                      }
+                    </div>
+                    <div className="CustomContainer">
+                      <div className="CustomTitle">
+                        직접 추가하기
+                      </div>
+                      <div className="MySelf">
+                        <div className="Element2">
+                          <div className="item">
+                            명칭
+                          </div>
+                          <div className="item">
+                              <input className="CustomInput" ref={nameCup}>
+                              </input>
+                          </div>
+                        </div>
+                        <div className="Element2">
+                          <div className="item">
+                            용량
+                          </div>
+                          <div className="item">
+                            <input 
+                                type="number" 
+                                placeholder="ml 입력"
+                                className="CustomInput"
+                                ref = {ml}
+                            />
+                          </div>
+                          
+                        </div>
+                        <button className="CustomBtn" onClick={save}>
+                          저장
+                        </button>
+                      </div>
+
+                    </div>
+                    
                 </div>
             )}
-            */}
+            
 
 
 
