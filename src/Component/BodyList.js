@@ -69,6 +69,9 @@ function BodyList(props) {
   }); 
 
   console.log("popup", popup);
+
+
+
   
 
   const Save = (e) => {
@@ -175,9 +178,10 @@ function BodyList(props) {
         ) : null;
       })}
 
+      {/*}
       {popup.value && (
                 <div className="popup">
-                    <h6>직접 설정할 용량 입력하기</h6>
+                    <div className="TopTitle">직접 설정할 용량 입력하기</div>
                     <input 
                         type="number" 
                         placeholder="ml 입력"
@@ -192,6 +196,7 @@ function BodyList(props) {
                     </button>
                 </div>
             )}
+            */}
 
 
 

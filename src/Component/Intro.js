@@ -83,7 +83,8 @@ function Intro() {
 
 
         const data2 = JSON.parse(localStorage.getItem("data"));
-        setLen(json.length + data2.length);
+
+        setLen(json.length + (data2 != null ? data2.length : 0));
 
         if(data2 != null){
             for(let i =0; i<data2.length;i++){
@@ -400,7 +401,6 @@ function Intro() {
                             total > max ? `권장 섭취량을 넘어섰습니다.`: `약 ${Math.ceil((max - total) / 200)}컵의 물을 더 마셔야 합니다.`
                         }
                     </div>
-                    
                     
                     
                 
