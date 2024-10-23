@@ -12,9 +12,9 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
   const date1 = useSelector((state) => state.date);
   const timeR = useSelector((state) => state.time);
 
+  console.log("timeR:", timeR);
   const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
   const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
-
   
   const today1 = new Date();
   const format = today1.toISOString().split('T')[0];
@@ -41,6 +41,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
     // If timeR is available, set it as the initial value
     if (timeR) {
         setTimeValue(timeR);
+
         //inputRef.
     }
   }, [date1, timeR, dispatch]);

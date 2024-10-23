@@ -4,7 +4,7 @@ import React from 'react'
 import {useState, useEffect} from 'react'
 import BodyList from "./BodyList";
 import { useSelector, useDispatch } from "react-redux";
-import {enqueue, dequeue, setQueue, setSilgeum} from './store';
+import {enqueue, dequeue, setQueue, setSilgeum, setDate, setTimeRedux} from './store';
 
 function ButtonHeader() {
 
@@ -18,14 +18,43 @@ function ButtonHeader() {
   const silgeum = useSelector((state) => {
     return state.silgeum;
   });
+
+  const date = useSelector((state) => {
+    return state.value;
+  })
+
+  const time = useSelector((state) => {
+    return state.value;
+  })
+
+  const today = new Date();
+
+// 연도, 월, 일을 각각 추출합니다
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // getMonth()는 0부터 시작하므로 +1이 필요
+    const day = String(today.getDate()).padStart(2, '0');
+
+    // "YYYY-MM-DD" 형식의 문자열로 만듭니다
+    const formattedDate = `${year}-${month}-${day}`;
+
+
+    const now = new Date();
+
+// 시간을 추출합니다
+    const hours = String(now.getHours()).padStart(2, '0'); // 0 ~ 23 범위의 시간
+    const minutes = String(now.getMinutes()).padStart(2, '0'); // 0 ~ 59 범위의 분
+
+    // "HH:MM" 형식의 문자열로 만듭니다
+    const formattedTime = `${hours}:${minutes}`;
+
+
+
   useEffect(() => {
     // Logs whenever silgeum changes
     console.log("Updated silgeum: ", silgeum);
     let updatedQueue = modalQueue;
 
     if (!updatedQueue.includes(2) && silgeum.value === 'Y') {
-        console.log("here!!");
-
     }
 
     if(updatedQueue.includes(2) && silgeum.value === 'N'){
@@ -37,7 +66,12 @@ function ButtonHeader() {
 
   }, [silgeum]);
   //console.log("header:" ,silgeum);
+  useEffect(()=>{
 
+    dispatch(setDate(formattedDate));
+    dispatch(setTimeRedux(formattedTime));
+    
+  },[]);
   //console.log(count);
 
 
