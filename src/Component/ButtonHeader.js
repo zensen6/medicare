@@ -25,11 +25,11 @@ function ButtonHeader() {
 
     if (!updatedQueue.includes(2) && silgeum.value === 'Y') {
         console.log("here!!");
-        updatedQueue = [...updatedQueue, 2];
+
     }
 
     if(updatedQueue.includes(2) && silgeum.value === 'N'){
-        updatedQueue = modalQueue.filter(e=> e!==2);
+        //updatedQueue = modalQueue.filter(e=> e!==2);
     }
     setModalQueue(updatedQueue);
     dispatch(setQueue(updatedQueue));
@@ -49,6 +49,18 @@ function ButtonHeader() {
 
     const handleButtonClick = (id) => {
         let updatedQueue = modalQueue;
+        if(modalQueue.includes(1) && id==2){
+            return;
+        }
+        if(modalQueue.includes(2) && id==1){
+            updatedQueue = modalQueue.filter(e => e !== 2);
+            updatedQueue = [...updatedQueue, id];
+            setModalQueue(updatedQueue);
+            dispatch(setQueue(updatedQueue));
+            return;
+        }
+
+
       
         // Toggle modalQueue based on button click
         if (modalQueue.includes(id)) {

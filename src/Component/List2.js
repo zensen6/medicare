@@ -2,12 +2,13 @@ import "./List.css";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import './RangeSlider.css';
-import { setDate, setTimeRedux } from "./store";
+import { setDate, setTimeRedux, setYo } from "./store";
 
 function List2({ className }) {
     const dispatch = useDispatch();
     const inputRef = useRef(null);
     const inputRef2 = useRef(null);
+    const inputRef3 = useRef(null);
 
     const date1 = useSelector((state) => state.date);
     const timeR = useSelector((state) => state.time);
@@ -56,9 +57,12 @@ function List2({ className }) {
         dispatch(setTimeRedux(newTime));
     };
 
+
     const handleSliderChange = (event) => {
-        setValue(parseInt(event.target.value, 10));
-    };
+      setValue(parseInt(event.target.value,10));
+      inputRef3.current.value = parseInt(event.target.value,10);
+      dispatch(setYo(event.target.value));
+    }
 
     return (
       <div className={`List silgeum ${className}`}>
@@ -90,7 +94,7 @@ function List2({ className }) {
         </div>
         <div className="elementBtn">
           <span className="smallTitle">요절박 점수</span>
-          <input type="number" className="inputY inputY2" defaultValue={0} value={yo.value} />
+          <input type="number" className="inputY inputY2" defaultValue={0} value={yo.value} ref={inputRef3} />
           <span className="smallTitle">점</span>
         </div>
         <div className="elementBtn3">
