@@ -141,6 +141,11 @@ const Result = () => {
         updatedLL1.splice(index, 7);
         setL1(updatedLL1);
 
+        const dataFromStorage = JSON.parse(localStorage.getItem("data")) || [];
+        const dataIndex = Math.floor(index / 7); // 각 행은 7개의 항목으로 구성되어 있으므로 인덱스를 계산
+        dataFromStorage.splice(dataIndex, 1); // 해당 인덱스의 객체 삭제
+        localStorage.setItem("data", JSON.stringify(dataFromStorage));
+
         //localStorage.setItem("data",updatedLL1);
     };
 
@@ -176,10 +181,10 @@ const Result = () => {
             time: { value: mediumTime },
             drunk: { value: 0 },
             water: { value: `${mediumWater}` },
-            yo: { value: 0 },
+            yo: { value: "0" },
             silgeum: { value: "N" },
-            weird: { value: "-" },
-            url: { value: "-" }
+            weird: { value: "" },
+            url: { value: "" }
         };
 
         // localStorage에 업데이트
@@ -188,11 +193,28 @@ const Result = () => {
         localStorage.setItem("data", JSON.stringify(jsonData));
 
 
+        const updatedData = JSON.parse(localStorage.getItem("data"));
+        const newL1 = [];
+        updatedData.forEach((entry) => {
+            newL1.push(
+                entry.time.value,
+                entry.drunk.value,
+                entry.water.value,
+                entry.yo.value,
+                entry.silgeum.value,
+                entry.weird.value || "-",
+                entry.url.value || "-"
+            );
+        });
+    
+        setL1(newL1);
+
+
         setIsPopupVisible6(false);
 
-        const newL1 = [...l1];
-        newL1.splice(newL1.length - 7, 0, mediumTime, "0", mediumWater, "0", "N", "-", "-");
-        setL1(newL1);
+        //const newL1 = [...l1];
+        //newL1.splice(newL1.length - 7, 0, mediumTime, "0", mediumWater, "0", "N", "-", "-");
+        //setL1(newL1);
 
     }
 
