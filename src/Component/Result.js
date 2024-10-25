@@ -119,10 +119,10 @@ const Result = () => {
                 lastIdx = i;
                 break;
             }
-
             if(lastIdx === 0 && data2[lastIdx]?.["time"]?.["value"]?.split(":")[0] < "05"){
                 return;
             }
+
 
             firstIdx = lastIdx;
             
