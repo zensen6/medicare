@@ -8,13 +8,18 @@ import './List.css';
 import data from "../Data/data.json";
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from "react-router-dom";
-import {useRef} from 'react'
+import {useRef, useEffect} from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faWhiskeyGlass, faGlassWater, faBottleWater, faX } from "@fortawesome/free-solid-svg-icons";
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setFrequentList, setCustomList, setSelectedList} from "./store";
 
 
 function BodyList(props) {
+
+  useEffect(() => {
+    // 페이지 로드 시 화면을 맨 위로 이동
+    window.scrollTo(0, 0);
+  }, []); 
 
 
   const dispatch = useDispatch();

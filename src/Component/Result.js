@@ -1,4 +1,5 @@
 import "./Result.css";
+import "./Popup.css";
 import data from "../Data/data.json";
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
@@ -7,6 +8,9 @@ import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-s
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 const Result = () => {
+
+
+    const [isPopupVisibleFirst, setIsPopupVisibleFirst] = useState(false);
 
     const [curDate, setCurDate] = useState(new Date());
     const [clickCount, setClickCount] = useState(0);
@@ -62,10 +66,15 @@ const Result = () => {
 
         const data2 = JSON.parse(localStorage.getItem("data"));
 
+        let isFirstCount = 0;
         if(data2 != null){
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                var Today = (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'));
+                if(selectedDate === Today){
+                    isFirstCount += 1;
+                }
 
                 if((String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) !== selectedDate) continue;
 
@@ -88,6 +97,14 @@ const Result = () => {
                 }
                 //l1.push(" ");
             }
+
+            console.log("today data :", isFirstCount);
+        }
+        if(isFirstCount === 1){
+            setIsPopupVisibleFirst(true);
+        }else if(isFirstCount >= 2){ // 당일 직전 배뇨 기록
+
+
         }
 
         setL(l);
@@ -120,8 +137,25 @@ const Result = () => {
     }
     
 
+    const handleConfirm = () => {
+        // 첫 도뇨 확인 로직 추가
+        
+        setIsPopupVisibleFirst(false);
+        navigate("/main");
+      };
+
     return(
         <div className="Result">
+
+            <FirstUrinePopup
+                isVisible={isPopupVisibleFirst}
+                onClose={() => setIsPopupVisibleFirst(false)}
+                onConfirm={handleConfirm}
+            />
+
+
+
+
             <div className="ResultHeader">
                 <FontAwesomeIcon icon={faCaretLeft} style={{color: 'black', width: "20px"}} onClick={handleYesterday}/>
                 <div className="Date">
@@ -230,3 +264,22 @@ const Result = () => {
 }
 
 export default Result;
+
+
+
+function FirstUrinePopup({ isVisible, onClose, onConfirm }) {
+    if (!isVisible) return null;
+  
+    return (
+      <div className="popup-overlay">
+        <div className="popup-content">
+          <h4>오늘의 첫 도뇨인가요?</h4>
+          <p style={{fontSize:"13px"}}>오늘 처음 도뇨를 기록하시려면 확인을 눌러주세요.</p>
+          <div className="popup-buttons">
+            <button onClick={onClose} className="popup-button cancel">아니요</button>
+            <button onClick={onConfirm} className="popup-button confirm">확인</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
