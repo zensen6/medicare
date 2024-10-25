@@ -17,19 +17,21 @@
 }
 
 
-.Advice{
+.advice1{
     display: flex;
     justify-content: center;
     align-items: center; 
     text-align: center;
     width: 90%;
-    height: 120px;
-    border-radius: 10px;
+    height: auto; /* 높이를 자동으로 조정 */
+    border-radius: 15px;
     margin-top: 30px;
     background-color: #4a90e2; /* Same blue as header */
     color: white;
     margin-bottom: 5px;
     padding: 10px;
+
+    
 
     font-size: 1.1em;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */

@@ -86,7 +86,7 @@ function Intro() {
 
         setLen(json.length + (data2 != null ? data2.length : 0));
 
-        if(data2 != null){
+        if(data2 != null && data2.length > 0){
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
@@ -105,15 +105,16 @@ function Intro() {
 
 
 
-        if(data2 != null){
-            var lastDay = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+        if(data2 != null && data2.length > 0){
+            console.log("not empty");
+            var lastDay = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
             var firstIdx = data2.length-1;
             var lastIdx = data2.length-1;
             for(let i =data2.length-1; i>=0;i--){
-                if(data2[lastIdx]["time"]["value"].split(0) < "05"){
+                if(data2[lastIdx]?.["time"]?.["value"]?.split(0) < "05"){
                     continue;
                 }
-                lastDay = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                lastDay = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
                 lastIdx = i;
                 break;
             }
@@ -122,15 +123,15 @@ function Intro() {
             
             for(let i = lastIdx; i>=0;i--){
                 var values = data2[i];
-                var dateHere = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                var dateHere = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
                 if(lastDay !== dateHere) break;
-                if(data2[i]["time"]["value"].split(0) < "05"){
+                if(data2[i]["time"]?.["value"]?.split(0) < "05"){
                     break;
                 }
                 firstIdx = i;
             }
-            var first = data2[firstIdx]["time"]["value"];
-            var last = data2[lastIdx]["time"]["value"];
+            var first = data2[firstIdx]?.["time"]?.["value"];
+            var last = data2[lastIdx]?.["time"]?.["value"];
             
             setDiff(getMinuteDifference(first, last));
 
