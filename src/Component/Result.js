@@ -11,6 +11,7 @@ const Result = () => {
 
 
     const [isPopupVisibleFirst, setIsPopupVisibleFirst] = useState(false);
+    const [isPopupVisible6, setIsPopupVisible6] = useState(false);
 
     const [curDate, setCurDate] = useState(new Date());
     const [clickCount, setClickCount] = useState(0);
@@ -67,6 +68,7 @@ const Result = () => {
         const data2 = JSON.parse(localStorage.getItem("data"));
 
         let isFirstCount = 0;
+        let is6 = false;
         if(data2 != null){
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
@@ -98,12 +100,22 @@ const Result = () => {
                 //l1.push(" ");
             }
 
+
+
             console.log("today data :", isFirstCount);
         }
         if(isFirstCount === 1){
             setIsPopupVisibleFirst(true);
         }else if(isFirstCount >= 2){ // 당일 직전 배뇨 기록
+            var lastIdx = data2.length-1;
+            var secIdx = data2.length-2;
+            var valuesLast = data2[lastIdx];
+            var valuesSec = data2[secIdx];
 
+            var diff = getMinuteDifference(valuesLast["time"]["value"], valuesSec["time"]["value"]);
+            if(diff >= 360){
+                setIsPopupVisible6(true);
+            }
 
         }
 
@@ -139,10 +151,61 @@ const Result = () => {
 
     const handleConfirm = () => {
         // 첫 도뇨 확인 로직 추가
-        
         setIsPopupVisibleFirst(false);
         navigate("/main");
-      };
+    };
+
+
+
+    const handleAutomatic = () => {
+
+        const data2 = JSON.parse(localStorage.getItem("data"));
+        var lastIdx = data2.length-1;
+        var secIdx = data2.length-2;
+        var valuesLast = data2[lastIdx];
+        var valuesSec = data2[secIdx];
+        var mediumTime = getMinutesLater(valuesLast["time"]["value"], valuesSec["time"]["value"]);
+
+        var LastWater = data2[lastIdx]["water"]["value"];
+        var SecWater =  data2[secIdx]["water"]["value"];
+        var mediumWater = Math.ceil((parseInt(LastWater) + parseInt(SecWater)) / 2);
+        var Today = (curYear + "-" + String(curDate.getMonth()+1).padStart(2,'0') + '-' + String(curDate.getDate()).padStart(2,'0'));
+//[{"date":{"value":"2024-10-25"},"time":{"value":"14:39"},"drunk":{"value":350},"water":{"value":"360"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":""},"url":{"value":""}},{"date":{"value":"10/25"},"time":{"value":"02:39"},"drunk":{"value":225},"water":{"value":"0"},"yo":{"value":"0"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"}},{"date":{"value":"2024-10-25"},"time":{"value":"22:39"},"drunk":{"value":200},"water":{"value":"90"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":""},"url":{"value":""}}]
+        const dataJson = {
+            date: { value: Today },
+            time: { value: mediumTime },
+            drunk: { value: 0 },
+            water: { value: `${mediumWater}` },
+            yo: { value: 0 },
+            silgeum: { value: "N" },
+            weird: { value: "-" },
+            url: { value: "-" }
+        };
+
+        // localStorage에 업데이트
+        const jsonData = JSON.parse(localStorage.getItem("data")) || [];
+        jsonData.splice(jsonData.length - 1, 0, dataJson);
+        localStorage.setItem("data", JSON.stringify(jsonData));
+
+
+        setIsPopupVisible6(false);
+
+        const newL1 = [...l1];
+        newL1.splice(newL1.length - 7, 0, mediumTime, "0", mediumWater, "0", "N", "-", "-");
+        setL1(newL1);
+
+    }
+
+    const onClose6 = () =>{
+        setIsPopupVisible6(false);
+    }
+
+    const onConfirm6 = () =>{
+        setIsPopupVisible6(false);
+        navigate("/main");
+    }
+
+    
 
     return(
         <div className="Result">
@@ -153,6 +216,12 @@ const Result = () => {
                 onConfirm={handleConfirm}
             />
 
+            <SixHoursPopup
+                isVisible={isPopupVisible6}
+                onClose={onClose6}
+                onConfirm={onConfirm6}
+                onAutomatic={handleAutomatic}
+            />
 
 
 
@@ -283,3 +352,62 @@ function FirstUrinePopup({ isVisible, onClose, onConfirm }) {
       </div>
     );
   }
+
+
+function SixHoursPopup({ isVisible, onClose, onConfirm, onAutomatic }) {
+    if (!isVisible) return null;
+  
+    return (
+      <div className="popup-overlay2">
+        <div className="popup-content">
+          <h4>중간에 도뇨 기록을 빠뜨리셨나요?</h4>
+          <p style={{fontSize:"13px"}}>직접 기록하시려면 도뇨 기록 추가, 특이 사항 없으시다면 기록 자동 생성 자동을 눌러주세요.</p>
+          <div className="popup-buttons2">
+            <button onClick={onClose} className="popup-button cancel2">아니요</button>
+            <button onClick={onConfirm} className="popup-button confirm2">도뇨 기록 추가하기</button>
+            <button onClick={onAutomatic} className="popup-button confirm2">기록 자동 생성하기</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
+  function getMinuteDifference(time1, time2) {
+    // 시간과 분을 분리 (예: "08:11" => ["08", "11"])
+    const [hours1, minutes1] = time1.split(":").map(Number);
+    const [hours2, minutes2] = time2.split(":").map(Number);
+    
+    // 총 분 계산
+    const totalMinutes1 = hours1 * 60 + minutes1;
+    const totalMinutes2 = hours2 * 60 + minutes2;
+    
+    // 분 차이 계산
+    return Math.abs(totalMinutes1 - totalMinutes2);
+}
+
+function getMinutesLater(time1, time2) {
+    // Parse hours and minutes for each time
+    const [hours1, minutes1] = time1.split(":").map(Number);
+    const [hours2, minutes2] = time2.split(":").map(Number);
+    
+    // Convert both times to total minutes
+    const totalMinutes1 = hours1 * 60 + minutes1;
+    const totalMinutes2 = hours2 * 60 + minutes2;
+
+    // Identify the earlier time and calculate the time difference
+    const earlier = Math.min(totalMinutes1, totalMinutes2);
+    const difference = Math.abs(totalMinutes1 - totalMinutes2);
+
+    // Calculate the midpoint in minutes
+    const midpointMinutes = earlier + Math.floor(difference / 2);
+
+    // Convert midpoint back to hours and minutes
+    const resultHours = Math.floor(midpointMinutes / 60) % 24;  // 24-hour format
+    const resultMinutes = midpointMinutes % 60;
+
+    // Format the time to "HH:MM"
+    return `${resultHours.toString().padStart(2, '0')}:${resultMinutes.toString().padStart(2, '0')}`;
+}
+
+  //[{"date":{"value":"2024-10-25"},"time":{"value":"14:52"},"drunk":{"value":2000},"water":{"value":"470"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":""}},{"date":"10/25","time":"25.366666666666667:22","drunk":250,"water":0,"yo":0,"silgeum":"N","weird":"-","url":"-"},{"date":{"value":"2024-10-25"},"time":{"value":"21:52"},"drunk":{"value":350},"water":{"value":"30"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":""}}]
