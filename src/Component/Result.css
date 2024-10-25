@@ -204,3 +204,23 @@ tr:last-child td:last-child {
     font-size: 13px;
     z-index: 1000;
 }
+
+
+.grid{
+    display : grid;
+    margin : 10px;
+    width: 100%;
+    height: 90%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+
+.GridItem{
+    display: flex;
+    margin-left: 20px;
+    justify-content: start;
+    width: 100%;
+    height: 100%;
+    font-size: 10px;
+    align-items: center;
+}
