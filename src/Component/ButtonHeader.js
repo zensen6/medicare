@@ -5,6 +5,11 @@ import {useState, useEffect} from 'react'
 import BodyList from "./BodyList";
 import { useSelector, useDispatch } from "react-redux";
 import {enqueue, dequeue, setQueue, setSilgeum, setDate, setTimeRedux} from './store';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {useNavigate} from "react-router-dom";
+
 
 function ButtonHeader() {
 
@@ -14,6 +19,11 @@ function ButtonHeader() {
   const [btn2, setBtn2] = useState(false);
   const [btn3, setBtn3] = useState(false);
   const [btn4, setBtn4] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+
+
+
+  const navigate = useNavigate();
 
   const silgeum = useSelector((state) => {
     return state.silgeum;
@@ -83,6 +93,13 @@ function ButtonHeader() {
     const handleButtonClick = (id) => {
         let updatedQueue = modalQueue;
         if(modalQueue.includes(1) && id==2){
+            setPopupMessage("도뇨기록에 중복되는 항목이 있습니다");
+
+            // Hide the message after 1 second
+            setTimeout(() => {
+                setPopupMessage("");
+            }, 1500);
+
             return;
         }
         if(modalQueue.includes(2) && id==1){
@@ -130,8 +147,16 @@ function ButtonHeader() {
   return (
     <>
         <div className="Header">
+            {popupMessage && (
+                <div className="popup-message">
+                    {popupMessage}
+                </div>
+            )}
+
+
             <div className="HeaderElement">
                 <h4>기록하고 싶은 항목을 모두 클릭하세요</h4>    
+                <FontAwesomeIcon icon={faHouse} style={{position:"absolute", right : "20px", top : "26px"}} onClick={(e)=>{navigate("/")}}/>
             </div>
             <div className="HeaderElement">
                 <button className="Button1" onClick={() => handleButtonClick(1)}>

@@ -68,3 +68,22 @@
     border: none;
     
 }
+
+
+.popup-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    position: fixed;
+    top: 10px;
+    left: calc(50vw - 125px);
+    z-index: 1000;
+    animation: fadeOut 1.5s linear forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}

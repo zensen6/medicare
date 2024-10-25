@@ -395,7 +395,7 @@ const Result = () => {
                     }
                 </div>
                 <FontAwesomeIcon icon={faCaretRight} style={{color: 'black', width: "20px"}} onClick={handleTommorow}/>
-                <FontAwesomeIcon icon={faHouse} style={{position:"fixed", right : "20px", top : "20px"}} onClick={(e)=>{navigate("/")}}/>
+                <FontAwesomeIcon icon={faHouse} style={{position:"absolute", right : "20px", top : "20px"}} onClick={(e)=>{navigate("/")}}/>
             </div>
             <div className="ResultSummary">
                 <div className="GrayBlock">

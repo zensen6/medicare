@@ -307,19 +307,19 @@ function BodyList(props) {
                       </div>
                       <div className="MySelf">
                         <div className="Element2">
-                          <div className="item">
+                          <div className="item_">
                             명칭
                           </div>
-                          <div className="item">
+                          <div className="item_">
                               <input className="CustomInput" ref={nameCup}>
                               </input>
                           </div>
                         </div>
                         <div className="Element2">
-                          <div className="item">
+                          <div className="item_">
                             용량
                           </div>
-                          <div className="item">
+                          <div className="item_">
                             <input 
                                 type="number" 
                                 placeholder="ml 입력"
