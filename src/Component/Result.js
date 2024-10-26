@@ -88,8 +88,7 @@ const Result = () => {
             if(!datesToCheck.includes(nowString)) continue;
             if(nowString === (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'))){
                 newTotal += parseInt(values[2]);
-            }
-            
+            } 
         }
 
         
@@ -99,81 +98,66 @@ const Result = () => {
 
         setLen(json.length + (data2 != null ? data2.length : 0));
 
+        var clickedDate = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
+        console.log("clicked:", clickedDate);
+        var firstIdx = -1;
+        var lastIdx = -1;
         if(data2 != null && data2.length > 0){
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                bn += parseInt(values["drunk"]["value"]);
-
-                if(!datesToCheck.includes(selectedDate)) continue;
-                if(NowString === selectedDate) newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
-                for(let j=0;j<5;j++){
-                    if(datesToCheck[j] === selectedDate){
-                        newY[j] += (values["silgeum"]["value"] == 'Y' ? 1 : 0);
-                    }
-                }
-            }
-            
-        }
-
-
-
-        if(data2 != null && data2.length > 0){
-            console.log("not empty");
-            var lastDay = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
-            var firstIdx = data2.length-1;
-            var lastIdx = data2.length-1;
-            for(let i =data2.length-1; i>=0;i--){
-                if(data2[lastIdx]?.["time"]?.["value"]?.split(":")[0] < "05"){
-                    continue;
-                }
-                lastDay = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
-                lastIdx = i;
-                break;
-            }
-            if(lastIdx === 0 && data2[lastIdx]?.["time"]?.["value"]?.split(":")[0] < "05"){
-                return;
-            }
-
-
-            firstIdx = lastIdx;
-            
-            for(let i = lastIdx; i>=0;i--){
-                var values = data2[i];
-                var dateHere = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
-                if(lastDay !== dateHere) break;
-                if(data2[i]["time"]?.["value"]?.split(":")[0] < "05"){
+                if(clickedDate === selectedDate){
+                    firstIdx = i;
                     break;
                 }
-                firstIdx = i;
+                //bn += parseInt(values["drunk"]["value"]);
+                //if(NowString === selectedDate) newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
             }
-            var first = data2[firstIdx]?.["time"]?.["value"];
-            var last = data2[lastIdx]?.["time"]?.["value"];
-            
-            setDiff(getMinuteDifference(first, last));
 
-            if(first.split(":")[0] < "12"){
-                setFirstS("오전 " + `${parseInt(first.split(":")[0])}` + '시 ' + first.split(":")[1] + '분');
+            for(let i =data2.length-1; i>=0;i--){
+                var values = data2[i];
+                var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                if(clickedDate === selectedDate){
+                    lastIdx = i;
+                    break;
+                }
+            }   
+
+            if(firstIdx === lastIdx === -1){
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+                setFirstS("-");
+                setLastS("-");
             }else{
-                setFirstS("오후 " + `${parseInt(first.split(":")[0]) - 12}` + '시 ' + first.split(":")[1] + '분');
-            }
+                var first = data2[firstIdx]?.["time"]?.["value"];
+                var last = data2[lastIdx]?.["time"]?.["value"];
+                
+                setDiff(getMinuteDifference(first, last));
 
-            if(last.split(":")[0] < "12"){
-                setLastS("오전 " + `${parseInt(last.split(":")[0])}` + '시 ' + last.split(":")[1] + '분');
-            }else{
-                setLastS("오후 " + `${parseInt(last.split(":")[0]) - 12}` + '시 ' + last.split(":")[1] + '분');
-            }
+                if(first.split(":")[0] < "12"){
+                    setFirstS("오전 " + `${parseInt(first.split(":")[0])}` + '시 ' + first.split(":")[1] + '분');
+                }else{
+                    setFirstS("오후 " + `${parseInt(first.split(":")[0]) - 12}` + '시 ' + first.split(":")[1] + '분');
+                }
 
-            setFIdx(firstIdx);
-            setLIdx(lastIdx);
-            
+                if(last.split(":")[0] < "12"){
+                    setLastS("오전 " + `${parseInt(last.split(":")[0])}` + '시 ' + last.split(":")[1] + '분');
+                }else{
+                    setLastS("오후 " + `${parseInt(last.split(":")[0]) - 12}` + '시 ' + last.split(":")[1] + '분');
+                }
+
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+                setFirstS(data2[firstIdx]?.["time"]?.["value"]);
+                setLastS(data2[lastIdx]?.["time"]?.["value"]);
+            }
         }
 
-        setBaenow(bn);
+        //setBaenow(bn);
 
-        setTotal(newTotal); // 총합 업데이트
-        setAvg(total / json.length);
-        setY(newY); // Y 값 업데이트
+        //setTotal(newTotal); // 총합 업데이트
+        //setAvg(total / (json.length));
+        //setY(newY); // Y 값 업데이트
 
     },[]);
 
@@ -183,14 +167,73 @@ const Result = () => {
     const handleYesterday = (e) => {
         const pivot = curDate;
         const yesterday = new Date(pivot);
-        yesterday.setDate(pivot.getDate() -1);
+        yesterday.setDate(pivot.getDate() - 1);
         setCurDate(yesterday);
-
-        setMonth(String(curDate.getMonth()+1).padStart(2,'0'));
-        setDay(String(curDate.getDate()).padStart(2,'0'));
-        setClickCount(clickCount+1);
-
-    }
+    
+        setMonth(String(yesterday.getMonth() + 1).padStart(2, '0'));
+        setDay(String(yesterday.getDate()).padStart(2, '0'));
+        setClickCount(clickCount + 1);
+    
+        const data2 = JSON.parse(localStorage.getItem("data"));
+        const clickedDate = String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0');
+        console.log(clickedDate);
+        let firstIdx = -1;
+        let lastIdx = -1;
+    
+        if (data2 != null && data2.length > 0) {
+            for (let i = 0; i < data2.length; i++) {
+                const values = data2[i];
+                const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
+                if (clickedDate === selectedDate) {
+                    firstIdx = i;
+                    break;
+                }
+            }
+    
+            for (let i = data2.length - 1; i >= 0; i--) {
+                const values = data2[i];
+                const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
+                if (clickedDate === selectedDate) {
+                    lastIdx = i;
+                    break;
+                }
+            }
+    
+            if (firstIdx === -1 && lastIdx === -1) {
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+                setFirstS("-");
+                setLastS("-");
+            } else {
+                const first = data2[firstIdx]?.["time"]?.["value"];
+                const last = data2[lastIdx]?.["time"]?.["value"];
+    
+                // first와 last가 모두 존재하는 경우에만 getMinuteDifference 호출
+                if (first && last) {
+                    setDiff(getMinuteDifference(first, last));
+    
+                    // 시간을 오전/오후 형식으로 설정
+                    const formatTime = (time) => {
+                        const [hour, minute] = time.split(":").map(Number);
+                        const period = hour < 12 ? "오전" : "오후";
+                        const formattedHour = hour % 12 || 12;
+                        return `${period} ${formattedHour}시 ${minute}분`;
+                    };
+    
+                    setFirstS(formatTime(first));
+                    setLastS(formatTime(last));
+                } else {
+                    // first 또는 last가 없을 경우 "-"로 설정
+                    setFirstS("-");
+                    setLastS("-");
+                }
+    
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+            }
+        }
+    };
+    
 
     const handleTommorow = (e) => {
         const pivot = curDate;
@@ -201,6 +244,66 @@ const Result = () => {
         setMonth(String(curDate.getMonth()+1).padStart(2,'0'));
         setDay(String(curDate.getDate()).padStart(2,'0'));
         setClickCount(clickCount+1);
+
+        const data2 = JSON.parse(localStorage.getItem("data"));
+        const clickedDate = String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0');
+        console.log(clickedDate);
+        let firstIdx = -1;
+        let lastIdx = -1;
+    
+        if (data2 != null && data2.length > 0) {
+            for (let i = 0; i < data2.length; i++) {
+                const values = data2[i];
+                const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
+                if (clickedDate === selectedDate) {
+                    firstIdx = i;
+                    break;
+                }
+            }
+    
+            for (let i = data2.length - 1; i >= 0; i--) {
+                const values = data2[i];
+                const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
+                if (clickedDate === selectedDate) {
+                    lastIdx = i;
+                    break;
+                }
+            }
+    
+            if (firstIdx === -1 && lastIdx === -1) {
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+                setFirstS("-");
+                setLastS("-");
+            } else {
+                const first = data2[firstIdx]?.["time"]?.["value"];
+                const last = data2[lastIdx]?.["time"]?.["value"];
+    
+                // first와 last가 모두 존재하는 경우에만 getMinuteDifference 호출
+                if (first && last) {
+                    setDiff(getMinuteDifference(first, last));
+    
+                    // 시간을 오전/오후 형식으로 설정
+                    const formatTime = (time) => {
+                        const [hour, minute] = time.split(":").map(Number);
+                        const period = hour < 12 ? "오전" : "오후";
+                        const formattedHour = hour % 12 || 12;
+                        return `${period} ${formattedHour}시 ${minute}분`;
+                    };
+    
+                    setFirstS(formatTime(first));
+                    setLastS(formatTime(last));
+                } else {
+                    // first 또는 last가 없을 경우 "-"로 설정
+                    setFirstS("-");
+                    setLastS("-");
+                }
+    
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+            }
+        }
+
 
     }
 
@@ -251,10 +354,6 @@ const Result = () => {
                 }
                 //l1.push(" ");
             }
-
-
-
-            console.log("today data :", isFirstCount);
         }
         if(isFirstCount === 1){
             setIsPopupVisibleFirst(true);
@@ -431,13 +530,13 @@ const Result = () => {
                             평균 도뇨 주기
                         </div>
                         <div className="GridItem">
-                            {(lIdx === fIdx && fIdx === 0) ? '-' : Math.ceil((diff / (lIdx - fIdx + 1))*10)/10 + '분'}
+                            {(lIdx === fIdx || fIdx === -1) ? '-' : Math.ceil((diff / (lIdx - fIdx))*10)/10 + '분'}
                         </div>
                         <div className="GridItem">
-                            평균 도뇨 횟수
+                            일일 도뇨 횟수
                         </div>
                         <div className="GridItem">
-                            {(lIdx === fIdx && fIdx === 0) ? '-' : `${lIdx - fIdx + 1} 회`}
+                            {(lIdx === fIdx || fIdx === -1) ? '0' : `${lIdx - fIdx} 회`}
                         </div>
 
                     </div>
@@ -510,10 +609,6 @@ const Result = () => {
                                     return (
                                         <tr key={index}>
                                             {rowItems.map((item, subIndex) => {
-
-                                                if(subIndex === 6){
-                                                    console.log("item", item);
-                                                }
 
                                                 if (subIndex === 0) {
                                                     return <td key={subIndex}>{convertTo12HourFormat(item)}</td>;

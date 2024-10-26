@@ -247,12 +247,12 @@ function BodyList(props) {
 
     const storedData = JSON.parse(localStorage.getItem('data')) || [];
     localStorage.setItem('data', JSON.stringify([...storedData, dataJson]));
-    navigate("/result");
+    navigate("/loading");
   };
 
   const onConfirmPopup = () => {
     setIsSavePopup(false);
-    navigate("/result");
+    navigate("/loading");
   };
 
 
@@ -264,13 +264,6 @@ function BodyList(props) {
         isVisible={isSavePopup}
         onClose={onClosePopup}
         onConfirm={onConfirmPopup}
-        date1={date1}
-        timeR={timeR}
-        water={water}
-        pees={pees}
-        silgeum={silgeum}
-        weird={weird}
-        url={url}
       />
 
       {modalQueue.map((element, index) => {
@@ -402,20 +395,8 @@ function BodyList(props) {
 export default BodyList;
 
 
-function DuringNightPopup({ isVisible, onClose, onConfirm, date1, timeR, water, pees, yo, silgeum, weird, url }) {
+function DuringNightPopup({ isVisible, onClose, onConfirm }) {
   if (!isVisible) return null;
-
-
-  const dataJson = {
-    date : date1,
-    time : timeR,
-    drunk : water,
-    water : pees,
-    yo : yo,
-    silgeum : silgeum,
-    weird : weird,
-    url : url
-  }
 
   return (
     <div className="popup-overlay">

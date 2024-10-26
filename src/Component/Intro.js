@@ -111,16 +111,16 @@ function Intro() {
             var firstIdx = data2.length-1;
             var lastIdx = data2.length-1;
             for(let i =data2.length-1; i>=0;i--){
-                if(data2[lastIdx]?.["time"]?.["value"]?.split(":")[0] < "05"){
-                    continue;
-                }
+                //if(data2[lastIdx]?.["time"]?.["value"]?.split(":")[0] < "05"){
+                //    continue;
+                //}
                 lastDay = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
                 lastIdx = i;
                 break;
             }
-            if(lastIdx === 0 && data2[lastIdx]?.["time"]?.["value"]?.split(":")[0] < "05"){
-                return;
-            }
+            //if(lastIdx === 0 && data2[lastIdx]?.["time"]?.["value"]?.split(":")[0] < "05"){
+            //    return;
+            //}
 
             firstIdx = lastIdx;
             
@@ -128,12 +128,12 @@ function Intro() {
                 var values = data2[i];
                 var dateHere = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
                 if(lastDay !== dateHere) break;
-                if(data2[i]["time"]?.["value"]?.split(":")[0] < "05"){
-                    break;
-                }
+                //if(data2[i]["time"]?.["value"]?.split(":")[0] < "05"){
+                //    break;
+                //}
                 firstIdx = i;
             }
-            console.log("first:", firstIdx, lastIdx);
+            //console.log("first:", firstIdx, lastIdx);
             var first = data2[firstIdx]?.["time"]?.["value"];
             var last = data2[lastIdx]?.["time"]?.["value"];
             
