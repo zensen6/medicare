@@ -68,6 +68,9 @@ function List4({ className, date, timeP, onDateChange, onTimeChange }) {
     const [isFever, setIsFever] = useState(false);
     const handleFever = () => setIsFever(!isFever);
 
+    const url = useSelector((state)=>{
+        return state.url;
+    })
 
 
     useEffect(() => {
@@ -117,18 +120,41 @@ function List4({ className, date, timeP, onDateChange, onTimeChange }) {
     
 
     const [source, setSource] = useState("");
-    const handleCapture = (target) => {
+
+    const convertBlobToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+    
+
+
+    
+    const handleCapture = async (target) => {
         if (target.files) {
             if (target.files.length !== 0) {
                 const file = target.files[0];
+
+                const base64Url = await convertBlobToBase64(file);
+                setSource(base64Url); // Base64 URL을 상태에 저장
+                dispatch(setUrl(base64Url)); // Redux 상태에 저장
+                localStorage.setItem("imageSource", base64Url); // Base64 URL을 LocalStorage에 저장
+
+                /*
                 const newUrl = URL.createObjectURL(file);
                 setSource(newUrl);
                 setPhoto(true);
+                dispatch(setUrl(newUrl));
                 
                 localStorage.setItem('imageSource', newUrl);
+                */
             }
         }
     };
+    
 
     const triggerFileInput = () => {
         document.getElementById("cameraInput").click();

@@ -211,10 +211,7 @@ function BodyList(props) {
     if(!ml.current.value){
       return;
     }
-
-    console.log("aaaa:", nameCup.current.value);
     dispatch(setCustomList([...customList,{name:nameCup.current.value, volume:ml.current.value}]));
-
     dispatch(setSelectedList(frequentList));
   }) 
 

@@ -5,8 +5,10 @@ import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import json from "../Data/data.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { setUrl } from './store';
 import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import { useSelector } from "react-redux";
 
 const Result = () => {
 
@@ -39,9 +41,16 @@ const Result = () => {
     const [fIdx, setFIdx] = useState(0);
     const [lIdx, setLIdx] = useState(0);
     const [freq, setFreq] = useState("-");
+    const [source, setSource] = useState("");
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
 
+
+    /*
+    const url = useSelector((state) => {
+        return state.url;
+    })
+    */
 
     function getMinuteDifference(time1, time2) {
         // 시간과 분을 분리 (예: "08:11" => ["08", "11"])
@@ -58,6 +67,10 @@ const Result = () => {
 
 
     useEffect(()=>{
+
+        //source
+        const source = localStorage.getItem("imageSource");
+        console.log(source);
 
         const datesToCheck = [];
         for (let i = 0; i <= 4; i++) {
@@ -461,13 +474,19 @@ const Result = () => {
                             l1.map((e, index) => {
                                 if (index % 7 === 0) {
                                     const rowItems = l1.slice(index, index + 7);
+        
                                     return (
                                         <tr key={index}>
                                             {rowItems.map((item, subIndex) => {
+                                                
                                                 if (subIndex === 0) {
                                                     return <td key={subIndex}>{convertTo12HourFormat(item)}</td>;
-                                                } else {
-                                                    return <td key={subIndex}>{item}</td>;
+                                                } 
+                                                else if(subIndex === 6 && item){
+                                                    return <td key={subIndex}><img src={item} alt={"snap"} width='20' height='20'></img></td>    
+                                                }
+                                                else {
+                                                    return<td key={subIndex}>{item}</td>;
                                                 }
                                             })}
                                             <td>
@@ -492,9 +511,18 @@ const Result = () => {
                                     return (
                                         <tr key={index}>
                                             {rowItems.map((item, subIndex) => {
+
+                                                if(subIndex === 6){
+                                                    console.log("item", item);
+                                                }
+
                                                 if (subIndex === 0) {
                                                     return <td key={subIndex}>{convertTo12HourFormat(item)}</td>;
-                                                } else {
+                                                } 
+                                                else if(subIndex === 6 && item){
+                                                    return <td key={subIndex}><img src={item} alt={"snap"} width='20' height='20'></img></td>    
+                                                }
+                                                else {
                                                     return <td key={subIndex}>{item}</td>;
                                                 }
                                             })}
