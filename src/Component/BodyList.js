@@ -1,4 +1,5 @@
 import "./BodyList.css";
+import './Popup.css';
 import React from 'react';
 import List1 from "./List1";
 import List2 from "./List2";
@@ -8,7 +9,7 @@ import './List.css';
 import data from "../Data/data.json";
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from "react-router-dom";
-import {useRef, useEffect} from 'react'
+import {useRef, useEffect, useState} from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faWhiskeyGlass, faGlassWater, faBottleWater, faX } from "@fortawesome/free-solid-svg-icons";
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setFrequentList, setCustomList, setSelectedList} from "./store";
@@ -21,7 +22,7 @@ function BodyList(props) {
     window.scrollTo(0, 0);
   }, []); 
 
-
+  const [isSavePopup, setIsSavePopup] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const nameCup = useRef();
@@ -105,10 +106,17 @@ function BodyList(props) {
       weird : weird,
       url : url
     }
-    if(localStorage.getItem('data')){
-      localStorage.setItem('data', JSON.stringify([...JSON.parse(localStorage.getItem('data')), dataJson]));
+
+    console.log(timeR);
+    if(timeR["value"].split(":")[0] < "04"){
+      setIsSavePopup(true);
+      return;
     }else{
-      localStorage.setItem('data', JSON.stringify([dataJson]));
+      if(localStorage.getItem('data')){
+        localStorage.setItem('data', JSON.stringify([...JSON.parse(localStorage.getItem('data')), dataJson]));
+      }else{
+        localStorage.setItem('data', JSON.stringify([dataJson]));
+      }
     }
     navigate('/loading');
   }
@@ -220,8 +228,51 @@ function BodyList(props) {
     dispatch(setPopUp(false));
   })
 
+
+  const onClosePopup = () => {
+    setIsSavePopup(false);
+
+    const dataJson = {
+      date: date1,
+      time: timeR,
+      drunk: water,
+      water: pees,
+      yo: yo,
+      silgeum: silgeum,
+      weird: weird,
+      url: url,
+    };
+
+    console.log("url", url);
+
+    const storedData = JSON.parse(localStorage.getItem('data')) || [];
+    localStorage.setItem('data', JSON.stringify([...storedData, dataJson]));
+    navigate("/result");
+  };
+
+  const onConfirmPopup = () => {
+    setIsSavePopup(false);
+    navigate("/result");
+  };
+
+
   return (
+
     <div className="BodyList">
+
+      <DuringNightPopup
+        isVisible={isSavePopup}
+        onClose={onClosePopup}
+        onConfirm={onConfirmPopup}
+        date1={date1}
+        timeR={timeR}
+        water={water}
+        pees={pees}
+        silgeum={silgeum}
+        weird={weird}
+        url={url}
+      />
+
       {modalQueue.map((element, index) => {
         const Component = componentMap[element]; // element에 맞는 컴포넌트 선택
         return Component ? (
@@ -349,3 +400,33 @@ function BodyList(props) {
 }
 
 export default BodyList;
+
+
+function DuringNightPopup({ isVisible, onClose, onConfirm, date1, timeR, water, pees, yo, silgeum, weird, url }) {
+  if (!isVisible) return null;
+
+
+  const dataJson = {
+    date : date1,
+    time : timeR,
+    drunk : water,
+    water : pees,
+    yo : yo,
+    silgeum : silgeum,
+    weird : weird,
+    url : url
+  }
+
+  return (
+    <div className="popup-overlay">
+      <div className="popup-content">
+        <h4>자정12시 ~ 새벽4시 사이 기록인데 야간 배뇨인가요?</h4>
+        <p style={{fontSize:"13px"}}>예를 클릭하면 측정에서 제외됩니다.</p>
+        <div className="popup-buttons">
+          <button onClick={onClose} className="popup-button cancel">아니오</button>
+          <button onClick={onConfirm} className="popup-button confirm">예</button>
+        </div>
+      </div>
+    </div>
+  );
+}

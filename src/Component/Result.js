@@ -70,7 +70,6 @@ const Result = () => {
 
         //source
         const source = localStorage.getItem("imageSource");
-        console.log(source);
 
         const datesToCheck = [];
         for (let i = 0; i <= 4; i++) {
@@ -483,7 +482,7 @@ const Result = () => {
                                                     return <td key={subIndex}>{convertTo12HourFormat(item)}</td>;
                                                 } 
                                                 else if(subIndex === 6 && item){
-                                                    return <td key={subIndex}><img src={item} alt={"snap"} width='20' height='20'></img></td>    
+                                                    return <td key={subIndex}>{item==="-" ? "-" : <img src={item} alt={"snap"} width='20' height='20'></img>}</td>    
                                                 }
                                                 else {
                                                     return<td key={subIndex}>{item}</td>;
@@ -520,7 +519,7 @@ const Result = () => {
                                                     return <td key={subIndex}>{convertTo12HourFormat(item)}</td>;
                                                 } 
                                                 else if(subIndex === 6 && item){
-                                                    return <td key={subIndex}><img src={item} alt={"snap"} width='20' height='20'></img></td>    
+                                                    return <td key={subIndex}>{item==="-" ? "-" : <img src={item} alt={"snap"} width='20' height='20'></img>}</td>    
                                                 }
                                                 else {
                                                     return <td key={subIndex}>{item}</td>;
@@ -628,4 +627,21 @@ function getMinutesLater(time1, time2) {
     return `${resultHours.toString().padStart(2, '0')}:${resultMinutes.toString().padStart(2, '0')}`;
 }
 
-  //[{"date":{"value":"2024-10-25"},"time":{"value":"14:52"},"drunk":{"value":2000},"water":{"value":"470"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":""}},{"date":"10/25","time":"25.366666666666667:22","drunk":250,"water":0,"yo":0,"silgeum":"N","weird":"-","url":"-"},{"date":{"value":"2024-10-25"},"time":{"value":"21:52"},"drunk":{"value":350},"water":{"value":"30"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":""}}]
+
+
+  function PicturePopup({ isVisible, src }) {
+    if (!isVisible) return null;
+
+    const handleClose = (e) => {
+        // 클릭한 요소가 팝업 이미지가 아닌 경우에만 닫기 실행
+        if (e.target.className === "popup-overlay") {
+            isVisible(false); // 부모 컴포넌트에서 상태 제어 함수 필요
+        }
+    };
+  
+    return (
+      <div className="popup-overlay" onClick={handleClose}>
+        <img src={src} width="200px" height="200px" alt="popup"></img>
+      </div>
+    );
+  }
