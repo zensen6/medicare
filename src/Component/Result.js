@@ -9,6 +9,9 @@ import { setUrl } from './store';
 import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { useSelector } from "react-redux";
+import { openDB } from 'idb';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const Result = () => {
 
@@ -140,7 +143,7 @@ const Result = () => {
                 setMaxBae(0);
                 setAvgBae(0);
                 setSilgeum(0);
-                
+
             }else{
 
                 var totWater = 0;
@@ -401,6 +404,43 @@ const Result = () => {
 
     }
 
+    const loadData = async () => {
+        const data2 = JSON.parse(localStorage.getItem("data")); // Assuming you're getting data from local storage
+        const l1 = []; // Initialize your l1 array
+        let isFirstCount = 0;
+    
+        if (data2 != null) {
+            for (let i = 0; i < data2.length; i++) {
+                const values = data2[i];
+                const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
+                const Today = (String(curDate.getMonth() + 1).padStart(2, '0') + '/' + String(curDate.getDate()).padStart(2, '0'));
+                if (selectedDate === Today) {
+                    isFirstCount += 1;
+                }
+    
+                if (Today !== selectedDate) continue;
+    
+                l1.push(values["time"]["value"]);
+                l1.push(values["drunk"]["value"]);
+                l1.push(values["water"]["value"]);
+                l1.push(values["yo"]["value"]);
+                l1.push(values["silgeum"]["value"]);
+    
+                // Push "weird" value or "-" if it doesn't exist
+                l1.push(values["weird"]["value"].length ? values["weird"]["value"] : "-");
+    
+                // Now, we need to fetch the base64 URL from IndexedDB
+                const url = values["url"]["value"].length ? values["url"]["value"] : "-";
+                const base64Url = url !== "-" ? await getFromIndexedDB(url) : "-"; // Fetch base64 URL from IndexedDB
+    
+                l1.push(base64Url); // Push the base64 URL (or "-" if not available)
+            }
+        }
+    
+        // Update your state or do whatever you need with the l1 array
+        setL1(l1);
+    };
+
     useEffect(()=>{
         let l=[];
         let l1=[];
@@ -413,7 +453,7 @@ const Result = () => {
             }
             //l.push(" ");
         }
-
+        /*
         const data2 = JSON.parse(localStorage.getItem("data"));
 
         let isFirstCount = 0;
@@ -441,14 +481,21 @@ const Result = () => {
                     l1.push("-");
                 }
 
-                if(values["url"]["value"].length){
-                    l1.push(values["url"]["value"]);
-                }else{
-                    l1.push("-");
-                }
+                const url = values["url"]["value"].length ? values["url"]["value"] : "-";
+                const base64Url = url !== "-" ? await getFromIndexedDB(url) : "-"; // Fetch base64 URL from IndexedDB
+
+                l1.push(base64Url); 
                 //l1.push(" ");
             }
         }
+            */
+
+        loadData();
+
+        let isFirstCount = 0;
+        let is6 = false;
+        const data2 = JSON.parse(localStorage.getItem("data"));
+
         if(isFirstCount === 1){
             setIsPopupVisibleFirst(true);
         }else if(isFirstCount >= 2){ // 당일 직전 배뇨 기록
@@ -571,6 +618,7 @@ const Result = () => {
         setIsPopupVisible6(false);
         navigate("/main");
     }
+
 
     
 
@@ -867,3 +915,25 @@ function getMinutesLater(time1, time2) {
       </div>
     );
   }
+
+
+  const getFromIndexedDB = async (key) => {
+    const db = await openDB("ImageDB", 1);
+    return await db.get("images", key);
+  };
+
+  const LoadImageFromIndexedDB = async (uuid) => {
+    try {
+        const base64Url = await getFromIndexedDB(uuid); // Fetch Base64 from IndexedDB using UUID
+        if (base64Url) {
+            //setSource(base64Url); // Set the fetched Base64 image to the component state
+            return(
+                <img src={base64Url} alt={"snap"} width='20' height='20'></img>
+            );
+        } else {
+            console.warn("No image found for the given UUID");
+        }
+    } catch (error) {
+        console.error("Error loading image from IndexedDB:", error);
+    }
+};

@@ -2,6 +2,24 @@ import "./List.css";
 import React, { useState, useEffect, useRef } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo} from "./store";
+import { openDB } from "idb";
+import { v4 as uuidv4 } from 'uuid';
+
+const saveToIndexedDB = async (key, data) => {
+    const db = await openDB("ImageDB", 1, {
+        upgrade(db) {
+            db.createObjectStore("images");
+        },
+    });
+    // key: UUID, data: base64Url
+    await db.put("images", data, key);
+};
+
+const getFromIndexedDB = async (key) => {
+    const db = await openDB("ImageDB", 1);
+    return await db.get("images", key);
+};
+
 
 function List4({ className, date, timeP, onDateChange, onTimeChange }) {
 
@@ -130,18 +148,33 @@ function List4({ className, date, timeP, onDateChange, onTimeChange }) {
         });
     };
     
-
-
-    
     const handleCapture = async (target) => {
         if (target.files) {
             if (target.files.length !== 0) {
                 const file = target.files[0];
 
+                /*
+                try {
+                    const compressedBase64Url = await compressImage(file);
+                    setSource(compressedBase64Url);
+                    dispatch(setUrl(compressedBase64Url));
+                    localStorage.setItem("imageSource", compressedBase64Url);
+                } catch (error) {
+                    console.error("Error compressing image:", error);
+                }
+                */
+
+            
                 const base64Url = await convertBlobToBase64(file);
                 setSource(base64Url); // Base64 URL을 상태에 저장
-                dispatch(setUrl(base64Url)); // Redux 상태에 저장
-                localStorage.setItem("imageSource", base64Url); // Base64 URL을 LocalStorage에 저장
+                const uniqueId = uuidv4();
+                await saveToIndexedDB(uniqueId, base64Url); // Save UUID and base64Url in IndexedDB
+                dispatch(setUrl(uniqueId));
+
+                //dispatch(setUrl(base64Url)); // Redux 상태에 저장
+                //localStorage.setItem("imageSource", base64Url); // Base64 URL을 LocalStorage에 저장
+
+                
 
                 /*
                 const newUrl = URL.createObjectURL(file);
