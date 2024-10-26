@@ -33,6 +33,12 @@ const Result = () => {
     const [baenow, setBaenow] = useState(0);
     const [Y, setY] = useState([0, 0, 0, 0, 0]); // Y 값을 상태로 관리
     const [calen, setCalen] = useState([0,0,0,0,0]);
+    const [totalWater, setTotalWater] = useState(0);
+    const [maxBae, setMaxBae] = useState(0);
+    const [avgBae, setAvgBae] = useState(0);
+    const [yo, setYo] = useState(0);
+    const [silgeum, setSilgeum] = useState(0);
+
     const [avg, setAvg] = useState(0);
     const [len, setLen] = useState(0);
     const [diff, setDiff] = useState(0);
@@ -128,7 +134,36 @@ const Result = () => {
                 setLIdx(lastIdx);
                 setFirstS("-");
                 setLastS("-");
+
+                setTotalWater(0);
+                setYo(0);
+                setMaxBae(0);
+                setAvgBae(0);
+                setSilgeum(0);
+                
             }else{
+
+                var totWater = 0;
+                var yoCnt = 0;
+                var maxB = 0;
+                var totBae = 0;
+                var silgeumCnt = 0;
+                for(var i = firstIdx; i <= lastIdx; i++){
+                    const values = data2[i];
+                    totWater += parseInt(values["drunk"]["value"]);
+                    yoCnt += parseInt(values["yo"]["value"]);
+                    silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
+                    totBae += parseInt(values["water"]["value"]);
+                    maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                }
+                setTotalWater(totWater);
+                setYo(yoCnt);
+                setMaxBae(maxB);
+                setAvgBae(Math.floor(totBae / (lastIdx - firstIdx + 1)));
+                setSilgeum(silgeumCnt);
+
+
+
                 var first = data2[firstIdx]?.["time"]?.["value"];
                 var last = data2[lastIdx]?.["time"]?.["value"];
                 
@@ -204,7 +239,35 @@ const Result = () => {
                 setLIdx(lastIdx);
                 setFirstS("-");
                 setLastS("-");
+
+                setTotalWater(0);
+                setYo(0);
+                setMaxBae(0);
+                setAvgBae(0);
+                setSilgeum(0);
+
             } else {
+
+                // 요약구하기
+                var totWater = 0;
+                var yoCnt = 0;
+                var maxB = 0;
+                var totBae = 0;
+                var silgeumCnt = 0;
+                for(var i = firstIdx; i <= lastIdx; i++){
+                    const values = data2[i];
+                    totWater += parseInt(values["drunk"]["value"]);
+                    yoCnt += parseInt(values["yo"]["value"]);
+                    silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
+                    totBae += parseInt(values["water"]["value"]);
+                    maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                }
+                setTotalWater(totWater);
+                setYo(yoCnt);
+                setMaxBae(maxB);
+                setAvgBae(Math.floor(totBae / (lastIdx - firstIdx + 1)));
+                setSilgeum(silgeumCnt);
+
                 const first = data2[firstIdx]?.["time"]?.["value"];
                 const last = data2[lastIdx]?.["time"]?.["value"];
     
@@ -275,7 +338,38 @@ const Result = () => {
                 setLIdx(lastIdx);
                 setFirstS("-");
                 setLastS("-");
+
+                setTotalWater(0);
+                setYo(0);
+                setMaxBae(0);
+                setAvgBae(0);
+                setSilgeum(0);
             } else {
+
+                var totWater = 0;
+                var yoCnt = 0;
+                var maxB = 0;
+                var totBae = 0;
+                var silgeumCnt = 0;
+                for(var i = firstIdx; i <= lastIdx; i++){
+                    const values = data2[i];
+                    totWater += parseInt(values["drunk"]["value"]);
+                    yoCnt += parseInt(values["yo"]["value"]);
+                    silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
+                    totBae += parseInt(values["water"]["value"]);
+                    maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                }
+                
+                setTotalWater(totWater);
+                setYo(yoCnt);
+                setMaxBae(maxB);
+                setAvgBae(Math.floor(totBae / (lastIdx - firstIdx + 1)));
+                setSilgeum(silgeumCnt);
+
+
+
+
+
                 const first = data2[firstIdx]?.["time"]?.["value"];
                 const last = data2[lastIdx]?.["time"]?.["value"];
     
@@ -514,7 +608,7 @@ const Result = () => {
                         도뇨 주기 분석
                     </div>
                     <div className="grid">
-                    <div className="GridItem">
+                        <div className="GridItem">
                             첫 도뇨 시간
                         </div>
                         <div className="GridItem" style={{textAlign: "right"}}>
@@ -536,7 +630,7 @@ const Result = () => {
                             일일 도뇨 횟수
                         </div>
                         <div className="GridItem">
-                            {(lIdx === fIdx || fIdx === -1) ? '0' : `${lIdx - fIdx} 회`}
+                            {(fIdx === -1) ? '0' : ((fIdx === lIdx) ? "1" : `${lIdx - fIdx + 1} 회`)}
                         </div>
 
                     </div>
@@ -545,6 +639,39 @@ const Result = () => {
                 <div className="GrayBlock">
                     <div className="SummaryTitle">
                         요약
+                    </div>
+                    <div className="grid">
+                        <div className="GridItem">
+                            총 수분 섭취량
+                        </div>
+                        <div className="GridItem" style={{textAlign: "right"}}>
+                            {totalWater}
+                        </div>
+                        <div className="GridItem">
+                            최대 배뇨량 
+                        </div>
+                        <div className="GridItem">
+                            {maxBae}
+                        </div>
+                        <div className="GridItem">
+                            평균 배뇨량
+                        </div>
+                        <div className="GridItem">
+                            {avgBae}
+                        </div>
+                        <div className="GridItem">
+                            요절박 횟수
+                        </div>
+                        <div className="GridItem">
+                            {yo}
+                        </div>
+                        <div className="GridItem">
+                            실금 횟수
+                        </div>
+                        <div className="GridItem">
+                            {silgeum}
+                        </div>
+
                     </div>
                 </div>
             </div>

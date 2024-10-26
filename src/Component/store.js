@@ -1,6 +1,6 @@
 import {configureStore, createSlice} from '@reduxjs/toolkit'
 
-
+   
 const yes = createSlice({
     name : 'isYes',
     initialState: [false],

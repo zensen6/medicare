@@ -335,13 +335,13 @@ function Intro() {
                         평균 도뇨 주기
                     </div>
                     <div className="GridItem">
-                        {(lIdx === fIdx && fIdx === 0) ? '-' : Math.ceil((diff / (lIdx - fIdx + 1))*10)/10 + '분'}
+                        {(lIdx === fIdx && fIdx === 0) ? '-' : Math.ceil((diff / (lIdx - fIdx))*10)/10 + '분'}
                     </div>
                     <div className="GridItem">
                         평균 도뇨 횟수
                     </div>
                     <div className="GridItem">
-                        {(lIdx === fIdx && fIdx === 0) ? '-' : `${lIdx - fIdx + 1} 회`}
+                        {(lIdx === fIdx && fIdx === 0) ? '0' : `${lIdx - fIdx + 1} 회`}
                     </div>
                 </div>
             </div>
