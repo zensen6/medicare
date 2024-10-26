@@ -453,7 +453,9 @@ const Result = () => {
             }
             //l.push(" ");
         }
-        /*
+
+        
+        
         const data2 = JSON.parse(localStorage.getItem("data"));
 
         let isFirstCount = 0;
@@ -467,6 +469,7 @@ const Result = () => {
                     isFirstCount += 1;
                 }
 
+                /*
                 if((String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) !== selectedDate) continue;
 
                 l1.push(values["time"]["value"]);
@@ -486,15 +489,16 @@ const Result = () => {
 
                 l1.push(base64Url); 
                 //l1.push(" ");
+                */
             }
         }
-            */
+            
 
         loadData();
 
-        let isFirstCount = 0;
-        let is6 = false;
-        const data2 = JSON.parse(localStorage.getItem("data"));
+        //let isFirstCount = 0;
+        //let is6 = false;
+        //const data2 = JSON.parse(localStorage.getItem("data"));
 
         if(isFirstCount === 1){
             setIsPopupVisibleFirst(true);
