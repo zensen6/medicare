@@ -28,9 +28,24 @@ function Intro() {
     const [fIdx, setFIdx] = useState(0);
     const [lIdx, setLIdx] = useState(0);
     const [freq, setFreq] = useState("-");
+    const [rec, setRec] = useState(0);
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
 
+    const CIC = [
+        "도뇨 전에 손을 씻고 소독하는 것이 감염을 예방하는 데 매우 중요합니다.",
+        "도뇨관은 일회용을 사용하거나 소독 후 재사용하여 감염을 예방하세요.",
+        "특별한 문제가 보이지 않더라도 1년에 1회 방광검사를 하여 방광 내 결석, 요도 손상 등을 점검하는 것이 좋습니다.",
+        "도뇨관 삽입에 지속적으로 어려움이 있거나, 삽입 시 출혈이 있을 때는 병원을 방문해야 합니다.",
+        "혼탁한 소변이나 색상이 변한 소변은 감염의 징후일 수 있으니 기록 후 의료진과 상담하세요.",
+        "발열이나 구토 등의 증상이 있을 경우 즉시 기록하고 병원을 방문하는 것이 좋습니다.",
+        "소변에서 불쾌한 냄새가 나거나 배뇨통이 발생할 경우, 관련 기록을 자세히 남기고 증상이 지속되면 의료진과 상의하세요.",
+        "방광이 꽉 찼는데 도뇨관 삽입이 안 되며, 두통, 식은땀, 안절부절 하는 등 자율신경과반사 증상이 나타날 때는 응급 상황이므로 즉시 응급실로 갑니다. ",
+    ];
+
+    var f = Math.floor(Math.random()*CIC.length);
+    var s = (f+1 === CIC.length) ? 0 : f+1;
+    
 
     function getMinuteDifference(time1, time2) {
         // 시간과 분을 분리 (예: "08:11" => ["08", "11"])
@@ -43,6 +58,26 @@ function Intro() {
         
         // 분 차이 계산
         return Math.abs(totalMinutes1 - totalMinutes2);
+    }
+
+
+    function getMinuteDifference2(dateTime1, dateTime2) {
+        // 날짜와 시간 분리
+        const [date1, time1] = dateTime1.split(" ");
+        const [year1, month1, day1] = date1.split("-").map(Number);
+        const [hour1, minute1] = time1.split(":").map(Number);
+    
+        const [date2, time2] = dateTime2.split(" ");
+        const [year2, month2, day2] = date2.split("-").map(Number);
+        const [hour2, minute2] = time2.split(":").map(Number);
+    
+        // 두 Date 객체 생성
+        const dateObj1 = new Date(year1, month1 - 1, day1, hour1, minute1);
+        const dateObj2 = new Date(year2, month2 - 1, day2, hour2, minute2);
+    
+        // 두 날짜의 차이 계산 (밀리초를 분 단위로 변환)
+        const differenceInMinutes = Math.abs((dateObj2 - dateObj1) / (1000 * 60));
+        return differenceInMinutes;
     }
 
 
@@ -62,6 +97,7 @@ function Intro() {
         let bn = 0;
 
 
+        
         for(let i = 0; i < json.length; i++){
             var values = Object.values(json[i]);
             const nowString = values[0];
@@ -85,6 +121,13 @@ function Intro() {
         const data2 = JSON.parse(localStorage.getItem("data"));
 
         setLen(json.length + (data2 != null ? data2.length : 0));
+
+        var firstDateTime = `${data2[0]["date"]["value"]} ${data2[0]["time"]["value"]}`;
+        var lastDateTime = `${data2[data2.length-1]["date"]["value"]} ${data2[data2.length-1]["time"]["value"]}`;
+
+        setRec(getMinuteDifference2(firstDateTime, lastDateTime) / Math.max(data2.length, 1));
+        console.log(getMinuteDifference2(firstDateTime, lastDateTime));
+
 
         if(data2 != null && data2.length > 0){
             for(let i =0; i<data2.length;i++){
@@ -304,6 +347,10 @@ function Intro() {
                 <div className="InfoTitle">
                     다음 권장 도뇨 시간은
                 </div>
+
+                <div className="InfoContent">
+                    {rec === 0 ? "아직 충분한 데이터가 쌓이지 않았습니다." : Math.ceil(rec) + '분'} 
+                </div>
             </div>
             <div className="InfoHorizontal" ref={addToRefs}>
                 <div className="InfoTitle">
@@ -425,14 +472,20 @@ function Intro() {
 
             <div className="InfoHorizontal" ref={addToRefs}>
                 <div className="InfoTitle">
-                    CIC 진행시 유의 사항
+                    CIC 진행시 유의 사항1
                 </div>
+                <p style={{padding:"15px"}}>
+                {CIC[f]}
+                </p>
             </div>
 
             <div className="InfoHorizontal" ref={addToRefs}>
                 <div className="InfoTitle">
-                    조언.....
+                    CIC 진행시 유의 사항2
                 </div>
+                <p style={{padding:"15px"}}>
+                {CIC[s]}
+                </p>
             </div>
             <button className="SaveInfoBtn" onClick={(e)=>{navigate("/main")}}>
                 기록 추가하기

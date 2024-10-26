@@ -8,10 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setUrl } from './store';
 import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { openDB } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
-
 
 const Result = () => {
 
@@ -54,6 +53,16 @@ const Result = () => {
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
 
+    const dispatch = useDispatch();
+    const url = useSelector((state) => {
+        return state.url;
+    })
+
+    const Advice = [
+        "수분 섭취량이 부족하면 요로 감염, 신장 결석의 위험이 높아집니다.",
+        "평균 배뇨량이 400ml를 초과할 경우, 방광 압력이 높아져 요로 감염 및 방광 기능 저하의 위험이 있습니다. 정상적인 방광 용적을 초과하는 경우 방광벽에 무리가 갈 수 있으며, 배뇨 주기를 조절하여 방광 건강을 유지하는 것이 좋습니다.",
+        "일일 최고 배뇨량이 500ml 이상일 경우, 이는 방광에 과도한 부담을 줄 수 있으며 신장 역류 또는 신장 손상으로 이어질 위험이 있습니다. 신장 건강을 위해 배뇨 주기를 줄이고 적절한 배뇨량을 유지하는 것이 권장됩니다.",
+    ];
 
     /*
     const url = useSelector((state) => {
@@ -79,6 +88,9 @@ const Result = () => {
 
         //source
         const source = localStorage.getItem("imageSource");
+
+        dispatch(setUrl("-"));
+
 
         const datesToCheck = [];
         for (let i = 0; i <= 4; i++) {
@@ -731,6 +743,21 @@ const Result = () => {
                 <div className="SummaryTitle2">
                     조언
                 </div>
+                <div className="InfoContent2">
+                    {
+                        totalWater < 1500 ?
+                        Advice[0] : (
+                            avgBae >= 500 ?
+                            Advice[2] :(
+                                avgBae >= 400 ?
+                                    Advice[1] : ""
+                            )
+
+                        )
+
+                    }
+                </div>
+
 
             </div>
             <table className="rwd-table">

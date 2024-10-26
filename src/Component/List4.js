@@ -170,6 +170,7 @@ function List4({ className, date, timeP, onDateChange, onTimeChange }) {
                 const uniqueId = uuidv4();
                 await saveToIndexedDB(uniqueId, base64Url); // Save UUID and base64Url in IndexedDB
                 dispatch(setUrl(uniqueId));
+                setPhoto(true);
 
                 //dispatch(setUrl(base64Url)); // Redux 상태에 저장
                 //localStorage.setItem("imageSource", base64Url); // Base64 URL을 LocalStorage에 저장

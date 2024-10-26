@@ -106,8 +106,7 @@ function BodyList(props) {
       weird : weird,
       url : url
     }
-
-    console.log(timeR);
+    console.log("url ",url);
     if(timeR["value"].split(":")[0] < "04"){
       setIsSavePopup(true);
       return;
@@ -118,6 +117,7 @@ function BodyList(props) {
         localStorage.setItem('data', JSON.stringify([dataJson]));
       }
     }
+    dispatch(setUrl("-"));
     navigate('/loading');
   }
 

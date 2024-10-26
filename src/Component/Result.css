@@ -108,6 +108,16 @@
 }
 
 
+.InfoContent2{
+    width : 80%;
+    height: 60%;
+    font-size : 13px;
+    color : white;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
 .item{
     display: flex;
     justify-content: center;
