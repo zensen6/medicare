@@ -80,6 +80,24 @@ function Intro() {
         return differenceInMinutes;
     }
 
+    function addMinutesToTime(time, minutesToAdd) {
+        // 시간과 분 분리
+        const [hours, minutes] = time.split(":").map(Number);
+    
+        
+        // Date 객체 생성
+        const date = new Date();
+        date.setHours(hours);
+        date.setMinutes(minutes + minutesToAdd);
+    
+        // 결과 포맷팅 (2자리 숫자 유지)
+        const resultHours = String(date.getHours()).padStart(2, '0');
+        const resultMinutes = String(date.getMinutes()).padStart(2, '0');
+
+
+        return `${resultHours}:${resultMinutes}`;
+    }
+
 
     useEffect(()=>{
 
@@ -121,15 +139,34 @@ function Intro() {
         const data2 = JSON.parse(localStorage.getItem("data"));
 
         setLen(json.length + (data2 != null ? data2.length : 0));
-
+/*
         var firstDateTime = `${data2[0]["date"]["value"]} ${data2[0]["time"]["value"]}`;
         var lastDateTime = `${data2[data2.length-1]["date"]["value"]} ${data2[data2.length-1]["time"]["value"]}`;
 
+        if(data2 != null && data2.length > 0){
+            
+        }
+        
+
         setRec(getMinuteDifference2(firstDateTime, lastDateTime) / Math.max(data2.length, 1));
-        console.log(getMinuteDifference2(firstDateTime, lastDateTime));
+        */
+        //console.log(getMinuteDifference2(firstDateTime, lastDateTime));
 
 
         if(data2 != null && data2.length > 0){
+
+            var firstDateTime = `${data2[0]["date"]["value"]} ${data2[0]["time"]["value"]}`;
+            var lastDateTime = `${data2[data2.length-1]["date"]["value"]} ${data2[data2.length-1]["time"]["value"]}`;
+            var alpha = getMinuteDifference2(firstDateTime, lastDateTime) / Math.max(data2.length, 1);
+            if(alpha === 0){
+                setRec(0);
+            }
+            else{
+                console.log(addMinutesToTime(data2[data2.length-1]["time"]["value"], alpha));
+                setRec(addMinutesToTime(data2[data2.length-1]["time"]["value"], alpha));
+            }
+
+
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
@@ -349,7 +386,7 @@ function Intro() {
                 </div>
 
                 <div className="InfoContent">
-                    {rec === 0 ? "아직 충분한 데이터가 쌓이지 않았습니다." : Math.ceil(rec) + '분'} 
+                    {rec === 0 ? "아직 충분한 데이터가 쌓이지 않았습니다." : rec.split(":")[0] + '시' + rec.split(":")[1] + '분'} 
                 </div>
             </div>
             <div className="InfoHorizontal" ref={addToRefs}>
