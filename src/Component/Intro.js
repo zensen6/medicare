@@ -162,7 +162,6 @@ function Intro() {
                 setRec(0);
             }
             else{
-                console.log(addMinutesToTime(data2[data2.length-1]["time"]["value"], alpha));
                 setRec(addMinutesToTime(data2[data2.length-1]["time"]["value"], alpha));
             }
 
@@ -186,7 +185,6 @@ function Intro() {
 
 
         if(data2 != null && data2.length > 0){
-            console.log("not empty");
             var lastDay = values["date"]?.["value"]?.substring(5,7) + '/' + values["date"]?.["value"]?.substring(8,10);
             var firstIdx = data2.length-1;
             var lastIdx = data2.length-1;

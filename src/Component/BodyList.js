@@ -92,9 +92,6 @@ function BodyList(props) {
     return state.selectedList;
   });
 
-  console.log("popup", popup);
-
-
   const Save = (e) => {
     const dataJson = {
       date : date1,
@@ -106,7 +103,6 @@ function BodyList(props) {
       weird : weird,
       url : url
     }
-    console.log("url ",url);
     if(timeR["value"].split(":")[0] < "04"){
       setIsSavePopup(true);
       return;
@@ -243,7 +239,6 @@ function BodyList(props) {
       url: url,
     };
 
-    console.log("url", url);
 
     const storedData = JSON.parse(localStorage.getItem('data')) || [];
     localStorage.setItem('data', JSON.stringify([...storedData, dataJson]));

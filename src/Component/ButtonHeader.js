@@ -61,7 +61,6 @@ function ButtonHeader() {
 
   useEffect(() => {
     // Logs whenever silgeum changes
-    console.log("Updated silgeum: ", silgeum);
     let updatedQueue = modalQueue;
 
     if (!updatedQueue.includes(2) && silgeum.value === 'Y') {
@@ -72,7 +71,6 @@ function ButtonHeader() {
     }
     setModalQueue(updatedQueue);
     dispatch(setQueue(updatedQueue));
-    console.log(updatedQueue);
 
   }, [silgeum]);
   //console.log("header:" ,silgeum);
@@ -130,7 +128,6 @@ function ButtonHeader() {
             dispatch(setSilgeum('Y'));
           }
         }
-        console.log(silgeum);
       
         // Automatically ensure 2 is added if silgeum is 'Y'
         

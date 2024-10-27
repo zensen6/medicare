@@ -102,10 +102,8 @@ function List4({ className, date, timeP, onDateChange, onTimeChange }) {
     useEffect(() => {
         // If date1 is available, set it as the initial value
         if (date1) {
-            console.log("list2 effect : ", date1);
             setDateValue(date1);
           
-            console.log("after effect : ", inputRef2.defaultValue);
         } else {
             // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
             const today = new Date();

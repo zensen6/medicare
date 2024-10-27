@@ -140,9 +140,7 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
       let t;
       //const targetDiv = divRefs.current[index];
       const targetDiv = e.currentTarget;
-      console.log(targetDiv);
 
-      console.log(targetDiv.style.backgroundColor);
       const computedStyle = window.getComputedStyle(targetDiv); // 요소의 스타일을 가져옴
       const backgroundColor = computedStyle.backgroundColor; // 배경색
 
@@ -182,10 +180,8 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
     useEffect(() => {
       // If date1 is available, set it as the initial value
       if (date1) {
-          console.log("list2 effect : ", date1);
           setDateValue(date1);
         
-          console.log("after effect : ", inputRef2.defaultValue);
       } else {
           // 기본 날짜를 오늘로 설정 (예: YYYY-MM-DD 형식)
           const today = new Date();

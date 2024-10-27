@@ -120,7 +120,6 @@ const Result = () => {
         setLen(json.length + (data2 != null ? data2.length : 0));
 
         var clickedDate = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
-        console.log("clicked:", clickedDate);
         var firstIdx = -1;
         var lastIdx = -1;
         if(data2 != null && data2.length > 0){
@@ -226,7 +225,6 @@ const Result = () => {
     
         const data2 = JSON.parse(localStorage.getItem("data"));
         const clickedDate = String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0');
-        console.log(clickedDate);
         let firstIdx = -1;
         let lastIdx = -1;
     
@@ -325,7 +323,6 @@ const Result = () => {
 
         const data2 = JSON.parse(localStorage.getItem("data"));
         const clickedDate = String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0');
-        console.log(clickedDate);
         let firstIdx = -1;
         let lastIdx = -1;
     
@@ -453,6 +450,15 @@ const Result = () => {
         setL1(l1);
     };
 
+    const loadDataSafe = async () => {
+        try {
+            await loadData();
+            console.log(l1);
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+    };
+
     useEffect(()=>{
         let l=[];
         let l1=[];
@@ -480,28 +486,6 @@ const Result = () => {
                 if(selectedDate === Today){
                     isFirstCount += 1;
                 }
-
-                /*
-                if((String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) !== selectedDate) continue;
-
-                l1.push(values["time"]["value"]);
-                l1.push(values["drunk"]["value"]);
-                l1.push(values["water"]["value"]);
-                l1.push(values["yo"]["value"]);
-                l1.push(values["silgeum"]["value"]);
-
-                if(values["weird"]["value"].length){
-                    l1.push(values["weird"]["value"]);
-                }else{
-                    l1.push("-");
-                }
-
-                const url = values["url"]["value"].length ? values["url"]["value"] : "-";
-                const base64Url = url !== "-" ? await getFromIndexedDB(url) : "-"; // Fetch base64 URL from IndexedDB
-
-                l1.push(base64Url); 
-                //l1.push(" ");
-                */
             }
         }
             
@@ -528,7 +512,7 @@ const Result = () => {
         }
 
         setL(l);
-        setL1(l1);
+        //setL1(l1);
     },[clickCount]);
 
     const convertTo12HourFormat = (timeString) => {
@@ -583,7 +567,7 @@ const Result = () => {
         var SecWater =  data2[secIdx]["water"]["value"];
         var mediumWater = Math.ceil((parseInt(LastWater) + parseInt(SecWater)) / 2);
         var Today = (curYear + "-" + String(curDate.getMonth()+1).padStart(2,'0') + '-' + String(curDate.getDate()).padStart(2,'0'));
-//[{"date":{"value":"2024-10-25"},"time":{"value":"14:39"},"drunk":{"value":350},"water":{"value":"360"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":""},"url":{"value":""}},{"date":{"value":"10/25"},"time":{"value":"02:39"},"drunk":{"value":225},"water":{"value":"0"},"yo":{"value":"0"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"}},{"date":{"value":"2024-10-25"},"time":{"value":"22:39"},"drunk":{"value":200},"water":{"value":"90"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":""},"url":{"value":""}}]
+
         const dataJson = {
             date: { value: Today },
             time: { value: mediumTime },
@@ -619,11 +603,6 @@ const Result = () => {
 
 
         setIsPopupVisible6(false);
-
-        //const newL1 = [...l1];
-        //newL1.splice(newL1.length - 7, 0, mediumTime, "0", mediumWater, "0", "N", "-", "-");
-        //setL1(newL1);
-
     }
 
     const onClose6 = () =>{
@@ -635,8 +614,6 @@ const Result = () => {
         navigate("/main");
     }
 
-
-    
 
     return(
         <div className="Result">
@@ -811,6 +788,7 @@ const Result = () => {
                         ll1.length > 0 ? (
                             ll1.map((e, index) => {
                                 if (index % 7 === 0) {
+                                    console.log("index", index);
                                     const rowItems = ll1.slice(index, index + 7);
                                     return (
                                         <tr key={index}>
