@@ -84,6 +84,112 @@ const Result = () => {
     }
 
 
+    const update = () => {
+        const data2 = JSON.parse(localStorage.getItem("data"));
+
+        if(data2.length === 0){
+            setFIdx(-1);
+            setLIdx(-1);
+            setFirstS("-");
+            setLastS("-");
+
+            setTotalWater(0);
+            setYo(0);
+            setMaxBae(0);
+            setAvgBae(0);
+            setSilgeum(0);
+
+        }
+
+        setLen(json.length + (data2 != null ? data2.length : 0));
+
+        var clickedDate = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
+        var firstIdx = -1;
+        var lastIdx = -1;
+        if(data2 != null && data2.length > 0){
+            for(let i =0; i<data2.length;i++){
+                var values = data2[i];
+                var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                if(clickedDate === selectedDate){
+                    firstIdx = i;
+                    break;
+                }
+                //bn += parseInt(values["drunk"]["value"]);
+                //if(NowString === selectedDate) newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
+            }
+
+            for(let i =data2.length-1; i>=0;i--){
+                var values = data2[i];
+                var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                if(clickedDate === selectedDate){
+                    lastIdx = i;
+                    break;
+                }
+            }   
+
+            if(firstIdx === lastIdx === -1){
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+                setFirstS("-");
+                setLastS("-");
+
+                setTotalWater(0);
+                setYo(0);
+                setMaxBae(0);
+                setAvgBae(0);
+                setSilgeum(0);
+
+            }else{
+
+                var totWater = 0;
+                var yoCnt = 0;
+                var maxB = 0;
+                var totBae = 0;
+                var silgeumCnt = 0;
+                for(var i = firstIdx; i <= lastIdx; i++){
+                    const values = data2[i];
+                    totWater += parseInt(values["drunk"]["value"]);
+                    yoCnt += parseInt(values["yo"]["value"]);
+                    silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
+                    totBae += parseInt(values["water"]["value"]);
+                    maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                }
+                setTotalWater(totWater);
+                setYo(yoCnt);
+                setMaxBae(maxB);
+                setAvgBae(Math.floor(totBae / (lastIdx - firstIdx + 1)));
+                setSilgeum(silgeumCnt);
+
+
+
+                var first = data2[firstIdx]?.["time"]?.["value"];
+                var last = data2[lastIdx]?.["time"]?.["value"];
+                
+                setDiff(getMinuteDifference(first, last));
+
+                if(first.split(":")[0] < "12"){
+                    setFirstS("오전 " + `${parseInt(first.split(":")[0])}` + '시 ' + first.split(":")[1] + '분');
+                }else{
+                    setFirstS("오후 " + `${parseInt(first.split(":")[0]) - 12}` + '시 ' + first.split(":")[1] + '분');
+                }
+
+                if(last.split(":")[0] < "12"){
+                    setLastS("오전 " + `${parseInt(last.split(":")[0])}` + '시 ' + last.split(":")[1] + '분');
+                }else{
+                    setLastS("오후 " + `${parseInt(last.split(":")[0]) - 12}` + '시 ' + last.split(":")[1] + '분');
+                }
+
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+                setFirstS(data2[firstIdx]?.["time"]?.["value"]);
+                setLastS(data2[lastIdx]?.["time"]?.["value"]);
+            }
+        }
+
+    }
+
+
+
     useEffect(()=>{
 
         //source
@@ -114,7 +220,7 @@ const Result = () => {
 
         
 
-
+        /*
         const data2 = JSON.parse(localStorage.getItem("data"));
 
         setLen(json.length + (data2 != null ? data2.length : 0));
@@ -207,6 +313,8 @@ const Result = () => {
         //setTotal(newTotal); // 총합 업데이트
         //setAvg(total / (json.length));
         //setY(newY); // Y 값 업데이트
+        */
+       update();
 
     },[]);
 
@@ -538,6 +646,8 @@ const Result = () => {
         dataFromStorage.splice(dataIndex, 1); // 해당 인덱스의 객체 삭제
         localStorage.setItem("data", JSON.stringify(dataFromStorage));
 
+        update();
+
         //localStorage.setItem("data",updatedLL1);
     };
 
@@ -549,7 +659,6 @@ const Result = () => {
     const handleConfirm = () => {
         // 첫 도뇨 확인 로직 추가
         setIsPopupVisibleFirst(false);
-        navigate("/main");
     };
 
 
@@ -614,13 +723,17 @@ const Result = () => {
         navigate("/main");
     }
 
+    const handleYes = (e) => {
+        setIsPopupVisibleFirst(false);
+        navigate("/main");
+    }
 
     return(
         <div className="Result">
 
             <FirstUrinePopup
                 isVisible={isPopupVisibleFirst}
-                onClose={() => setIsPopupVisibleFirst(false)}
+                onClose={handleYes}
                 onConfirm={handleConfirm}
             />
 
@@ -839,10 +952,10 @@ function FirstUrinePopup({ isVisible, onClose, onConfirm }) {
       <div className="popup-overlay">
         <div className="popup-content">
           <h4>오늘의 첫 도뇨인가요?</h4>
-          <p style={{fontSize:"13px"}}>오늘 처음 도뇨를 기록하시려면 확인을 눌러주세요.</p>
+          <p style={{fontSize:"13px"}}>오늘 처음 도뇨를 기록하시려면 '아니오'를 눌러주세요.</p>
           <div className="popup-buttons">
             <button onClick={onClose} className="popup-button cancel">아니요</button>
-            <button onClick={onConfirm} className="popup-button confirm">확인</button>
+            <button onClick={onConfirm} className="popup-button confirm">예</button>
           </div>
         </div>
       </div>
