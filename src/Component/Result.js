@@ -107,6 +107,23 @@ const Result = () => {
         var firstIdx = -1;
         var lastIdx = -1;
         if(data2 != null && data2.length > 0){
+
+            
+            data2.sort((a, b) => {
+                const dateA = new Date(`${a.date.value}T${a.time.value}`);
+                const dateB = new Date(`${b.date.value}T${b.time.value}`);
+                return dateA - dateB; // 오름차순 정렬
+            });
+            
+            // 3. 정렬된 데이터를 다시 localStorage에 저장
+            localStorage.setItem("data", JSON.stringify(data2));
+
+
+
+
+
+
+
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
@@ -604,7 +621,7 @@ const Result = () => {
         //let is6 = false;
         //const data2 = JSON.parse(localStorage.getItem("data"));
 
-        if(isFirstCount === 1){
+        if(isFirstCount === 1 && (String(currentDate.getMonth()+1).padStart(2,'0') ===  String(curDate.getMonth() + 1).padStart(2,'0') && String(currentDate.getDate()).padStart(2,'0') === String(curDate.getDate()).padStart(2,'0'))){
             setIsPopupVisibleFirst(true);
         }else if(isFirstCount >= 2){ // 당일 직전 배뇨 기록
             var lastIdx = data2.length-1;
