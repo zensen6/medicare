@@ -114,6 +114,14 @@ function BodyList(props) {
       }
     }
     dispatch(setUrl("-"));
+    dispatch(setWater(0));
+    dispatch(setPees(0));
+    dispatch(setYo(0));
+    dispatch(setSilgeum('N'));
+    dispatch(setWeird("-"));
+    dispatch(setDate(''));
+    dispatch(setTimeRedux(''));
+
     navigate('/loading');
   }
 
