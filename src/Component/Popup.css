@@ -12,12 +12,30 @@
     z-index: 1000;
   }
 
+
+
+
+
   .popup-overlay2 {
     position: fixed;
     width: 65%;
     height: 23%;
     top: 200px;
     left: calc(50vw-130px);
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+
+  .popup-overlay-Picture {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    top: 200px;
+    left: calc(50vw - 150px);
     background: rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;

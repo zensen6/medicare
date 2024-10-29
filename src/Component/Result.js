@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import json from "../Data/data.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setUrl } from './store';
-import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faCaretLeft, faTrash, faHouse, faX } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { useSelector, useDispatch } from "react-redux";
 import { openDB } from 'idb';
@@ -50,6 +50,8 @@ const Result = () => {
     const [lIdx, setLIdx] = useState(0);
     const [freq, setFreq] = useState("-");
     const [source, setSource] = useState("");
+    const [visiblePicture, setVisiblePicture] = useState("");
+
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
 
@@ -235,102 +237,6 @@ const Result = () => {
             } 
         }
 
-        
-
-        /*
-        const data2 = JSON.parse(localStorage.getItem("data"));
-
-        setLen(json.length + (data2 != null ? data2.length : 0));
-
-        var clickedDate = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
-        var firstIdx = -1;
-        var lastIdx = -1;
-        if(data2 != null && data2.length > 0){
-            for(let i =0; i<data2.length;i++){
-                var values = data2[i];
-                var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                if(clickedDate === selectedDate){
-                    firstIdx = i;
-                    break;
-                }
-                //bn += parseInt(values["drunk"]["value"]);
-                //if(NowString === selectedDate) newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
-            }
-
-            for(let i =data2.length-1; i>=0;i--){
-                var values = data2[i];
-                var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                if(clickedDate === selectedDate){
-                    lastIdx = i;
-                    break;
-                }
-            }   
-
-            if(firstIdx === lastIdx === -1){
-                setFIdx(firstIdx);
-                setLIdx(lastIdx);
-                setFirstS("-");
-                setLastS("-");
-
-                setTotalWater(0);
-                setYo(0);
-                setMaxBae(0);
-                setAvgBae(0);
-                setSilgeum(0);
-
-            }else{
-
-                var totWater = 0;
-                var yoCnt = 0;
-                var maxB = 0;
-                var totBae = 0;
-                var silgeumCnt = 0;
-                for(var i = firstIdx; i <= lastIdx; i++){
-                    const values = data2[i];
-                    totWater += parseInt(values["drunk"]["value"]);
-                    yoCnt += parseInt(values["yo"]["value"]);
-                    silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
-                    totBae += parseInt(values["water"]["value"]);
-                    maxB = Math.max(maxB, parseInt(values["water"]["value"]));
-                }
-                setTotalWater(totWater);
-                setYo(yoCnt);
-                setMaxBae(maxB);
-                setAvgBae(Math.floor(totBae / (lastIdx - firstIdx + 1)));
-                setSilgeum(silgeumCnt);
-
-
-
-                var first = data2[firstIdx]?.["time"]?.["value"];
-                var last = data2[lastIdx]?.["time"]?.["value"];
-                
-                setDiff(getMinuteDifference(first, last));
-
-                if(first.split(":")[0] < "12"){
-                    setFirstS("오전 " + `${parseInt(first.split(":")[0])}` + '시 ' + first.split(":")[1] + '분');
-                }else{
-                    setFirstS("오후 " + `${parseInt(first.split(":")[0]) - 12}` + '시 ' + first.split(":")[1] + '분');
-                }
-
-                if(last.split(":")[0] < "12"){
-                    setLastS("오전 " + `${parseInt(last.split(":")[0])}` + '시 ' + last.split(":")[1] + '분');
-                }else{
-                    setLastS("오후 " + `${parseInt(last.split(":")[0]) - 12}` + '시 ' + last.split(":")[1] + '분');
-                }
-
-                setFIdx(firstIdx);
-                setLIdx(lastIdx);
-                setFirstS(data2[firstIdx]?.["time"]?.["value"]);
-                setLastS(data2[lastIdx]?.["time"]?.["value"]);
-            }
-        }
-
-        //setBaenow(bn);
-
-        //setTotal(newTotal); // 총합 업데이트
-        //setAvg(total / (json.length));
-        //setY(newY); // Y 값 업데이트
-        */
        update();
 
     },[]);
@@ -745,6 +651,17 @@ const Result = () => {
         navigate("/main");
     }
 
+
+    const clickToMakeBigger = (base64Url) => {
+        console.log(base64Url);
+        setVisiblePicture(base64Url);
+    }
+
+    const onClosePicture = (e) => {
+        setVisiblePicture("");
+    }
+
+
     return(
         <div className="Result">
 
@@ -759,6 +676,11 @@ const Result = () => {
                 onClose={onClose6}
                 onConfirm={onConfirm6}
                 onAutomatic={handleAutomatic}
+            />
+
+            <BigPicture
+                isVisiblePicture={visiblePicture}
+                onClose={onClosePicture}
             />
 
 
@@ -928,7 +850,7 @@ const Result = () => {
                                                     return <td key={subIndex}>{convertTo12HourFormat(item)}</td>;
                                                 } 
                                                 else if(subIndex === 6 && item){
-                                                    return <td key={subIndex}>{item==="-" ? "-" : <img src={item} alt={"snap"} width='20' height='20'></img>}</td>    
+                                                    return <td key={subIndex}>{item==="-" ? "-" : <img src={item} alt={"snap"} width='20' height='20' onClick={() => clickToMakeBigger(item)}></img>}</td>    
                                                 }
                                                 else {
                                                     return <td key={subIndex}>{item}</td>;
@@ -1060,6 +982,22 @@ function getMinutesLater(time1, time2) {
     const db = await openDB("ImageDB", 1);
     return await db.get("images", key);
   };
+
+  
+
+  function BigPicture({isVisiblePicture, onClose}){
+    if(!isVisiblePicture) return null;
+    return(
+        <div className="popup-overlay-Picture">
+            <FontAwesomeIcon icon={faX} onClick={onClose} style={{position:"absolute", top:"5px", right: "5px" }}/>
+            <img src={isVisiblePicture} alt={"snap"} width='88%' height='88%'></img>
+        </div>
+    );
+
+  }
+
+
+  
 
   const LoadImageFromIndexedDB = async (uuid) => {
     try {
