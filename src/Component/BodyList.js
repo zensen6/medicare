@@ -250,6 +250,15 @@ function BodyList(props) {
 
     const storedData = JSON.parse(localStorage.getItem('data')) || [];
     localStorage.setItem('data', JSON.stringify([...storedData, dataJson]));
+
+    dispatch(setUrl("-"));
+    dispatch(setWater(0));
+    dispatch(setPees(0));
+    dispatch(setYo(0));
+    dispatch(setSilgeum('N'));
+    dispatch(setWeird("-"));
+    dispatch(setDate(''));
+    dispatch(setTimeRedux(''));
     navigate("/loading");
   };
 
