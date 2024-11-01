@@ -51,6 +51,8 @@ const Result = () => {
     const [freq, setFreq] = useState("-");
     const [source, setSource] = useState("");
     const [visiblePicture, setVisiblePicture] = useState("");
+    const [popupFreq, setPopupFreq] = useState(false);
+    const [rec, setRec] = useState(0);
 
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
@@ -84,6 +86,44 @@ const Result = () => {
         // 분 차이 계산
         return Math.abs(totalMinutes1 - totalMinutes2);
     }
+
+    function getMinuteDifference2(dateTime1, dateTime2) {
+        // 날짜와 시간 분리
+        const [date1, time1] = dateTime1.split(" ");
+        const [year1, month1, day1] = date1.split("-").map(Number);
+        const [hour1, minute1] = time1.split(":").map(Number);
+    
+        const [date2, time2] = dateTime2.split(" ");
+        const [year2, month2, day2] = date2.split("-").map(Number);
+        const [hour2, minute2] = time2.split(":").map(Number);
+    
+        // 두 Date 객체 생성
+        const dateObj1 = new Date(year1, month1 - 1, day1, hour1, minute1);
+        const dateObj2 = new Date(year2, month2 - 1, day2, hour2, minute2);
+    
+        // 두 날짜의 차이 계산 (밀리초를 분 단위로 변환)
+        const differenceInMinutes = Math.abs((dateObj2 - dateObj1) / (1000 * 60));
+        return differenceInMinutes;
+    }
+
+    function addMinutesToTime(time, minutesToAdd) {
+        // 시간과 분 분리
+        const [hours, minutes] = time.split(":").map(Number);
+    
+        
+        // Date 객체 생성
+        const date = new Date();
+        date.setHours(hours);
+        date.setMinutes(minutes + minutesToAdd);
+    
+        // 결과 포맷팅 (2자리 숫자 유지)
+        const resultHours = String(date.getHours()).padStart(2, '0');
+        const resultMinutes = String(date.getMinutes()).padStart(2, '0');
+
+
+        return `${resultHours}:${resultMinutes}`;
+    }
+
 
 
     const update = () => {
@@ -448,6 +488,7 @@ const Result = () => {
         const data2 = JSON.parse(localStorage.getItem("data")); // Assuming you're getting data from local storage
         const l1 = []; // Initialize your l1 array
         let isFirstCount = 0;
+        let totBae = 0;
     
         if (data2 != null) {
             for (let i = 0; i < data2.length; i++) {
@@ -469,11 +510,29 @@ const Result = () => {
                 // Push "weird" value or "-" if it doesn't exist
                 l1.push(values["weird"]["value"].length ? values["weird"]["value"] : "-");
     
+                totBae += parseInt(values["water"]["value"]);
+
+
                 // Now, we need to fetch the base64 URL from IndexedDB
                 const url = values["url"]["value"].length ? values["url"]["value"] : "-";
                 const base64Url = url !== "-" ? await getFromIndexedDB(url) : "-"; // Fetch base64 URL from IndexedDB
     
                 l1.push(base64Url); // Push the base64 URL (or "-" if not available)
+            }
+        }
+
+
+        if(isFirstCount >= 4 && totBae >= 1000){
+            setPopupFreq(true);
+
+            var firstDateTime = `${data2[0]["date"]["value"]} ${data2[0]["time"]["value"]}`;
+            var lastDateTime = `${data2[data2.length-1]["date"]["value"]} ${data2[data2.length-1]["time"]["value"]}`;
+            var alpha = getMinuteDifference2(firstDateTime, lastDateTime) / Math.max(data2.length, 1);
+            if(alpha === 0){
+                setRec(0);
+            }
+            else{
+                setRec(addMinutesToTime(data2[data2.length-1]["time"]["value"], alpha));
             }
         }
     
@@ -661,6 +720,12 @@ const Result = () => {
         setVisiblePicture("");
     }
 
+    const onConfirmFreq = (e) => {
+        setPopupFreq(false);
+    }
+
+    
+
 
     return(
         <div className="Result">
@@ -681,6 +746,12 @@ const Result = () => {
             <BigPicture
                 isVisiblePicture={visiblePicture}
                 onClose={onClosePicture}
+            />
+
+            <Fregrec
+                isVisible={popupFreq}
+                onConfirm={onConfirmFreq}
+                rec={rec}
             />
 
 
@@ -914,6 +985,21 @@ function SixHoursPopup({ isVisible, onClose, onConfirm, onAutomatic }) {
             <button onClick={onClose} className="popup-button cancel2">아니요</button>
             <button onClick={onConfirm} className="popup-button confirm2">도뇨 기록 추가하기</button>
             <button onClick={onAutomatic} className="popup-button confirm2">기록 자동 생성하기</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function Fregrec({ isVisible, onConfirm, rec }) {
+    if (!isVisible) return null;
+  
+    return (
+      <div className="popup-overlay3">
+        <div className="popup-content2">
+          <h4>다음 도뇨 시각은 {rec.split(":")[0] + '시' + rec.split(":")[1] + '분 '}에 권장됩니다.</h4>
+          <div className="popup-buttons">
+            <button onClick={onConfirm} className="popup-button confirm">예</button>
           </div>
         </div>
       </div>

@@ -106,7 +106,7 @@ function Intro() {
             const pastDate = new Date(Now);
             pastDate.setDate(Now.getDate() - i); // i일 전 날짜
             const formattedPastDate = pastDate.toLocaleDateString('en-US', options).replace(/\/0/g, '/');
-            datesToCheck.push(formattedPastDate.split('/')[0] + '/' + formattedPastDate.split('/')[1]);
+            datesToCheck.push(formattedPastDate.split('/')[0] + '/' + (formattedPastDate.split('/')[1].length < 2 ? '0'+formattedPastDate.split('/')[1] : formattedPastDate.split('/')[1]));
         }
         datesToCheck.reverse();
         setCalen(datesToCheck);
@@ -170,9 +170,15 @@ function Intro() {
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                 bn += parseInt(values["drunk"]["value"]);
+                
 
+                //console.log(selectedDate, NowString, selectedDate===NowString, data2.length, datesToCheck);
                 if(!datesToCheck.includes(selectedDate)) continue;
-                if(NowString === selectedDate) newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
+                
+                
+                if(NowString === selectedDate){
+                    newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
+                }
                 for(let j=0;j<5;j++){
                     if(datesToCheck[j] === selectedDate){
                         newY[j] += (values["silgeum"]["value"] == 'Y' ? 1 : 0);
@@ -235,6 +241,9 @@ function Intro() {
         }
 
         setBaenow(bn);
+
+        console.log("newTotal:", newTotal);
+        console.log("newY:" , newY);
 
         setTotal(newTotal); // 총합 업데이트
         setAvg(total / json.length);

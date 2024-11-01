@@ -29,6 +29,20 @@
     z-index: 1000;
   }
 
+  .popup-overlay3 {
+    position: fixed;
+    width: 55%;
+    height: 19%;
+    top: 200px;
+    left: calc(50vw-130px);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
 
   .popup-overlay-Picture {
     position: fixed;
@@ -50,6 +64,34 @@
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     padding: 20px;
+    text-align: center;
+    animation: fadeIn 0.3s;
+  }
+
+  .popup-overlay-Picture2 {
+    position: fixed;
+    width: 430px;
+    height: 300px;
+    top: 200px;
+    left: calc(50vw - 150px);
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  /* Popup content */
+  .popup-content2 {
+    width: 430px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     text-align: center;
     animation: fadeIn 0.3s;
   }
