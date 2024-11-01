@@ -2,7 +2,9 @@ import "./List.css";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import './RangeSlider.css';
-import { setDate, setTimeRedux, setYo } from "./store";
+import { setDate, setTimeRedux, setYo, setMicro, setWeird } from "./store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhiskeyGlass, faGlassWater, faBottleWater,  faMicrophone, faMicrophoneAlt } from "@fortawesome/free-solid-svg-icons";
 
 function List2({ className }) {
     const dispatch = useDispatch();
@@ -12,9 +14,11 @@ function List2({ className }) {
 
     const date1 = useSelector((state) => state.date);
     const timeR = useSelector((state) => state.time);
+    const weird = useSelector((state) => state.weird);
   
     const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
     const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
+    const [microphone, setMicrophone] = useState(false);
     const [value, setValue] = useState(0);  // Initial value for the score slider
 
     const yo = useSelector((state) => {
@@ -60,6 +64,17 @@ function List2({ className }) {
       inputRef3.current.value = parseInt(event.target.value,10);
       dispatch(setYo(event.target.value));
     }
+
+
+    const useMicro = (e) => {
+      setMicrophone(true);
+      dispatch(setMicro(true));
+    }
+
+    const handleInputChange = (event) => {
+      dispatch(setWeird(event.target.value)); 
+    };
+
 
     return (
       <div className={`List silgeum ${className}`}>
@@ -124,10 +139,12 @@ function List2({ className }) {
           <span className="smallTitle">상황 기록(선택)</span>
         </div>
         <div className="elementBtn">
-          <input className="inputY inputY3" />
+          <input className="inputY inputY4" value={weird.value} onChange={handleInputChange} />
+          <FontAwesomeIcon icon={faMicrophoneAlt} style={{color : 'black'}} onClick={useMicro}/> 
         </div>
       </div>
     );
 }
 
 export default List2;
+

@@ -3,7 +3,7 @@ import React from 'react'
 import {useState, useEffect, useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useSelector, useDispatch} from 'react-redux';
-import { faWhiskeyGlass, faGlassWater, faBottleWater } from "@fortawesome/free-solid-svg-icons";
+import { faWhiskeyGlass, faGlassWater, faBottleWater,  faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, dequeue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setSelectedList} from "./store";
 
 

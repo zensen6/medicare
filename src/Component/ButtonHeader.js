@@ -4,7 +4,7 @@ import React from 'react'
 import {useState, useEffect} from 'react'
 import BodyList from "./BodyList";
 import { useSelector, useDispatch } from "react-redux";
-import {enqueue, dequeue, setQueue, setSilgeum, setDate, setTimeRedux} from './store';
+import {enqueue, dequeue, setQueue, setSilgeum, setDate, setTimeRedux, setWeird, setYo} from './store';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -21,8 +21,6 @@ function ButtonHeader() {
   const [btn4, setBtn4] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
 
-
-
   const navigate = useNavigate();
 
   const silgeum = useSelector((state) => {
@@ -34,6 +32,10 @@ function ButtonHeader() {
   })
 
   const time = useSelector((state) => {
+    return state.value;
+  })
+
+  const yo = useSelector((state) => {
     return state.value;
   })
 
@@ -118,6 +120,11 @@ function ButtonHeader() {
           // If id is 2, reset silgeum to 'N'
           if (id === 2) {
             dispatch(setSilgeum('N'));
+            dispatch(setWeird("-"));
+          }
+          else if(id === 1){
+            dispatch(setSilgeum('N'));
+            dispatch(setYo(0));
           }
         } else {
           // Add to queue

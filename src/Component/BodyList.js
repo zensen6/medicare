@@ -11,8 +11,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from "react-router-dom";
 import {useRef, useEffect, useState} from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faWhiskeyGlass, faGlassWater, faBottleWater, faX } from "@fortawesome/free-solid-svg-icons";
-import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setFrequentList, setCustomList, setSelectedList} from "./store";
+import { faWhiskeyGlass, faGlassWater, faBottleWater, faX, faMicrophone } from "@fortawesome/free-solid-svg-icons";
+import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setFrequentList, setCustomList, setSelectedList, setMicro} from "./store";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+
 
 
 function BodyList(props) {
@@ -27,6 +29,7 @@ function BodyList(props) {
   const navigate = useNavigate();
   const nameCup = useRef();
   const ml = useRef();
+  const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
 
   const handleDateChange = (newDate) => {
     dispatch(setDate(newDate));
@@ -90,6 +93,10 @@ function BodyList(props) {
 
   const selectedList = useSelector((state) => {
     return state.selectedList;
+  });
+
+  const micro = useSelector((state) => {
+    return state.micro;
   });
 
   const Save = (e) => {
@@ -233,6 +240,11 @@ function BodyList(props) {
   })
 
 
+  const SpeechClose = (e => {
+    dispatch(setMicro(false));
+  })
+
+
   const onClosePopup = () => {
     setIsSavePopup(false);
 
@@ -276,6 +288,11 @@ function BodyList(props) {
         isVisible={isSavePopup}
         onClose={onClosePopup}
         onConfirm={onConfirmPopup}
+      />
+
+      <ContainerSpeech
+        isVisible={micro.value}
+        onClose={SpeechClose}
       />
 
       {modalQueue.map((element, index) => {
@@ -422,4 +439,66 @@ function DuringNightPopup({ isVisible, onClose, onConfirm }) {
       </div>
     </div>
   );
+}
+
+
+function ContainerSpeech({isVisible, onClose}){
+  console.log("isVisible:", isVisible);
+  const dispatch = useDispatch();
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
+
+  const weird = useSelector((state) => {
+    return state.weird;
+  });
+  
+  useEffect(() => {
+    if (isVisible) {
+      SpeechRecognition.startListening({ continuous: true });
+      resetTranscript();
+    } else {
+      SpeechRecognition.stopListening();
+    }
+
+    // 컴포넌트가 사라질 때 녹음 중지
+    return () => {
+      SpeechRecognition.stopListening();
+    };
+  }, [isVisible]);
+
+  const Close = (e) => {
+
+    dispatch(setWeird(transcript));
+    onClose();
+
+  }
+
+  const Reset = (e) => {
+
+    dispatch(setWeird("-"));
+    resetTranscript();
+  }
+
+
+  if(!isVisible) return null;
+  return(
+      <div className="SpeechContainer">
+        <div class="SpeechHeader">음성 기록</div>
+        <div class="SpeechWaveContainer">
+            <div class="SpeechWave"></div>
+            <div class="SpeechWave"></div>
+            <div class="SpeechWave"></div>
+            <div class="SpeechWave"></div>
+            <div class="SpeechWave"></div>
+            <div class="SpeechWave"></div>
+        </div>
+        <textarea className="inputVoiceText" value={transcript} readOnly />
+
+        <div className="buttonContainer">
+          <button className="resetButton" onClick={Reset}>기록 초기화</button>
+          <button className="closeButton" onClick={Close}>닫기</button>
+        </div>
+       
+      </div>
+  );
+
 }

@@ -168,6 +168,10 @@
     width : 95%;
 }
 
+.inputY4{
+    width: 85%;
+}
+
 .inputText{
     width: 95%;
 }
@@ -314,8 +318,6 @@
     -webkit-box-shadow: 0px 3px 4px -3px rgba(112,112,112,0.75);
     -moz-box-shadow: 0px 3px 4px -3px rgbaa(112,112,112,0.75);
 }
-
-
 
 
 

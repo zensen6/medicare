@@ -164,6 +164,18 @@ const frequentList = createSlice({
     }
 });
 
+const micro = createSlice({
+    name : 'micro',
+    initialState: {
+        value : false,
+    },
+    reducers:{
+        setMicro : (state,action) => {
+            state.value = action.payload;
+        }
+    }
+});
+
 
 const customList = createSlice({
     name : 'customList',
@@ -222,6 +234,7 @@ export const {setPopUp} = popup.actions;
 export const {setFrequentList} = frequentList.actions;
 export const {setCustomList} = customList.actions;
 export const {setSelectedList} = selectedList.actions;
+export const {setMicro} = micro.actions;
 
 export default configureStore({
 
@@ -240,7 +253,8 @@ export default configureStore({
         frequentList: frequentList.reducer,
         customList: customList.reducer,
         selectedList: selectedList.reducer,
+        micro : micro.reducer,
     }
 
-
+    
 });
