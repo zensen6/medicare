@@ -85,7 +85,7 @@ const Loading = () => {
 
     return (
         <div className="loading-container">
-            <div className="loading-message">기록 저장 중...</div>
+            <div className="loading-message">기록 저장 중</div>
             <div className="advice1">
                 <p>{Advice[idx][Math.floor(Math.random()*Advice[idx].length)]}</p>
             </div>

@@ -387,6 +387,11 @@ function Intro() {
 
     return (
         <div className="Background">
+
+            <div className="Link" onClick={e => navigate("/result")}>
+                기록 결과 보기
+            </div>
+
             <div className="InfoHorizontal" ref={addToRefs}>
                 <div className="InfoTitle">
                     다음 권장 도뇨 시간은
