@@ -53,6 +53,7 @@ const Result = () => {
     const [visiblePicture, setVisiblePicture] = useState("");
     const [popupFreq, setPopupFreq] = useState(false);
     const [rec, setRec] = useState(0);
+    const [BaenowCount, setBaenowCount] = useState(0);
 
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
@@ -495,8 +496,9 @@ const Result = () => {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(curDate.getMonth() + 1).padStart(2, '0') + '/' + String(curDate.getDate()).padStart(2, '0'));
-                if (selectedDate === Today) {
+                if (selectedDate === Today && parseInt(values["water"]["value"]) > 0) {
                     isFirstCount += 1;
+                    setBaenowCount(isFirstCount);
                 }
     
                 if (Today !== selectedDate) continue;
@@ -573,8 +575,9 @@ const Result = () => {
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                 var Today = (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'));
-                if(selectedDate === Today){
+                if(selectedDate === Today && parseInt(values["water"]["value"]) > 0){
                     isFirstCount += 1;
+                    setBaenowCount(isFirstCount);
                 }
             }
         }
@@ -794,7 +797,7 @@ const Result = () => {
                             일일 도뇨 횟수
                         </div>
                         <div className="GridItem">
-                            {(fIdx === -1) ? '0' : ((fIdx === lIdx) ? "1" : `${lIdx - fIdx + 1} 회`)}
+                            {(fIdx === -1) ? '0' : (`${BaenowCount} 회`)}
                         </div>
 
                     </div>
