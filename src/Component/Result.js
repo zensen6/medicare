@@ -54,6 +54,7 @@ const Result = () => {
     const [popupFreq, setPopupFreq] = useState(false);
     const [rec, setRec] = useState(0);
     const [BaenowCount, setBaenowCount] = useState(0);
+    const [Tommorow, setTommorow] = useState("");
 
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
@@ -129,6 +130,26 @@ const Result = () => {
         return `${resultHours}:${resultMinutes}`;
     }
 
+    const isToday = (date1, time, pivot) => { // 앞의 두개는 localData의 각 행, 이걸 지금 헤더에 나타난 날짜에 포함시킬까를 나타냄
+        //"11/03"     "01:01"    "11/02"
+        const [month, day] = pivot.split("/").map(Number); // Split and convert to numbers
+        const date = new Date(0, month - 1, day); // Use a base date without a specific year
+
+        date.setDate(date.getDate() + 1); // Move to the next day
+
+        // Format month and day to always be two digits
+        const nextMonth = String(date.getMonth() + 1).padStart(2, "0");
+        const nextDay = String(date.getDate()).padStart(2, "0");
+
+        //console.log(date1, time, pivot, (nextMonth + "/" + nextDay), time.split(":")[0] <= "03");
+
+
+        if((date1 === pivot && (time.split(":")[0] >= "04"))) return true;
+        if((nextMonth + "/" + nextDay) === (date1) && (time.split(":")[0] <= "03")) return true;
+        return false;
+        //if(())
+    }
+
 
 
     const update = () => {
@@ -173,7 +194,8 @@ const Result = () => {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(curDate.getMonth() + 1).padStart(2, '0') + '/' + String(curDate.getDate()).padStart(2, '0'));
-                if (selectedDate === Today && parseInt(values["water"]["value"]) > 0 && (values["count"] === 'Y')) {
+                //if (selectedDate === Today && parseInt(values["water"]["value"]) > 0 && (values["count"] === 'Y')) {
+                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     isFirstCount += 1;
                     setBaenowCount(isFirstCount);
                 }
@@ -183,7 +205,9 @@ const Result = () => {
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
+                
+                //if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
+                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     firstIdx = i
                     break;
                 }
@@ -194,7 +218,8 @@ const Result = () => {
             for(let i =data2.length-1; i>=0;i--){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
+                //if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
+                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     lastIdx = i;
                     break;
                 }
@@ -274,6 +299,10 @@ const Result = () => {
 
     useEffect(()=>{
 
+        const pivot = curDate;
+        const tommorow = new Date(pivot);
+        tommorow.setDate(pivot.getDate() + 1);
+        setTommorow(String(tommorow.getFullYear()) + "-" + String(tommorow.getMonth()+1).padStart(2,'0') + "-" + String(tommorow.getDate()).padStart(2,'0'));
         //source
         const source = localStorage.getItem("imageSource");
 
@@ -305,6 +334,9 @@ const Result = () => {
     },[]);
 
 
+    
+
+
     const navigate = useNavigate();
 
     const handleYesterday = (e) => {
@@ -326,7 +358,9 @@ const Result = () => {
             for (let i = 0; i < data2.length; i++) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
-                if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                const Today = (String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0'));
+
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     firstIdx = i;
                     break;
                 }
@@ -335,7 +369,9 @@ const Result = () => {
             for (let i = data2.length - 1; i >= 0; i--) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
-                if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                const Today = (String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0'));
+                //if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     lastIdx = i;
                     break;
                 }
@@ -430,7 +466,10 @@ const Result = () => {
             for (let i = 0; i < data2.length; i++) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
-                if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                const Today = (String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0'));
+                console.log("here", Today);
+                //if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     firstIdx = i;
                     break;
                 }
@@ -439,7 +478,9 @@ const Result = () => {
             for (let i = data2.length - 1; i >= 0; i--) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
-                if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                const Today = (String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0'));
+                //if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     lastIdx = i;
                     break;
                 }
@@ -530,13 +571,17 @@ const Result = () => {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(curDate.getMonth() + 1).padStart(2, '0') + '/' + String(curDate.getDate()).padStart(2, '0'));
-                if (selectedDate === Today && parseInt(values["water"]["value"]) > 0 && (values["count"] === 'Y')) {
+                console.log("Today:", Today);
+                //if (selectedDate === Today && parseInt(values["water"]["value"]) > 0 && (values["count"] === 'Y')) {
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     isFirstCount += 1;
                     setBaenowCount(isFirstCount);
                 }
+                //isToday(selectedDate, values["time"]["value"], Today)
     
-                if (Today !== selectedDate) continue;
-    
+                //if (Today !== selectedDate) continue;
+                if(!isToday(selectedDate, values["time"]["value"], Today)) continue;
+
                 l1.push(values["time"]["value"]);
                 l1.push(values["drunk"]["value"]);
                 l1.push(values["water"]["value"]);
@@ -579,7 +624,6 @@ const Result = () => {
     const loadDataSafe = async () => {
         try {
             await loadData();
-            //console.log(l1);
         } catch (error) {
             console.error("Error loading data:", error);
         }
@@ -609,7 +653,8 @@ const Result = () => {
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                 var Today = (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'));
-                if(selectedDate === Today && parseInt(values["water"]["value"]) > 0  && (values["count"] === "Y")){
+                //if(selectedDate === Today && parseInt(values["water"]["value"]) > 0  && (values["count"] === "Y")){
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     isFirstCount += 1;
                     setBaenowCount(isFirstCount);
                 }
@@ -622,7 +667,7 @@ const Result = () => {
         //let isFirstCount = 0;
         //let is6 = false;
         //const data2 = JSON.parse(localStorage.getItem("data"));
-        console.log(lastInfo);
+        //console.log(lastInfo);
         if(isFirstCount === 1 && 
             (String(currentDate.getMonth()+1).padStart(2,'0') ===  String(curDate.getMonth() + 1).padStart(2,'0') && String(currentDate.getDate()).padStart(2,'0') === String(curDate.getDate()).padStart(2,'0'))
             &&
