@@ -207,7 +207,7 @@ const Result = () => {
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                 
                 //if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
-                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0) {
                     firstIdx = i
                     break;
                 }
@@ -219,7 +219,7 @@ const Result = () => {
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                 //if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
-                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0) {
                     lastIdx = i;
                     break;
                 }
@@ -245,26 +245,24 @@ const Result = () => {
                 var maxB = 0;
                 var totBae = 0;
                 var silgeumCnt = 0;
-                for(var i = firstIdx; i <= lastIdx; i++){
-                    const values = data2[i];
-                    totWater += parseInt(values["drunk"]["value"]);
-                    yoCnt += parseInt(values["yo"]["value"]);
-                    silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
-                    totBae += parseInt(values["water"]["value"]);
-                    maxB = Math.max(maxB, parseInt(values["water"]["value"]));
-                }
-
                 var avgCount = 0;
-                for(var i = firstIdx; i <= lastIdx; i++){
+                for(var i = 0; i <= data2.length-1; i++){
                     const values = data2[i];
-                    if(values["count"] === 'Y' && values["water"]["value"] > 0) avgCount += 1;
+                    var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                    if(isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) ){
+                        totWater += parseInt(values["drunk"]["value"]);
+                        yoCnt += parseInt(values["yo"]["value"]);
+                        silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
+                        totBae += parseInt(values["water"]["value"]);
+                        maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                        avgCount += 1;
+                    }
                 }
-
 
                 setTotalWater(totWater);
                 setYo(yoCnt);
                 setMaxBae(maxB);
-                setAvgBae(Math.floor(totBae / (avgCount + 1)));
+                setAvgBae(Math.floor(totBae / (totBae === 0 ? 10000 : avgCount)));
                 setSilgeum(silgeumCnt);
 
 
@@ -348,11 +346,13 @@ const Result = () => {
         setMonth(String(yesterday.getMonth() + 1).padStart(2, '0'));
         setDay(String(yesterday.getDate()).padStart(2, '0'));
         setClickCount(clickCount + 1);
+        setBaenowCount(0);
     
         const data2 = JSON.parse(localStorage.getItem("data"));
         const clickedDate = String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0');
         let firstIdx = -1;
         let lastIdx = -1;
+        var countBaenow = 0;
     
         if (data2 != null && data2.length > 0) {
             for (let i = 0; i < data2.length; i++) {
@@ -361,6 +361,11 @@ const Result = () => {
                 const Today = (String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0'));
 
                 if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                    countBaenow += 1;
+                    setBaenowCount(countBaenow);
+                }
+
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0) {
                     firstIdx = i;
                     break;
                 }
@@ -371,7 +376,7 @@ const Result = () => {
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0'));
                 //if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
-                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0) {
                     lastIdx = i;
                     break;
                 }
@@ -397,24 +402,25 @@ const Result = () => {
                 var maxB = 0;
                 var totBae = 0;
                 var silgeumCnt = 0;
-                for(var i = firstIdx; i <= lastIdx; i++){
+                var avgCount = 0;
+                for(var i = 0; i <= data2.length-1; i++){
                     const values = data2[i];
-                    totWater += parseInt(values["drunk"]["value"]);
-                    yoCnt += parseInt(values["yo"]["value"]);
-                    silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
-                    totBae += parseInt(values["water"]["value"]);
-                    maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                    var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                    const Today = (String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0'));
+                    if(isToday(selectedDate, values["time"]["value"], Today) ){
+                        totWater += parseInt(values["drunk"]["value"]);
+                        yoCnt += parseInt(values["yo"]["value"]);
+                        silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
+                        totBae += parseInt(values["water"]["value"]);
+                        maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                        avgCount += 1;
+                    }
                 }
 
-                var avgCount = 0;
-                for(var i = firstIdx; i <= lastIdx; i++){
-                    const values = data2[i];
-                    if(values["count"] === 'Y' && values["water"]["value"] > 0) avgCount += 1;
-                }
                 setTotalWater(totWater);
                 setYo(yoCnt);
                 setMaxBae(maxB);
-                setAvgBae(Math.floor(totBae / (avgCount + 1)));
+                setAvgBae(Math.floor(totBae / (totBae === 0 ? 10000 : avgCount)));
                 setSilgeum(silgeumCnt);
 
                 const first = data2[firstIdx]?.["time"]?.["value"];
@@ -461,15 +467,22 @@ const Result = () => {
         const clickedDate = String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0');
         let firstIdx = -1;
         let lastIdx = -1;
+
+        setBaenowCount(0);
+        let countBaenow = 0;
     
         if (data2 != null && data2.length > 0) {
             for (let i = 0; i < data2.length; i++) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0'));
-                console.log("here", Today);
-                //if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+
                 if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                    countBaenow += 1;
+                    setBaenowCount(countBaenow);
+                }
+                //if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0) {
                     firstIdx = i;
                     break;
                 }
@@ -480,7 +493,7 @@ const Result = () => {
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0'));
                 //if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
-                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0) {
                     lastIdx = i;
                     break;
                 }
@@ -504,25 +517,28 @@ const Result = () => {
                 var maxB = 0;
                 var totBae = 0;
                 var silgeumCnt = 0;
-                for(var i = firstIdx; i <= lastIdx; i++){
+                var avgCount = 0;
+                for(var i = 0; i <= data2.length-1; i++){
                     const values = data2[i];
-                    totWater += parseInt(values["drunk"]["value"]);
-                    yoCnt += parseInt(values["yo"]["value"]);
-                    silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
-                    totBae += parseInt(values["water"]["value"]);
-                    maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                    var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                    const Today = (String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0'));
+                    if(isToday(selectedDate, values["time"]["value"], Today) ){
+                        totWater += parseInt(values["drunk"]["value"]);
+                        yoCnt += parseInt(values["yo"]["value"]);
+                        silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
+                        totBae += parseInt(values["water"]["value"]);
+                        maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                        avgCount += 1;
+                    }
                 }
 
-                var avgCount = 0;
-                for(var i = firstIdx; i <= lastIdx; i++){
-                    const values = data2[i];
-                    if(values["count"] === 'Y' && values["water"]["value"] > 0) avgCount += 1;
-                }
+                
+                
                 
                 setTotalWater(totWater);
                 setYo(yoCnt);
                 setMaxBae(maxB);
-                setAvgBae(Math.floor(totBae / (avgCount + 1)));
+                setAvgBae(Math.floor(totBae / (totBae === 0 ? 10000 : avgCount)));
                 setSilgeum(silgeumCnt);
 
 
@@ -571,7 +587,6 @@ const Result = () => {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(curDate.getMonth() + 1).padStart(2, '0') + '/' + String(curDate.getDate()).padStart(2, '0'));
-                console.log("Today:", Today);
                 //if (selectedDate === Today && parseInt(values["water"]["value"]) > 0 && (values["count"] === 'Y')) {
                 if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     isFirstCount += 1;
