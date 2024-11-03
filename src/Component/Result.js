@@ -5,7 +5,7 @@ import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import json from "../Data/data.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { setUrl } from './store';
+import { setUrl, setLastInfo } from './store';
 import { faCaretRight, faCaretLeft, faTrash, faHouse, faX } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { useSelector, useDispatch } from "react-redux";
@@ -61,6 +61,10 @@ const Result = () => {
     const dispatch = useDispatch();
     const url = useSelector((state) => {
         return state.url;
+    })
+
+    const lastInfo = useSelector((state) => {
+        return state.lastInfo;
     })
 
     const Advice = [
@@ -141,6 +145,7 @@ const Result = () => {
             setMaxBae(0);
             setAvgBae(0);
             setSilgeum(0);
+            setBaenowCount(0);
 
         }
 
@@ -163,15 +168,23 @@ const Result = () => {
 
 
 
-
-
+            var isFirstCount = 0;
+            for (let i = 0; i < data2.length; i++) {
+                const values = data2[i];
+                const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
+                const Today = (String(curDate.getMonth() + 1).padStart(2, '0') + '/' + String(curDate.getDate()).padStart(2, '0'));
+                if (selectedDate === Today && parseInt(values["water"]["value"]) > 0 && (values["count"] === 'Y')) {
+                    isFirstCount += 1;
+                    setBaenowCount(isFirstCount);
+                }
+            }
 
 
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                if(clickedDate === selectedDate){
-                    firstIdx = i;
+                if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
+                    firstIdx = i
                     break;
                 }
                 //bn += parseInt(values["drunk"]["value"]);
@@ -181,13 +194,13 @@ const Result = () => {
             for(let i =data2.length-1; i>=0;i--){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                if(clickedDate === selectedDate){
+                if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
                     lastIdx = i;
                     break;
                 }
             }   
 
-            if(firstIdx === lastIdx === -1){
+            if(firstIdx === lastIdx && firstIdx === -1){
                 setFIdx(firstIdx);
                 setLIdx(lastIdx);
                 setFirstS("-");
@@ -200,6 +213,7 @@ const Result = () => {
                 setSilgeum(0);
 
             }else{
+                //console.log("fI", firstIdx, lastIdx);
 
                 var totWater = 0;
                 var yoCnt = 0;
@@ -214,10 +228,18 @@ const Result = () => {
                     totBae += parseInt(values["water"]["value"]);
                     maxB = Math.max(maxB, parseInt(values["water"]["value"]));
                 }
+
+                var avgCount = 0;
+                for(var i = firstIdx; i <= lastIdx; i++){
+                    const values = data2[i];
+                    if(values["count"] === 'Y' && values["water"]["value"] > 0) avgCount += 1;
+                }
+
+
                 setTotalWater(totWater);
                 setYo(yoCnt);
                 setMaxBae(maxB);
-                setAvgBae(Math.floor(totBae / (lastIdx - firstIdx + 1)));
+                setAvgBae(Math.floor(totBae / (avgCount + 1)));
                 setSilgeum(silgeumCnt);
 
 
@@ -304,7 +326,7 @@ const Result = () => {
             for (let i = 0; i < data2.length; i++) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
-                if (clickedDate === selectedDate) {
+                if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     firstIdx = i;
                     break;
                 }
@@ -313,7 +335,7 @@ const Result = () => {
             for (let i = data2.length - 1; i >= 0; i--) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
-                if (clickedDate === selectedDate) {
+                if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     lastIdx = i;
                     break;
                 }
@@ -347,10 +369,16 @@ const Result = () => {
                     totBae += parseInt(values["water"]["value"]);
                     maxB = Math.max(maxB, parseInt(values["water"]["value"]));
                 }
+
+                var avgCount = 0;
+                for(var i = firstIdx; i <= lastIdx; i++){
+                    const values = data2[i];
+                    if(values["count"] === 'Y' && values["water"]["value"] > 0) avgCount += 1;
+                }
                 setTotalWater(totWater);
                 setYo(yoCnt);
                 setMaxBae(maxB);
-                setAvgBae(Math.floor(totBae / (lastIdx - firstIdx + 1)));
+                setAvgBae(Math.floor(totBae / (avgCount + 1)));
                 setSilgeum(silgeumCnt);
 
                 const first = data2[firstIdx]?.["time"]?.["value"];
@@ -402,7 +430,7 @@ const Result = () => {
             for (let i = 0; i < data2.length; i++) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
-                if (clickedDate === selectedDate) {
+                if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     firstIdx = i;
                     break;
                 }
@@ -411,7 +439,7 @@ const Result = () => {
             for (let i = data2.length - 1; i >= 0; i--) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
-                if (clickedDate === selectedDate) {
+                if (clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     lastIdx = i;
                     break;
                 }
@@ -443,11 +471,17 @@ const Result = () => {
                     totBae += parseInt(values["water"]["value"]);
                     maxB = Math.max(maxB, parseInt(values["water"]["value"]));
                 }
+
+                var avgCount = 0;
+                for(var i = firstIdx; i <= lastIdx; i++){
+                    const values = data2[i];
+                    if(values["count"] === 'Y' && values["water"]["value"] > 0) avgCount += 1;
+                }
                 
                 setTotalWater(totWater);
                 setYo(yoCnt);
                 setMaxBae(maxB);
-                setAvgBae(Math.floor(totBae / (lastIdx - firstIdx + 1)));
+                setAvgBae(Math.floor(totBae / (avgCount + 1)));
                 setSilgeum(silgeumCnt);
 
 
@@ -490,13 +524,13 @@ const Result = () => {
         const l1 = []; // Initialize your l1 array
         let isFirstCount = 0;
         let totBae = 0;
-    
+    //[{"date":{"value":"2024-11-03"},"time":{"value":"19:05"},"drunk":{"value":350},"water":{"value":0},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-03"},"time":{"value":"19:05"},"drunk":{"value":0},"water":{"value":"310"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"}]
         if (data2 != null) {
             for (let i = 0; i < data2.length; i++) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(curDate.getMonth() + 1).padStart(2, '0') + '/' + String(curDate.getDate()).padStart(2, '0'));
-                if (selectedDate === Today && parseInt(values["water"]["value"]) > 0) {
+                if (selectedDate === Today && parseInt(values["water"]["value"]) > 0 && (values["count"] === 'Y')) {
                     isFirstCount += 1;
                     setBaenowCount(isFirstCount);
                 }
@@ -545,7 +579,7 @@ const Result = () => {
     const loadDataSafe = async () => {
         try {
             await loadData();
-            console.log(l1);
+            //console.log(l1);
         } catch (error) {
             console.error("Error loading data:", error);
         }
@@ -565,7 +599,7 @@ const Result = () => {
         }
 
         
-        
+
         const data2 = JSON.parse(localStorage.getItem("data"));
 
         let isFirstCount = 0;
@@ -575,7 +609,7 @@ const Result = () => {
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                 var Today = (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'));
-                if(selectedDate === Today && parseInt(values["water"]["value"]) > 0){
+                if(selectedDate === Today && parseInt(values["water"]["value"]) > 0  && (values["count"] === "Y")){
                     isFirstCount += 1;
                     setBaenowCount(isFirstCount);
                 }
@@ -588,8 +622,14 @@ const Result = () => {
         //let isFirstCount = 0;
         //let is6 = false;
         //const data2 = JSON.parse(localStorage.getItem("data"));
-
-        if(isFirstCount === 1 && (String(currentDate.getMonth()+1).padStart(2,'0') ===  String(curDate.getMonth() + 1).padStart(2,'0') && String(currentDate.getDate()).padStart(2,'0') === String(curDate.getDate()).padStart(2,'0'))){
+        console.log(lastInfo);
+        if(isFirstCount === 1 && 
+            (String(currentDate.getMonth()+1).padStart(2,'0') ===  String(curDate.getMonth() + 1).padStart(2,'0') && String(currentDate.getDate()).padStart(2,'0') === String(curDate.getDate()).padStart(2,'0'))
+            &&
+            lastInfo["count"] === 'Y'
+            && 
+            parseInt(lastInfo["water"]["value"]) > 0 
+        ){
             setIsPopupVisibleFirst(true);
         }else if(isFirstCount >= 2){ // 당일 직전 배뇨 기록
             var lastIdx = data2.length-1;
@@ -670,9 +710,10 @@ const Result = () => {
             yo: { value: "0" },
             silgeum: { value: "N" },
             weird: { value: "" },
-            url: { value: "" }
+            url: { value: "" },
+            count : "Y",
         };
-
+//[{"date":{"value":"2024-11-03"},"time":{"value":"02:18"},"drunk":{"value":350},"water":{"value":"130"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":""},"count":"N"},{"date":{"value":"2024-11-03"},"time":{"value":"03:18"},"drunk":{"value":0},"water":{"value":"180"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":"-"},"url":{"value":"-"},"count":{"value":"Y"}}]
         // localStorage에 업데이트
         const jsonData = JSON.parse(localStorage.getItem("data")) || [];
         jsonData.splice(jsonData.length - 1, 0, dataJson);
@@ -715,7 +756,7 @@ const Result = () => {
 
 
     const clickToMakeBigger = (base64Url) => {
-        console.log(base64Url);
+        //(base64Url);
         setVisiblePicture(base64Url);
     }
 
@@ -791,13 +832,13 @@ const Result = () => {
                             평균 도뇨 주기
                         </div>
                         <div className="GridItem">
-                            {(lIdx === fIdx || fIdx === -1) ? '-' : Math.ceil((diff / (lIdx - fIdx))*10)/10 + '분'}
+                            {BaenowCount > 1 ? Math.ceil((diff / (BaenowCount - 1))*10)/10 + '분' : '-'}
                         </div>
                         <div className="GridItem">
                             일일 도뇨 횟수
                         </div>
                         <div className="GridItem">
-                            {(fIdx === -1) ? '0' : (`${BaenowCount} 회`)}
+                            {(`${BaenowCount} 회`)}
                         </div>
 
                     </div>
@@ -914,7 +955,7 @@ const Result = () => {
                         ll1.length > 0 ? (
                             ll1.map((e, index) => {
                                 if (index % 7 === 0) {
-                                    console.log("index", index);
+                                    //console.log("index", index);
                                     const rowItems = ll1.slice(index, index + 7);
                                     return (
                                         <tr key={index}>

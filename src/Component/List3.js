@@ -256,7 +256,7 @@ function List3({ className, date, timeP, onDateChange, onTimeChange }) {
 
         <div className="elementBtn" style={{marginTop : '8px'}}>
           <span className="smallTitle">섭취량</span>
-            <input type="number" className="inputY inputY2" ref={inputRef} value={total} onChange={directInput}/>
+            <input type="number" className="inputY inputY2" ref={inputRef} value={water.value > 0 ? water.value : total} onChange={directInput}/>
           <span className="smallTitle">ml</span>
         </div>
 

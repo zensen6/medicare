@@ -4,11 +4,12 @@ import React from 'react'
 import {useState, useEffect} from 'react'
 import BodyList from "./BodyList";
 import { useSelector, useDispatch } from "react-redux";
-import {enqueue, dequeue, setQueue, setSilgeum, setDate, setTimeRedux, setWeird, setYo} from './store';
+import {enqueue, dequeue, setQueue, setWater, setPees, setSilgeum, setDate, setTimeRedux, setWeird, setYo} from './store';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight, faCaretLeft, faTrash, faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faCaretLeft, faTrash, faHouse, faX } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {useNavigate} from "react-router-dom";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
 
 function ButtonHeader() {
@@ -20,6 +21,7 @@ function ButtonHeader() {
   const [btn3, setBtn3] = useState(false);
   const [btn4, setBtn4] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+  const [popupVoice, setPopupVoice] = useState(false);
 
   const navigate = useNavigate();
 
@@ -29,15 +31,23 @@ function ButtonHeader() {
 
   const date = useSelector((state) => {
     return state.value;
-  })
+  });
 
   const time = useSelector((state) => {
     return state.value;
-  })
+  });
 
   const yo = useSelector((state) => {
     return state.value;
-  })
+  });
+
+  const dispatch = useDispatch();
+
+  const globalQueue = useSelector((state) => {
+        return state.queue;
+  });
+
+
 
   const today = new Date();
 
@@ -82,13 +92,29 @@ function ButtonHeader() {
     dispatch(setTimeRedux(formattedTime));
     
   },[]);
+
+  /////////////////
+  useEffect(()=> {
+    console.log("Redux globalQueue state updated:", globalQueue.queue);
+    setModalQueue(globalQueue.queue);
+  },[globalQueue]);
+  ////////////////////////
+
+
   //console.log(count);
 
 
-    const dispatch = useDispatch();
-    const globalQueue = useSelector((state) => {
-        return state.queue;
-    });
+    
+
+    const saveByVoice = (e) => {
+      setPopupVoice(true);
+
+    };
+
+    const onCloseVoice = (e) => {
+      setPopupVoice(false);
+    }
+
 
     const handleButtonClick = (id) => {
         let updatedQueue = modalQueue;
@@ -98,7 +124,7 @@ function ButtonHeader() {
             // Hide the message after 1 second
             setTimeout(() => {
                 setPopupMessage("");
-            }, 1500);
+            }, 2500);
 
             return;
         }
@@ -176,14 +202,162 @@ function ButtonHeader() {
                     이상증세 기록
                 </button>
             </div>
+
+            {/*
+            <div className="SaveInfoBtnVoice" onClick={() => saveByVoice()}>
+               음성으로 기록하기
+            </div>
+            */}
         </div>
         
         <BodyList modalQueue={modalQueue}>
 
 
         </BodyList>
+
+        {/*
+        <ContainerSpeech2
+          isVisible={popupVoice}
+          onClose={onCloseVoice}
+        />
+        */}
     </>
   )
 }
 
 export default ButtonHeader
+
+
+
+
+
+function ContainerSpeech2({isVisible, onClose}){
+  const dispatch = useDispatch();
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
+  const [popupVoiceValid, setPopupVoiceValid] = useState("");
+  const [savingModalVisible, setSavingModalVisible] = useState(false); // State for "Saving..." modal
+
+  const globalQueue = useSelector((state) => {
+    return state.queue;
+  });
+  
+  useEffect(() => {
+    if (isVisible) {
+      console.log("visible");
+      SpeechRecognition.startListening({ continuous: true });
+      resetTranscript();
+    } else {
+      SpeechRecognition.stopListening();
+    }
+
+    // 컴포넌트가 사라질 때 녹음 중지
+    return () => {
+      SpeechRecognition.stopListening();
+    };
+  }, [isVisible, resetTranscript]);
+
+  const Save = (e) => {
+
+    //dispatch(setWeird(transcript));
+    const [water, baenow, yo, silgeum] = transcript.split(" ");
+
+    const isNumericString = (str) => {
+      return !Number.isNaN(parseInt(str, 10));
+    };
+
+
+    if(!isNumericString(water) 
+      || !isNumericString(baenow) 
+      || !(parseInt(yo) >= 0 && parseInt(yo)<=3) 
+      || !(parseInt(silgeum) === 0 
+       || parseInt(silgeum) === 1))
+    {
+
+      setPopupVoiceValid("예시와 같이 형식에 맞게 말씀해 주세요.");
+      setTimeout(() => {
+        setPopupVoiceValid("");
+      }, 2000);
+      return;
+    }
+    else{
+
+      setPopupVoiceValid("");
+      dispatch(setWater(water));
+      dispatch(setPees(baenow));
+      dispatch(setYo(yo));
+      dispatch(setSilgeum(silgeum === '1' ? 'Y' : 'N'));
+      resetTranscript();
+
+      setSavingModalVisible(true); // Show "Saving..." modal
+
+      setTimeout(() => {
+        let queue = [1, 3, 4];
+        dispatch(setQueue(queue));
+        setSavingModalVisible(false); // Hide "Saving..." modal after 500 ms
+      }, 500);
+
+
+
+      onClose();
+    }
+  }
+
+  const Reset = (e) => {
+    resetTranscript();
+    setPopupVoiceValid("");
+  }
+
+  const Close = (e) => {
+    resetTranscript();
+    setPopupVoiceValid("");
+    onClose();
+  }
+
+
+  if(!isVisible) return null;
+  return(
+      <div className="SpeechContainer2">
+
+      <div style={{position:"absolute", top: "10px", right: "10px"}}>
+          <FontAwesomeIcon icon={faX} onClick={Close}/>
+      </div>
+        { 
+          popupVoiceValid &&
+            <div className="popup-message">
+                {popupVoiceValid}
+            </div>
+        }
+
+        <div className="SpeechHeader" style={{marginTop:"10px"}}>수분섭취량, 배뇨량, 요절박, 실금여부 순서로 말씀해주세요</div>
+        <div className="SpeechHeader2">
+          <li className="Example">실금이 발생했다면 1, 아니면 0</li>
+          <li className="Example">요절박 정도는 매우 심하면 3, 증상이 없으면 0</li>
+        </div>
+        <h2 className="Example">예시: 300 250 3(삼) 1(일)</h2>
+        
+        <div className="SpeechWaveContainer">
+            <div className="SpeechWave"></div>
+            <div className="SpeechWave"></div>
+            <div className="SpeechWave"></div>
+            <div className="SpeechWave"></div>
+            <div className="SpeechWave"></div>
+            <div className="SpeechWave"></div>
+        </div>
+        <input className="inputVoiceText2" value={transcript} readOnly />
+
+        <div className="buttonContainer">
+          <button className="resetButton" onClick={Reset}>기록 초기화</button>
+          <button className="closeButton" onClick={Save}>저장</button>
+        </div>
+
+
+        {savingModalVisible && (
+          <div className="saving-modal">
+            <div className="saving-message">저장 중...</div>
+          </div>
+        )}
+       
+      </div>
+  );
+
+}

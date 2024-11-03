@@ -242,8 +242,8 @@ function Intro() {
 
         setBaenow(bn);
 
-        console.log("newTotal:", newTotal);
-        console.log("newY:" , newY);
+        //console.log("newTotal:", newTotal);
+        //console.log("newY:" , newY);
 
         setTotal(newTotal); // 총합 업데이트
         setAvg(total / json.length);

@@ -12,7 +12,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
   const date1 = useSelector((state) => state.date);
   const timeR = useSelector((state) => state.time);
 
-  console.log("timeR:", timeR);
+  //console.log("timeR:", timeR);
   const [dateValue, setDateValue] = useState(date1 || ""); // Local state for date input
   const [timeValue, setTimeValue] = useState(timeR || ""); // Local state for time input
   
@@ -158,13 +158,13 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
   }
 
   const handleSliderChange2 = (event) => {
-    setValue2(parseInt(event.target.value));
+    //(parseInt(event.target.value));
     inputRef2.current.value = parseInt(event.target.value);
     dispatch(setPees(event.target.value));
   }
 
-  const handleYes = (e )=> {
-      if(!yes){
+  const handleYes = (e)=> {
+      if(silgeum.value==='N'){
         setYes(true);
         dispatch(setSilgeum('Y'));
         dispatch(changeState());
@@ -173,7 +173,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
   }
 
   const handleNo = (e )=> {
-    if(yes){
+    if(silgeum.value==='Y'){
       setYes(false);
       dispatch(setSilgeum('N'));
       dispatch(changeState());
@@ -257,7 +257,7 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
 
       <div className="elementBtn2">
           <span className="smallTitle">배뇨량</span>
-          <input type="number" className="inputY inputY2" ref={inputRef2} defaultValue={0} onChange={handlePees}/>
+          <input type="number" className="inputY inputY2" ref={inputRef2} defaultValue={0} onChange={handlePees} value={pees.value}/>
           <span className="smallTitle">mL</span>
       </div>
       <div className="elementBtn3">
@@ -266,7 +266,8 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
           min="0"
           max="700"
           step="10"
-          value={value2}
+          //value={value2}
+          value={pees.value}
           onChange={handleSliderChange2}
           className="slider"
           style={{width: '95%'}}
@@ -274,19 +275,19 @@ function List1({ className, date, timeP, onDateChange, onTimeChange }) {
       </div>
       <div className="elementBtn3" style={{display: "flex", justifyContent:"center"}}>
           <div className="labels" style={{width:"72%"}}>
-            <span className={`label ${value2 === 100? 'active':''}`} style={{fontSize:"9px"}}>100</span>
-            <span className={`label ${value2 === 200? 'active':''}`} style={{fontSize:"9px"}}>200</span>
-            <span className={`label ${value2 === 300? 'active':''}`} style={{fontSize:"9px"}}>300</span>
-            <span className={`label ${value2 === 400? 'active':''}`} style={{fontSize:"9px"}}>400</span>
-            <span className={`label ${value2 === 500? 'active':''}`} style={{fontSize:"9px"}}>500</span>
-            <span className={`label ${value2 === 600? 'active':''}`} style={{fontSize:"9px"}}>600</span>
+            <span className={`label ${pees.value === 100? 'active':''}`} style={{fontSize:"9px"}}>100</span>
+            <span className={`label ${pees.value === 200? 'active':''}`} style={{fontSize:"9px"}}>200</span>
+            <span className={`label ${pees.value === 300? 'active':''}`} style={{fontSize:"9px"}}>300</span>
+            <span className={`label ${pees.value === 400? 'active':''}`} style={{fontSize:"9px"}}>400</span>
+            <span className={`label ${pees.value === 500? 'active':''}`} style={{fontSize:"9px"}}>500</span>
+            <span className={`label ${pees.value === 600? 'active':''}`} style={{fontSize:"9px"}}>600</span>
           </div>
       </div>
 
       <div className="elementBtn2">
           <span className="smallTitle">실금 발생 여부</span>
-          <button onClick={()=> handleYes()} className={`yesButton ${yes ? "ClickedYes" : ""}`}>예</button>
-          <button onClick={()=> handleNo()} className={`yesButton ${yes ? "" : "ClickedYes"}`}>아니오</button>
+          <button onClick={()=> handleYes()} className={`yesButton ${silgeum.value==='Y' ? "ClickedYes" : ""}`}>예</button>
+          <button onClick={()=> handleNo()} className={`yesButton ${silgeum.value==='Y' ? "" : "ClickedYes"}`}>아니오</button>
       </div>
 
 

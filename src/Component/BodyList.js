@@ -12,7 +12,7 @@ import {useNavigate} from "react-router-dom";
 import {useRef, useEffect, useState} from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faWhiskeyGlass, faGlassWater, faBottleWater, faX, faMicrophone } from "@fortawesome/free-solid-svg-icons";
-import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setFrequentList, setCustomList, setSelectedList, setMicro} from "./store";
+import {changeState, setDate, setSilgeum, setTimeRedux, setQueue, enqueue, setPees, setUrl, setWater, setWeird, setYo, setPopUp, setFrequentList, setCustomList, setSelectedList, setMicro, setLastInfo} from "./store";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
 
@@ -99,6 +99,10 @@ function BodyList(props) {
     return state.micro;
   });
 
+  const lastInfo = useSelector((state) => {
+    return state.lastInfo;
+  });
+
   const Save = (e) => {
     const dataJson = {
       date : date1,
@@ -108,7 +112,8 @@ function BodyList(props) {
       yo : yo,
       silgeum : silgeum,
       weird : weird,
-      url : url
+      url : url,
+      count : "Y",
     }
     if(timeR["value"].split(":")[0] < "04"){
       setIsSavePopup(true);
@@ -120,6 +125,9 @@ function BodyList(props) {
         localStorage.setItem('data', JSON.stringify([dataJson]));
       }
     }
+
+    dispatch(setLastInfo({count:"Y", water:pees}));
+
     dispatch(setUrl("-"));
     dispatch(setWater(0));
     dispatch(setPees(0));
@@ -133,6 +141,8 @@ function BodyList(props) {
   }
 
   const { modalQueue } = props;
+
+  console.log("mocalQueue," , modalQueue);
 
   function l1(idx) {
 
@@ -244,7 +254,7 @@ function BodyList(props) {
     dispatch(setMicro(false));
   })
 
-
+//[{"date":{"value":"2024-11-03"},"time":{"value":"02:18"},"drunk":{"value":350},"water":{"value":"130"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":""},"count":"N"},{"date":{"value":"2024-11-03"},"time":{"value":"03:18"},"drunk":{"value":0},"water":{"value":"180"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":"-"},"url":{"value":"-"},"count":{"value":"Y"}}]
   const onClosePopup = () => {
     setIsSavePopup(false);
 
@@ -257,11 +267,14 @@ function BodyList(props) {
       silgeum: silgeum,
       weird: weird,
       url: url,
+      count : "Y",
     };
 
 
     const storedData = JSON.parse(localStorage.getItem('data')) || [];
     localStorage.setItem('data', JSON.stringify([...storedData, dataJson]));
+
+    dispatch(setLastInfo({count:"Y", water:pees}));
 
     dispatch(setUrl("-"));
     dispatch(setWater(0));
@@ -276,6 +289,33 @@ function BodyList(props) {
 
   const onConfirmPopup = () => {
     setIsSavePopup(false);
+
+    const dataJson = {
+      date: date1,
+      time: timeR,
+      drunk: water,
+      water: pees,
+      yo: yo,
+      silgeum: silgeum,
+      weird: weird,
+      url: url,
+      count : "N",
+    };
+
+
+    const storedData = JSON.parse(localStorage.getItem('data')) || [];
+    localStorage.setItem('data', JSON.stringify([...storedData, dataJson]));
+
+    dispatch(setLastInfo({count:"N", water:pees}));
+
+    dispatch(setUrl("-"));
+    dispatch(setWater(0));
+    dispatch(setPees(0));
+    dispatch(setYo(0));
+    dispatch(setSilgeum('N'));
+    dispatch(setWeird("-"));
+    dispatch(setDate(''));
+    dispatch(setTimeRedux(''));
     navigate("/loading");
   };
 
@@ -431,7 +471,7 @@ function DuringNightPopup({ isVisible, onClose, onConfirm }) {
     <div className="popup-overlay">
       <div className="popup-content">
         <h4>자정12시 ~ 새벽4시 사이 기록인데 야간 배뇨인가요?</h4>
-        <p style={{fontSize:"13px"}}>예를 클릭하면 측정에서 제외됩니다.</p>
+        <p style={{fontSize:"13px"}}>'예'를 클릭하면 야간 배뇨로 기록됩니다.</p>
         <div className="popup-buttons">
           <button onClick={onClose} className="popup-button cancel">아니오</button>
           <button onClick={onConfirm} className="popup-button confirm">예</button>
@@ -443,7 +483,7 @@ function DuringNightPopup({ isVisible, onClose, onConfirm }) {
 
 
 function ContainerSpeech({isVisible, onClose}){
-  console.log("isVisible:", isVisible);
+  //console.log("isVisible:", isVisible);
   const dispatch = useDispatch();
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
 

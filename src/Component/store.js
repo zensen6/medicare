@@ -118,7 +118,7 @@ const queue = createSlice({
     },
     reducers:{
         setQueue : (state, action) => {
-            state.value = action.payload;
+            state.queue = action.payload;
         },
         enqueue : (state, action) => {
             state.queue.push(action.payload);
@@ -218,6 +218,17 @@ const selectedList = createSlice({
 });
 
 
+const lastInfo = createSlice({
+    name : 'lastInfo',
+    initialState: [],
+    reducers:{
+        setLastInfo : (state,action) => {
+            return action.payload;
+        }
+    }
+});
+
+
 
 
 export const {changeState} = yes.actions;
@@ -235,6 +246,8 @@ export const {setFrequentList} = frequentList.actions;
 export const {setCustomList} = customList.actions;
 export const {setSelectedList} = selectedList.actions;
 export const {setMicro} = micro.actions;
+export const {setLastInfo} = lastInfo.actions;
+
 
 export default configureStore({
 
@@ -254,6 +267,7 @@ export default configureStore({
         customList: customList.reducer,
         selectedList: selectedList.reducer,
         micro : micro.reducer,
+        lastInfo : lastInfo.reducer,
     }
 
     
