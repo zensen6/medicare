@@ -203,11 +203,11 @@ function ButtonHeader() {
                 </button>
             </div>
 
-            {/*
+            {
             <div className="SaveInfoBtnVoice" onClick={() => saveByVoice()}>
                음성으로 기록하기
             </div>
-            */}
+            }
         </div>
         
         <BodyList modalQueue={modalQueue}>
@@ -215,12 +215,12 @@ function ButtonHeader() {
 
         </BodyList>
 
-        {/*
+        {
         <ContainerSpeech2
           isVisible={popupVoice}
           onClose={onCloseVoice}
         />
-        */}
+        }
     </>
   )
 }
@@ -268,9 +268,9 @@ function ContainerSpeech2({isVisible, onClose}){
 
     if(!isNumericString(water) 
       || !isNumericString(baenow) 
-      || !(parseInt(yo) >= 0 && parseInt(yo)<=3) 
-      || !(parseInt(silgeum) === 0 
-       || parseInt(silgeum) === 1))
+      || !((parseInt(yo) >= 0 && parseInt(yo)<=3) || (yo === '영' || yo === '일' || yo ==='이' || yo ==='심')) 
+      || !(silgeum === '예' || silgeum === '아니오' || silgeum === '아니요' || silgeum === '아니')
+    )
     {
 
       setPopupVoiceValid("예시와 같이 형식에 맞게 말씀해 주세요.");
@@ -284,8 +284,20 @@ function ContainerSpeech2({isVisible, onClose}){
       setPopupVoiceValid("");
       dispatch(setWater(water));
       dispatch(setPees(baenow));
+      if(yo === '영'){
+        dispatch(setYo(0));
+      }else if(yo === '일'){
+        dispatch(setYo(1));
+      }else if(yo === '이'){
+        dispatch(setYo(2));
+      }else if(yo === '삼'){
+        dispatch(setYo(3));
+      }else{
+        dispatch(setYo(parseInt(yo)));
+      }
+
       dispatch(setYo(yo));
-      dispatch(setSilgeum(silgeum === '1' ? 'Y' : 'N'));
+      dispatch(setSilgeum(silgeum === '예' ? 'Y' : 'N'));
       resetTranscript();
 
       setSavingModalVisible(true); // Show "Saving..." modal
@@ -330,10 +342,11 @@ function ContainerSpeech2({isVisible, onClose}){
 
         <div className="SpeechHeader" style={{marginTop:"10px"}}>수분섭취량, 배뇨량, 요절박, 실금여부 순서로 말씀해주세요</div>
         <div className="SpeechHeader2">
-          <li className="Example">실금이 발생했다면 1, 아니면 0</li>
+          
           <li className="Example">요절박 정도는 매우 심하면 3, 증상이 없으면 0</li>
+          <li className="Example">실금이 발생했다면 '예', 아니면 '아니요'</li>
         </div>
-        <h2 className="Example">예시: 300 250 3(삼) 1(일)</h2>
+        <h2 className="Example">예시: 300 250 3(삼) 아니요</h2>
         
         <div className="SpeechWaveContainer">
             <div className="SpeechWave"></div>
