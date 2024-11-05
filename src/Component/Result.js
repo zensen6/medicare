@@ -251,11 +251,11 @@ const Result = () => {
                     var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                     if(isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) ){
                         totWater += parseInt(values["drunk"]["value"]);
-                        yoCnt += parseInt(values["yo"]["value"]);
+                        yoCnt += (parseInt(values["yo"]["value"]) > 0) ? 1 : 0;
                         silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
                         totBae += parseInt(values["water"]["value"]);
                         maxB = Math.max(maxB, parseInt(values["water"]["value"]));
-                        avgCount += 1;
+                        avgCount += (parseInt(values["water"]["value"]) > 0) ? 1 : 0;
                     }
                 }
 
@@ -409,11 +409,11 @@ const Result = () => {
                     const Today = (String(yesterday.getMonth() + 1).padStart(2, '0') + '/' + String(yesterday.getDate()).padStart(2, '0'));
                     if(isToday(selectedDate, values["time"]["value"], Today) ){
                         totWater += parseInt(values["drunk"]["value"]);
-                        yoCnt += parseInt(values["yo"]["value"]);
+                        yoCnt += (parseInt(values["yo"]["value"]) > 0) ? 1 : 0 ;
                         silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
                         totBae += parseInt(values["water"]["value"]);
                         maxB = Math.max(maxB, parseInt(values["water"]["value"]));
-                        avgCount += 1;
+                        avgCount += (parseInt(values["water"]["value"]) > 0) ? 1 : 0;
                     }
                 }
 
@@ -524,11 +524,11 @@ const Result = () => {
                     const Today = (String(tommorow.getMonth() + 1).padStart(2, '0') + '/' + String(tommorow.getDate()).padStart(2, '0'));
                     if(isToday(selectedDate, values["time"]["value"], Today) ){
                         totWater += parseInt(values["drunk"]["value"]);
-                        yoCnt += parseInt(values["yo"]["value"]);
+                        yoCnt += (parseInt(values["yo"]["value"]) > 0) ? 1 : 0;
                         silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
                         totBae += parseInt(values["water"]["value"]);
                         maxB = Math.max(maxB, parseInt(values["water"]["value"]));
-                        avgCount += 1;
+                        avgCount += (parseInt(values["water"]["value"]) > 0) ? 1 : 0;
                     }
                 }
 
