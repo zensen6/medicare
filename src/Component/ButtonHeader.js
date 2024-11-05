@@ -236,6 +236,7 @@ function ContainerSpeech2({isVisible, onClose}){
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const [popupVoiceValid, setPopupVoiceValid] = useState("");
   const [savingModalVisible, setSavingModalVisible] = useState(false); // State for "Saving..." modal
+  const [convertedTranscript, setConvertedTranscript] = useState("");
 
   const globalQueue = useSelector((state) => {
     return state.queue;
@@ -259,7 +260,7 @@ function ContainerSpeech2({isVisible, onClose}){
   const Save = (e) => {
 
     //dispatch(setWeird(transcript));
-    const [water, baenow, yo, silgeum] = transcript.split(" ");
+    const [yo, silgeum, water, baenow] = convertedTranscript.split(" ");
 
     const isNumericString = (str) => {
       return !Number.isNaN(parseInt(str, 10));
@@ -298,7 +299,7 @@ function ContainerSpeech2({isVisible, onClose}){
 
       dispatch(setYo(yo));
       dispatch(setSilgeum(silgeum === '예' ? 'Y' : 'N'));
-      resetTranscript();
+      
 
       setSavingModalVisible(true); // Show "Saving..." modal
 
@@ -309,7 +310,8 @@ function ContainerSpeech2({isVisible, onClose}){
       }, 500);
 
 
-
+      resetTranscript();
+      setPopupVoiceValid("");
       onClose();
     }
   }
@@ -326,6 +328,18 @@ function ContainerSpeech2({isVisible, onClose}){
   }
 
 
+
+  useEffect(()=>{
+    var convertedTranscript1 = transcript
+    .replaceAll("영", "0")
+    .replaceAll("일", "1")
+    .replaceAll("이", "2")
+    .replaceAll("삼", "3");
+
+    setConvertedTranscript(convertedTranscript1);
+  },[transcript])
+
+
   if(!isVisible) return null;
   return(
       <div className="SpeechContainer2">
@@ -340,13 +354,13 @@ function ContainerSpeech2({isVisible, onClose}){
             </div>
         }
 
-        <div className="SpeechHeader" style={{marginTop:"10px"}}>수분섭취량, 배뇨량, 요절박, 실금여부 순서로 말씀해주세요</div>
+        <div className="SpeechHeader" style={{marginTop:"10px"}}>요절박, 실금여부, 수분섭취량, 배뇨량 순서로 말씀해주세요</div>
         <div className="SpeechHeader2">
           
           <li className="Example">요절박 정도는 매우 심하면 3, 증상이 없으면 0</li>
           <li className="Example">실금이 발생했다면 '예', 아니면 '아니요'</li>
         </div>
-        <h2 className="Example">예시: 300 250 3(삼) 아니요</h2>
+        <h2 className="Example">예시: 3 아니요 300 250 </h2>
         
         <div className="SpeechWaveContainer">
             <div className="SpeechWave"></div>
@@ -356,7 +370,7 @@ function ContainerSpeech2({isVisible, onClose}){
             <div className="SpeechWave"></div>
             <div className="SpeechWave"></div>
         </div>
-        <input className="inputVoiceText2" value={transcript} readOnly />
+        <input className="inputVoiceText2" value={convertedTranscript} readOnly />
 
         <div className="buttonContainer">
           <button className="resetButton" onClick={Reset}>기록 초기화</button>
@@ -366,7 +380,7 @@ function ContainerSpeech2({isVisible, onClose}){
 
         {savingModalVisible && (
           <div className="saving-modal">
-            <div className="saving-message">저장 중...</div>
+            <div className="saving-message">저장 중</div>
           </div>
         )}
        
