@@ -77,7 +77,7 @@ const Loading = () => {
         // Navigate to the /result page after 3 seconds
         const timer = setTimeout(() => {
             navigate('/result');
-        }, 5000);
+        }, 1000);
 
         // Cleanup the timer
         return () => clearTimeout(timer);

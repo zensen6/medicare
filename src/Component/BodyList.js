@@ -142,7 +142,7 @@ function BodyList(props) {
 
   const { modalQueue } = props;
 
-  console.log("mocalQueue," , modalQueue);
+
 
   function l1(idx) {
 

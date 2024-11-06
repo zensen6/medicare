@@ -55,6 +55,7 @@ const Result = () => {
     const [rec, setRec] = useState(0);
     const [BaenowCount, setBaenowCount] = useState(0);
     const [Tommorow, setTommorow] = useState("");
+    const [listUpdated, setListUpdated] = useState(false);
 
     const Now = new Date();
     const NowString = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
@@ -150,6 +151,37 @@ const Result = () => {
         //if(())
     }
 
+    function getFirstIdx(Today){
+        const data2 = JSON.parse(localStorage.getItem("data"));
+        var firstIdx = -1;
+        for (let i = 0; i < data2.length; i++) {
+            const values = data2[i];
+            var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+            if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                firstIdx = i;
+                break;
+            }
+        }
+        return firstIdx;
+    }
+
+
+
+    function getLastIdx(Today){
+
+        const data2 = JSON.parse(localStorage.getItem("data"));
+        var lastIdx = -1;
+        for (let i = data2.length - 1; i >= 0; i--) {
+            const values = data2[i];
+            var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+            if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                lastIdx = i;
+                break;
+            }
+        }
+        return lastIdx;
+    }
+
 
 
     const update = () => {
@@ -173,8 +205,8 @@ const Result = () => {
         setLen(json.length + (data2 != null ? data2.length : 0));
 
         var clickedDate = String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0');
-        var firstIdx = -1;
-        var lastIdx = -1;
+        var firstIdx = getFirstIdx(String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'));
+        var lastIdx = getLastIdx(String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'));
         if(data2 != null && data2.length > 0){
 
             
@@ -200,30 +232,7 @@ const Result = () => {
                     setBaenowCount(isFirstCount);
                 }
             }
-
-
-            for(let i =0; i<data2.length;i++){
-                var values = data2[i];
-                var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                
-                //if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
-                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0) {
-                    firstIdx = i
-                    break;
-                }
-                //bn += parseInt(values["drunk"]["value"]);
-                //if(NowString === selectedDate) newTotal += parseInt(values["drunk"]["value"]); // 현재 날짜에 해당하는 water 값 추가
-            }
-
-            for(let i =data2.length-1; i>=0;i--){
-                var values = data2[i];
-                var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
-                //if(clickedDate === selectedDate && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y'){
-                if (isToday(selectedDate, values["time"]["value"], String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0')) && parseInt(values["water"]["value"]) > 0) {
-                    lastIdx = i;
-                    break;
-                }
-            }   
+  
 
             if(firstIdx === lastIdx && firstIdx === -1){
                 setFIdx(firstIdx);
@@ -294,8 +303,10 @@ const Result = () => {
     }
 
 
+    
 
-    useEffect(()=>{
+    // dummy Data
+    useEffect(()=>{ 
 
         const pivot = curDate;
         const tommorow = new Date(pivot);
@@ -314,7 +325,6 @@ const Result = () => {
         }
         let bn = 0;
         let newTotal = 0; // 새로운 총합을 저장할 변수
-        let newY = [0, 0, 0, 0, 0]; // 새로운 Y 값을 저장할 배열
      
         for(let i = 0; i < json.length; i++){
             var values = Object.values(json[i]);
@@ -337,12 +347,114 @@ const Result = () => {
 
     const navigate = useNavigate();
 
+
+    const handleDate = (day) => {
+    
+        setMonth(String(day.getMonth() + 1).padStart(2, '0'));
+        setDay(String(day.getDate()).padStart(2, '0'));
+        setClickCount(clickCount + 1);
+        setBaenowCount(0);
+    
+        const data2 = JSON.parse(localStorage.getItem("data"));
+        const clickedDate = String(day.getMonth() + 1).padStart(2, '0') + '/' + String(day.getDate()).padStart(2, '0');
+        const Today = (String(day.getMonth() + 1).padStart(2, '0') + '/' + String(day.getDate()).padStart(2, '0'));
+        let firstIdx = getFirstIdx(Today);
+        let lastIdx = getLastIdx(Today);
+        var countBaenow = 0;
+    
+        if (data2 != null && data2.length > 0) {
+            for (let i = 0; i < data2.length; i++) {
+                const values = data2[i];
+                const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
+                //const Today = (String(day.getMonth() + 1).padStart(2, '0') + '/' + String(day.getDate()).padStart(2, '0'));
+
+                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
+                    countBaenow += 1;
+                    setBaenowCount(countBaenow);
+                }
+            }
+
+            if (firstIdx === -1 && lastIdx === -1) {
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+                setFirstS("-");
+                setLastS("-");
+
+                setTotalWater(0);
+                setYo(0);
+                setMaxBae(0);
+                setAvgBae(0);
+                setSilgeum(0);
+
+            } else {
+
+                // 요약구하기
+                var totWater = 0;
+                var yoCnt = 0;
+                var maxB = 0;
+                var totBae = 0;
+                var silgeumCnt = 0;
+                var avgCount = 0;
+                for(var i = 0; i <= data2.length-1; i++){
+                    const values = data2[i];
+                    var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
+                    const Today = (String(day.getMonth() + 1).padStart(2, '0') + '/' + String(day.getDate()).padStart(2, '0'));
+                    if(isToday(selectedDate, values["time"]["value"], Today) ){
+                        totWater += parseInt(values["drunk"]["value"]);
+                        yoCnt += (parseInt(values["yo"]["value"]) > 0) ? 1 : 0 ;
+                        silgeumCnt += (values["silgeum"]["value"] === 'Y' ? 1 : 0);
+                        totBae += parseInt(values["water"]["value"]);
+                        maxB = Math.max(maxB, parseInt(values["water"]["value"]));
+                        avgCount += (parseInt(values["water"]["value"]) > 0) ? 1 : 0;
+                    }
+                }
+
+                setTotalWater(totWater);
+                setYo(yoCnt);
+                setMaxBae(maxB);
+                setAvgBae(Math.floor(totBae / (totBae === 0 ? 10000 : avgCount)));
+                setSilgeum(silgeumCnt);
+
+                const first = data2[firstIdx]?.["time"]?.["value"];
+                const last = data2[lastIdx]?.["time"]?.["value"];
+    
+                // first와 last가 모두 존재하는 경우에만 getMinuteDifference 호출
+                if (first && last) {
+                    setDiff(getMinuteDifference(first, last));
+    
+                    // 시간을 오전/오후 형식으로 설정
+                    const formatTime = (time) => {
+                        const [hour, minute] = time.split(":").map(Number);
+                        const period = hour < 12 ? "오전" : "오후";
+                        const formattedHour = hour % 12 || 12;
+                        return `${period} ${formattedHour}시 ${minute}분`;
+                    };
+    
+                    setFirstS(formatTime(first));
+                    setLastS(formatTime(last));
+                } else {
+                    // first 또는 last가 없을 경우 "-"로 설정
+                    setFirstS("-");
+                    setLastS("-");
+                }
+    
+                setFIdx(firstIdx);
+                setLIdx(lastIdx);
+            }
+        }
+
+
+    }
+
+
+
     const handleYesterday = (e) => {
         const pivot = curDate;
         const yesterday = new Date(pivot);
         yesterday.setDate(pivot.getDate() - 1);
         setCurDate(yesterday);
-    
+        handleDate(yesterday);
+        /*
         setMonth(String(yesterday.getMonth() + 1).padStart(2, '0'));
         setDay(String(yesterday.getDate()).padStart(2, '0'));
         setClickCount(clickCount + 1);
@@ -450,15 +562,19 @@ const Result = () => {
                 setLIdx(lastIdx);
             }
         }
+            */
+
     };
     
-
+//[{"date":{"value":"2024-11-03"},"time":{"value":"03:49"},"drunk":{"value":0},"water":{"value":"90"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-03"},"time":{"value":"03:53"},"drunk":{"value":200},"water":{"value":"90"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-03"},"time":{"value":"03:53"},"drunk":{"value":2000},"water":{"value":0},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-03"},"time":{"value":"23:53"},"drunk":{"value":0},"water":{"value":"160"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":""},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-03"},"time":{"value":"23:53"},"drunk":{"value":350},"water":{"value":0},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-05"},"time":{"value":"03:04"},"drunk":{"value":200},"water":{"value":"280"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-05"},"time":{"value":"03:16"},"drunk":{"value":350},"water":{"value":0},"yo":{"value":"3"},"silgeum":{"value":"Y"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-05"},"time":{"value":"03:21"},"drunk":{"value":200},"water":{"value":"70"},"yo":{"value":"2"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-05"},"time":{"value":"19:59"},"drunk":{"value":0},"water":{"value":0},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":""},"count":"Y"},{"date":{"value":"2024-11-05"},"time":{"value":"20:04"},"drunk":{"value":0},"water":{"value":"330"},"yo":{"value":"2"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-05"},"time":{"value":"20:04"},"drunk":{"value":200},"water":{"value":"260"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-06"},"time":{"value":"01:43"},"drunk":{"value":500},"water":{"value":"260"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-06"},"time":{"value":"03:50"},"drunk":{"value":0},"water":{"value":0},"yo":{"value":"2"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"N"},{"date":{"value":"2024-11-06"},"time":{"value":"03:51"},"drunk":{"value":500},"water":{"value":"200"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"N"},{"date":{"value":"2024-11-06"},"time":{"value":"03:53"},"drunk":{"value":0},"water":{"value":"480"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"N"},{"date":{"value":"2024-11-06"},"time":{"value":"19:41"},"drunk":{"value":350},"water":{"value":"280"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":""},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-06"},"time":{"value":"19:42"},"drunk":{"value":500},"water":{"value":"60"},"yo":{"value":"2"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-06"},"time":{"value":"19:42"},"drunk":{"value":350},"water":{"value":0},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"}]
     const handleTommorow = (e) => {
         const pivot = curDate;
         const tommorow = new Date(pivot);
         tommorow.setDate(pivot.getDate() + 1);
         setCurDate(tommorow);
+        handleDate(tommorow);
 
+        /*
         setMonth(String(curDate.getMonth()+1).padStart(2,'0'));
         setDay(String(curDate.getDate()).padStart(2,'0'));
         setClickCount(clickCount+1);
@@ -572,29 +688,24 @@ const Result = () => {
                 setLIdx(lastIdx);
             }
         }
+            */
 
 
     }
 
     const loadData = async () => {
+
+        
         const data2 = JSON.parse(localStorage.getItem("data")); // Assuming you're getting data from local storage
         const l1 = []; // Initialize your l1 array
-        let isFirstCount = 0;
-        let totBae = 0;
-    //[{"date":{"value":"2024-11-03"},"time":{"value":"19:05"},"drunk":{"value":350},"water":{"value":0},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-03"},"time":{"value":"19:05"},"drunk":{"value":0},"water":{"value":"310"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"}]
+        //let isFirstCount = 0;
+        //let totBae = 0;
+
         if (data2 != null) {
             for (let i = 0; i < data2.length; i++) {
                 const values = data2[i];
                 const selectedDate = values["date"]["value"].substring(5, 7) + '/' + values["date"]["value"].substring(8, 10);
                 const Today = (String(curDate.getMonth() + 1).padStart(2, '0') + '/' + String(curDate.getDate()).padStart(2, '0'));
-                //if (selectedDate === Today && parseInt(values["water"]["value"]) > 0 && (values["count"] === 'Y')) {
-                if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
-                    isFirstCount += 1;
-                    setBaenowCount(isFirstCount);
-                }
-                //isToday(selectedDate, values["time"]["value"], Today)
-    
-                //if (Today !== selectedDate) continue;
                 if(!isToday(selectedDate, values["time"]["value"], Today)) continue;
 
                 l1.push(values["time"]["value"]);
@@ -603,13 +714,11 @@ const Result = () => {
                 l1.push(values["yo"]["value"]);
                 l1.push(values["silgeum"]["value"]);
     
-                // Push "weird" value or "-" if it doesn't exist
                 l1.push(values["weird"]["value"].length ? values["weird"]["value"] : "-");
     
-                totBae += parseInt(values["water"]["value"]);
+                //totBae += parseInt(values["water"]["value"]);
 
 
-                // Now, we need to fetch the base64 URL from IndexedDB
                 const url = values["url"]["value"].length ? values["url"]["value"] : "-";
                 const base64Url = url !== "-" ? await getFromIndexedDB(url) : "-"; // Fetch base64 URL from IndexedDB
     
@@ -617,23 +726,10 @@ const Result = () => {
             }
         }
 
-
-        if(isFirstCount >= 4 && totBae >= 1000){
-            setPopupFreq(true);
-
-            var firstDateTime = `${data2[0]["date"]["value"]} ${data2[0]["time"]["value"]}`;
-            var lastDateTime = `${data2[data2.length-1]["date"]["value"]} ${data2[data2.length-1]["time"]["value"]}`;
-            var alpha = getMinuteDifference2(firstDateTime, lastDateTime) / Math.max(data2.length, 1);
-            if(alpha === 0){
-                setRec(0);
-            }
-            else{
-                setRec(addMinutesToTime(data2[data2.length-1]["time"]["value"], alpha));
-            }
-        }
     
         // Update your state or do whatever you need with the l1 array
         setL1(l1);
+        
     };
 
     const loadDataSafe = async () => {
@@ -654,7 +750,6 @@ const Result = () => {
             for(let j = 1; j < values.length; j++){
                 l.push(values[j]);
             }
-            //l.push(" ");
         }
 
         
@@ -662,27 +757,30 @@ const Result = () => {
         const data2 = JSON.parse(localStorage.getItem("data"));
 
         let isFirstCount = 0;
-        let is6 = false;
+        //let is6 = false;
+        let totBae = 0;
         if(data2 != null){
             for(let i =0; i<data2.length;i++){
                 var values = data2[i];
                 var selectedDate = values["date"]["value"].substring(5,7) + '/' + values["date"]["value"].substring(8,10);
                 var Today = (String(curDate.getMonth()+1).padStart(2,'0') + '/' + String(curDate.getDate()).padStart(2,'0'));
-                //if(selectedDate === Today && parseInt(values["water"]["value"]) > 0  && (values["count"] === "Y")){
+                
                 if (isToday(selectedDate, values["time"]["value"], Today) && parseInt(values["water"]["value"]) > 0 && values["count"] === 'Y') {
                     isFirstCount += 1;
                     setBaenowCount(isFirstCount);
                 }
+                
+                if(!isToday(selectedDate, values["time"]["value"], Today)) continue;
+                totBae += parseInt(values["water"]["value"]);
+
             }
         }
+        setL(l);
             
 
         loadData();
 
-        //let isFirstCount = 0;
-        //let is6 = false;
-        //const data2 = JSON.parse(localStorage.getItem("data"));
-        //console.log(lastInfo);
+        
         if(isFirstCount === 1 && 
             (String(currentDate.getMonth()+1).padStart(2,'0') ===  String(curDate.getMonth() + 1).padStart(2,'0') && String(currentDate.getDate()).padStart(2,'0') === String(curDate.getDate()).padStart(2,'0'))
             &&
@@ -703,9 +801,20 @@ const Result = () => {
             }
 
         }
+        if(isFirstCount >= 4 && totBae >= 1000){
+            setPopupFreq(true);
 
-        setL(l);
-        //setL1(l1);
+            var firstDateTime = `${data2[0]["date"]["value"]} ${data2[0]["time"]["value"]}`;
+            var lastDateTime = `${data2[data2.length-1]["date"]["value"]} ${data2[data2.length-1]["time"]["value"]}`;
+            var alpha = getMinuteDifference2(firstDateTime, lastDateTime) / Math.max(data2.length, 1);
+            if(alpha === 0){
+                setRec(0);
+            }
+            else{
+                setRec(addMinutesToTime(data2[data2.length-1]["time"]["value"], alpha));
+            }
+        }
+
     },[clickCount]);
 
     const convertTo12HourFormat = (timeString) => {
@@ -714,26 +823,52 @@ const Result = () => {
         const adjustedHours = hours % 12 || 12;
         return `${adjustedHours}:${minutes.toString().padStart(2, '0')} ${suffix}`;
     };
+//[{"date":{"value":"2024-11-06"},"time":{"value":"02:14"},"drunk":{"value":0},"water":{"value":"140"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-06"},"time":{"value":"02:20"},"drunk":{"value":0},"water":{"value":"260"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-06"},"time":{"value":"03:15"},"drunk":{"value":0},"water":{"value":"380"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-06"},"time":{"value":"21:13"},"drunk":{"value":0},"water":{"value":"160"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":"-"},"count":"Y"},{"date":{"value":"2024-11-06"},"time":{"value":"21:14"},"drunk":{"value":0},"water":{"value":"300"},"yo":{"value":0},"silgeum":{"value":"N"},"weird":{"value":"-"},"url":{"value":"-"},"count":"Y"}]
 
     const handleDelete = (index) => {
-        const updatedL1 = [...l1];
-        updatedL1.splice(index, 7); // Remove 8 elements (one full row)
-        setL(updatedL1);
+        //const updatedL1 = [...l1];
+        //updatedL1.splice(index, 7); // Remove 8 elements (one full row)
+        //setL(updatedL1);
 
-        //localStorage.setItem("data",updatedL1);
+        const data2 = JSON.parse(localStorage.getItem("data"));
+        console.log(index, ll1[index], String(curDate.getDate()).padStart(2,'0'));
+        var fitIdx = 0;
+        for(let i = 0; i < data2.length; i++){
+            const data = data2[i];
+            if(
+                data["date"]["value"].split("-")[1] ===  String(curDate.getMonth()+1).padStart(2,'0') &&
+                data["date"]["value"].split("-")[2] === String(curDate.getDate()).padStart(2,'0') &&
+                data["time"]["value"] === ll1[index] &&
+                data["drunk"]["value"] === ll1[index+1] &&
+                data["water"]["value"] === ll1[index+2] &&
+                data["yo"]["value"] === ll1[index+3] &&
+                data["silgeum"]["value"] === ll1[index+4] &&
+                (data["weird"]["value"] === "" && ll1[index+5] === "-" || data["weird"]["value"] === ll1[index+5]) &&
+                data["url"]["value"] === ll1[index+6]
+            ){
+
+                fitIdx = i;
+                break;
+            }
+        }
+
 
         const updatedLL1 = [...ll1];
         updatedLL1.splice(index, 7);
         setL1(updatedLL1);
 
+        /*
         const dataFromStorage = JSON.parse(localStorage.getItem("data")) || [];
         const dataIndex = Math.floor(index / 7); // 각 행은 7개의 항목으로 구성되어 있으므로 인덱스를 계산
         dataFromStorage.splice(dataIndex, 1); // 해당 인덱스의 객체 삭제
+        */
+
+        const dataFromStorage = JSON.parse(localStorage.getItem("data")) || [];
+        dataFromStorage.splice(fitIdx, 1); // 해당 인덱스의 객체 삭제
         localStorage.setItem("data", JSON.stringify(dataFromStorage));
 
         update();
 
-        //localStorage.setItem("data",updatedLL1);
     };
 
     const goBack = (e) => {
@@ -769,11 +904,11 @@ const Result = () => {
             water: { value: `${mediumWater}` },
             yo: { value: "0" },
             silgeum: { value: "N" },
-            weird: { value: "" },
-            url: { value: "" },
+            weird: { value: "-" },
+            url: { value: "-" },
             count : "Y",
         };
-//[{"date":{"value":"2024-11-03"},"time":{"value":"02:18"},"drunk":{"value":350},"water":{"value":"130"},"yo":{"value":"1"},"silgeum":{"value":"N"},"weird":{"value":""},"url":{"value":""},"count":"N"},{"date":{"value":"2024-11-03"},"time":{"value":"03:18"},"drunk":{"value":0},"water":{"value":"180"},"yo":{"value":"1"},"silgeum":{"value":"Y"},"weird":{"value":"-"},"url":{"value":"-"},"count":{"value":"Y"}}]
+
         // localStorage에 업데이트
         const jsonData = JSON.parse(localStorage.getItem("data")) || [];
         jsonData.splice(jsonData.length - 1, 0, dataJson);
